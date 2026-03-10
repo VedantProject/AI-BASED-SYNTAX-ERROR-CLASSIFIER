@@ -1,0 +1,19 @@
+{
+  "filepath": "test_samples/valid_test.py",
+  "is_anomalous": false,
+  "anomaly_score": 0.0,
+  "risk_flags": [
+    "Max nesting depth > 6"
+  ],
+  "structural_stats": {
+    "num_functions": 1,
+    "num_loops": 1,
+    "num_if_stmts": 2,
+    "max_nesting_depth": 7,
+    "total_statements": 31,
+    "total_tokens": 62,
+    "keyword_density": 0.1129,
+    "delimiter_imbalance": 0,
+    "errors_found": 6
+  }
+}

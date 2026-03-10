@@ -1,0 +1,38 @@
+============================================================
+PARSING SUMMARY REPORT
+============================================================
+
+Total Files Processed: 6
+Total Errors Found: 24
+
+--- By Language ---
+
+JAVA:
+  Files: 2
+  Errors: 12
+  Error Categories:
+    - Missing Delimiter: 1
+    - Syntax Error: 1
+    - Unknown Error: 10
+
+C:
+  Files: 2
+  Errors: 1
+  Error Categories:
+    - Missing Delimiter: 1
+
+PYTHON:
+  Files: 2
+  Errors: 11
+  Error Categories:
+    - Malformed Expression: 2
+    - Missing Delimiter: 5
+    - Syntax Error: 4
+
+--- Overall Error Categories ---
+  Unknown Error: 10
+  Missing Delimiter: 7
+  Syntax Error: 5
+  Malformed Expression: 2
+
+============================================================

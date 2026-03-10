@@ -1,0 +1,302 @@
+[
+  {
+    "timestamp": "2026-02-22T21:45:05.191199",
+    "level": "PHASE",
+    "stage": "Stage 0 \u00b7 Source Loading",
+    "message": "START"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.214439",
+    "level": "INFO",
+    "stage": "Load",
+    "message": "9 lines, 112 bytes"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.214785",
+    "level": "PHASE_DONE",
+    "stage": "Source Loading",
+    "message": "\u2713  Source Loading  (22.9 ms)"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.214878",
+    "level": "PHASE",
+    "stage": "Stage 1 \u00b7 Lexical Analysis",
+    "message": "START"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.216202",
+    "level": "INFO",
+    "stage": "Output",
+    "message": "Saved \u2192 results/week_7_outputs\\invalid_test_1_tokens.json"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.216360",
+    "level": "INFO",
+    "stage": "Lexer",
+    "message": "37 tokens, 9 distinct types"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.216455",
+    "level": "PHASE_DONE",
+    "stage": "Lexical Analysis",
+    "message": "\u2713  Lexical Analysis  (0.2 ms)"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.216606",
+    "level": "PHASE",
+    "stage": "Stage 2 \u00b7 Syntax / Parse Analysis",
+    "message": "START"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.218369",
+    "level": "INFO",
+    "stage": "Output",
+    "message": "Saved \u2192 results/week_7_outputs\\invalid_test_2_parse_errors.json"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.218581",
+    "level": "INFO",
+    "stage": "Parser",
+    "message": "1 syntax error(s)"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.218824",
+    "level": "WARN",
+    "stage": "Parser",
+    "message": "  Line 4: Missing semicolon after variable declaration"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.219052",
+    "level": "PHASE_DONE",
+    "stage": "Syntax Analysis",
+    "message": "\u2713  Syntax Analysis  (0.2 ms)"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.219195",
+    "level": "PHASE",
+    "stage": "Stage 3 \u00b7 AST Serialisation",
+    "message": "START"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.220465",
+    "level": "INFO",
+    "stage": "Output",
+    "message": "Saved \u2192 results/week_7_outputs\\invalid_test_3_ast.json"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.220576",
+    "level": "INFO",
+    "stage": "AST",
+    "message": "16 nodes serialised"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.220623",
+    "level": "PHASE_DONE",
+    "stage": "AST Serialisation",
+    "message": "\u2713  AST Serialisation  (1.0 ms)"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.220663",
+    "level": "PHASE",
+    "stage": "Stage 4 \u00b7 Semantic Analysis",
+    "message": "START"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.221737",
+    "level": "INFO",
+    "stage": "Output",
+    "message": "Saved \u2192 results/week_7_outputs\\invalid_test_4_semantic.json"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.221952",
+    "level": "INFO",
+    "stage": "Semantic",
+    "message": "4 symbols, 0 errors, 1 warnings"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.222070",
+    "level": "PHASE_DONE",
+    "stage": "Semantic Analysis",
+    "message": "\u2713  Semantic Analysis  (1.0 ms)"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.222308",
+    "level": "PHASE",
+    "stage": "Stage 5 \u00b7 Control-Flow Analysis",
+    "message": "START"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.223671",
+    "level": "INFO",
+    "stage": "Output",
+    "message": "Saved \u2192 results/week_7_outputs\\invalid_test_5_control_flow.json"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.224008",
+    "level": "INFO",
+    "stage": "CFG",
+    "message": "8 blocks, 7 edges, 0 loop(s), 0 unreachable"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.224149",
+    "level": "PHASE_DONE",
+    "stage": "Control-Flow Analysis",
+    "message": "\u2713  Control-Flow Analysis  (1.2 ms)"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.224318",
+    "level": "PHASE",
+    "stage": "Stage 6 \u00b7 Data-Flow Analysis",
+    "message": "START"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.226404",
+    "level": "INFO",
+    "stage": "Output",
+    "message": "Saved \u2192 results/week_7_outputs\\invalid_test_6_data_flow.json"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.226513",
+    "level": "INFO",
+    "stage": "DFA",
+    "message": "4 defs, 3 uses, 0 uninitialised, 0 dead defs"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.226793",
+    "level": "PHASE_DONE",
+    "stage": "Data-Flow Analysis",
+    "message": "\u2713  Data-Flow Analysis  (1.7 ms)"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.226956",
+    "level": "PHASE",
+    "stage": "Stage 7 \u00b7 Complexity Analysis",
+    "message": "START"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.228099",
+    "level": "INFO",
+    "stage": "Output",
+    "message": "Saved \u2192 results/week_7_outputs\\invalid_test_7_complexity.json"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.228337",
+    "level": "INFO",
+    "stage": "Complexity",
+    "message": "CC=1, depth=1, rating=low, LOC\u22486"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.228577",
+    "level": "PHASE_DONE",
+    "stage": "Complexity Analysis",
+    "message": "\u2713  Complexity Analysis  (1.0 ms)"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.228738",
+    "level": "PHASE",
+    "stage": "Stage 8 \u00b7 Constant Folding",
+    "message": "START"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.229812",
+    "level": "INFO",
+    "stage": "Output",
+    "message": "Saved \u2192 results/week_7_outputs\\invalid_test_8_constant_fold_log.json"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.229904",
+    "level": "INFO",
+    "stage": "ConstFold",
+    "message": "0 fold(s) applied"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.229950",
+    "level": "PHASE_DONE",
+    "stage": "Constant Folding",
+    "message": "\u2713  Constant Folding  (0.9 ms)"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.229998",
+    "level": "PHASE",
+    "stage": "Stage 9 \u00b7 Dead-Code Elimination",
+    "message": "START"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.231162",
+    "level": "INFO",
+    "stage": "Output",
+    "message": "Saved \u2192 results/week_7_outputs\\invalid_test_9_dead_code_log.json"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.231461",
+    "level": "INFO",
+    "stage": "DCE",
+    "message": "0 elimination(s) applied"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.231737",
+    "level": "PHASE_DONE",
+    "stage": "Dead-Code Elimination",
+    "message": "\u2713  Dead-Code Elimination  (1.4 ms)"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.231840",
+    "level": "PHASE",
+    "stage": "Stage 10 \u00b7 Code Simplification",
+    "message": "START"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.233717",
+    "level": "INFO",
+    "stage": "Output",
+    "message": "Saved \u2192 results/week_7_outputs\\invalid_test_10_simplify_log.json"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.234009",
+    "level": "INFO",
+    "stage": "Simplifier",
+    "message": "0 simplification(s) applied"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.234259",
+    "level": "PHASE_DONE",
+    "stage": "Code Simplification",
+    "message": "\u2713  Code Simplification  (1.9 ms)"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.235590",
+    "level": "INFO",
+    "stage": "Output",
+    "message": "Saved \u2192 results/week_7_outputs\\invalid_test_final_ast.json"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.235673",
+    "level": "PHASE",
+    "stage": "Stage 11 \u00b7 Rule / Heuristic Engine",
+    "message": "START"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.236959",
+    "level": "INFO",
+    "stage": "Output",
+    "message": "Saved \u2192 results/week_7_outputs\\invalid_test_11_rule_engine.json"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.237212",
+    "level": "INFO",
+    "stage": "Rules",
+    "message": "1/14 rules fired  \u2013 0 error(s), 1 warning(s), grade: B"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.237460",
+    "level": "PHASE_DONE",
+    "stage": "Rule Engine",
+    "message": "\u2713  Rule Engine  (1.1 ms)"
+  },
+  {
+    "timestamp": "2026-02-22T21:45:05.238317",
+    "level": "INFO",
+    "stage": "Output",
+    "message": "Saved \u2192 results/week_7_outputs\\invalid_test_pipeline_summary.json"
+  }
+]

@@ -1,0 +1,1332 @@
+{
+  "success": true,
+  "directory": "test_samples",
+  "total_files": 6,
+  "successful_parses": 2,
+  "failed_parses": 4,
+  "files_with_syntax_errors": 4,
+  "file_results": [
+    {
+      "success": false,
+      "filepath": "test_samples\\InvalidTest.java",
+      "language": "java",
+      "total_tokens": 39,
+      "total_errors": 12,
+      "error_summary": {
+        "language": "java",
+        "total_errors": 12,
+        "error_categories": {
+          "Unknown Error": 10,
+          "Syntax Error": 1,
+          "Missing Delimiter": 1
+        },
+        "error_types": {
+          "UNEXPECTED_TOKEN": 10,
+          "SyntaxError": 1,
+          "MISSING_BRACE": 1
+        },
+        "errors": [
+          {
+            "language": "java",
+            "error_type": "UNEXPECTED_TOKEN",
+            "category": "Unknown Error",
+            "line": 8,
+            "column": 1,
+            "message": "Unexpected token in class body: ",
+            "token": ""
+          },
+          {
+            "language": "java",
+            "error_type": "UNEXPECTED_TOKEN",
+            "category": "Unknown Error",
+            "line": 8,
+            "column": 1,
+            "message": "Unexpected token in class body: ",
+            "token": ""
+          },
+          {
+            "language": "java",
+            "error_type": "UNEXPECTED_TOKEN",
+            "category": "Unknown Error",
+            "line": 8,
+            "column": 1,
+            "message": "Unexpected token in class body: ",
+            "token": ""
+          },
+          {
+            "language": "java",
+            "error_type": "UNEXPECTED_TOKEN",
+            "category": "Unknown Error",
+            "line": 8,
+            "column": 1,
+            "message": "Unexpected token in class body: ",
+            "token": ""
+          },
+          {
+            "language": "java",
+            "error_type": "UNEXPECTED_TOKEN",
+            "category": "Unknown Error",
+            "line": 8,
+            "column": 1,
+            "message": "Unexpected token in class body: ",
+            "token": ""
+          },
+          {
+            "language": "java",
+            "error_type": "UNEXPECTED_TOKEN",
+            "category": "Unknown Error",
+            "line": 8,
+            "column": 1,
+            "message": "Unexpected token in class body: ",
+            "token": ""
+          },
+          {
+            "language": "java",
+            "error_type": "UNEXPECTED_TOKEN",
+            "category": "Unknown Error",
+            "line": 8,
+            "column": 1,
+            "message": "Unexpected token in class body: ",
+            "token": ""
+          },
+          {
+            "language": "java",
+            "error_type": "UNEXPECTED_TOKEN",
+            "category": "Unknown Error",
+            "line": 8,
+            "column": 1,
+            "message": "Unexpected token in class body: ",
+            "token": ""
+          },
+          {
+            "language": "java",
+            "error_type": "UNEXPECTED_TOKEN",
+            "category": "Unknown Error",
+            "line": 8,
+            "column": 1,
+            "message": "Unexpected token in class body: ",
+            "token": ""
+          },
+          {
+            "language": "java",
+            "error_type": "UNEXPECTED_TOKEN",
+            "category": "Unknown Error",
+            "line": 8,
+            "column": 1,
+            "message": "Unexpected token in class body: ",
+            "token": ""
+          },
+          {
+            "language": "java",
+            "error_type": "SyntaxError",
+            "category": "Syntax Error",
+            "line": 8,
+            "column": 1,
+            "message": "Expected DELIMITER, got EOF ''",
+            "token": ""
+          },
+          {
+            "language": "java",
+            "error_type": "MISSING_BRACE",
+            "category": "Missing Delimiter",
+            "line": 8,
+            "column": 1,
+            "message": "Missing closing brace in class body",
+            "token": ""
+          }
+        ]
+      },
+      "ast": {
+        "node_type": "Program",
+        "line": 0,
+        "column": 0,
+        "statements": [
+          {
+            "node_type": "ClassDecl",
+            "line": 1,
+            "column": 0,
+            "name": "InvalidTest",
+            "methods": [
+              {
+                "node_type": "FunctionDecl",
+                "line": 2,
+                "column": 0,
+                "return_type": "void",
+                "name": "main",
+                "parameters": [
+                  {
+                    "node_type": "Parameter",
+                    "line": 0,
+                    "column": 0,
+                    "param_type": "String[]",
+                    "name": "args"
+                  }
+                ],
+                "body": {
+                  "node_type": "Block",
+                  "line": 0,
+                  "column": 0,
+                  "statements": [
+                    {
+                      "node_type": "IfStmt",
+                      "line": 3,
+                      "column": 0,
+                      "condition": {
+                        "node_type": "Literal",
+                        "line": 3,
+                        "column": 0,
+                        "value": "true",
+                        "literal_type": "bool"
+                      },
+                      "then_block": {
+                        "node_type": "Block",
+                        "line": 0,
+                        "column": 0,
+                        "statements": [
+                          {
+                            "node_type": "Block",
+                            "line": 0,
+                            "column": 0,
+                            "statements": [
+                              {
+                                "node_type": "ExpressionStmt",
+                                "line": 0,
+                                "column": 0,
+                                "expression": {
+                                  "node_type": "MemberAccess",
+                                  "line": 0,
+                                  "column": 0,
+                                  "object": {
+                                    "node_type": "MemberAccess",
+                                    "line": 0,
+                                    "column": 0,
+                                    "object": {
+                                      "node_type": "Identifier",
+                                      "line": 4,
+                                      "column": 0,
+                                      "name": "System"
+                                    },
+                                    "member": "out"
+                                  },
+                                  "member": "println"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "else_block": null
+                    }
+                  ]
+                },
+                "modifiers": [
+                  "public",
+                  "static"
+                ]
+              }
+            ],
+            "fields": [],
+            "modifiers": [
+              "public"
+            ],
+            "parent": null
+          }
+        ],
+        "language": "Java"
+      },
+      "parse_time": 0.017974853515625
+    },
+    {
+      "success": false,
+      "filepath": "test_samples\\invalid_test.c",
+      "language": "c",
+      "total_tokens": 37,
+      "total_errors": 1,
+      "error_summary": {
+        "language": "c",
+        "total_errors": 1,
+        "error_categories": {
+          "Missing Delimiter": 1
+        },
+        "error_types": {
+          "MISSING_SEMICOLON": 1
+        },
+        "errors": [
+          {
+            "language": "c",
+            "error_type": "MISSING_SEMICOLON",
+            "category": "Missing Delimiter",
+            "line": 4,
+            "column": 15,
+            "message": "Missing semicolon after variable declaration",
+            "token": "\\n"
+          }
+        ]
+      },
+      "ast": {
+        "node_type": "Program",
+        "line": 0,
+        "column": 0,
+        "statements": [
+          {
+            "node_type": "ImportStmt",
+            "line": 1,
+            "column": 1,
+            "module": "#include <stdio.h>",
+            "items": []
+          },
+          {
+            "node_type": "FunctionDecl",
+            "line": 3,
+            "column": 0,
+            "return_type": "int",
+            "name": "main",
+            "parameters": [],
+            "body": {
+              "node_type": "Block",
+              "line": 0,
+              "column": 0,
+              "statements": [
+                {
+                  "node_type": "VariableDecl",
+                  "line": 4,
+                  "column": 0,
+                  "var_type": "int",
+                  "name": "x",
+                  "initializer": {
+                    "node_type": "Literal",
+                    "line": 4,
+                    "column": 0,
+                    "value": "10",
+                    "literal_type": "number"
+                  },
+                  "is_const": false
+                },
+                {
+                  "node_type": "VariableDecl",
+                  "line": 5,
+                  "column": 0,
+                  "var_type": "int",
+                  "name": "y",
+                  "initializer": {
+                    "node_type": "Literal",
+                    "line": 5,
+                    "column": 0,
+                    "value": "20",
+                    "literal_type": "number"
+                  },
+                  "is_const": false
+                },
+                {
+                  "node_type": "ExpressionStmt",
+                  "line": 0,
+                  "column": 0,
+                  "expression": {
+                    "node_type": "FunctionCall",
+                    "line": 0,
+                    "column": 0,
+                    "name": "printf",
+                    "arguments": [
+                      {
+                        "node_type": "Literal",
+                        "line": 6,
+                        "column": 0,
+                        "value": "\"Sum: %d\\n\"",
+                        "literal_type": "string"
+                      },
+                      {
+                        "node_type": "BinaryOp",
+                        "line": 0,
+                        "column": 0,
+                        "left": {
+                          "node_type": "Identifier",
+                          "line": 6,
+                          "column": 0,
+                          "name": "x"
+                        },
+                        "operator": "+",
+                        "right": {
+                          "node_type": "Identifier",
+                          "line": 6,
+                          "column": 0,
+                          "name": "y"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "node_type": "ReturnStmt",
+                  "line": 7,
+                  "column": 0,
+                  "value": {
+                    "node_type": "Literal",
+                    "line": 7,
+                    "column": 0,
+                    "value": "0",
+                    "literal_type": "number"
+                  }
+                }
+              ]
+            },
+            "modifiers": []
+          }
+        ],
+        "language": "C/C++"
+      },
+      "parse_time": 0.002230405807495117
+    },
+    {
+      "success": false,
+      "filepath": "test_samples\\invalid_test.py",
+      "language": "python",
+      "total_tokens": 27,
+      "total_errors": 5,
+      "error_summary": {
+        "language": "python",
+        "total_errors": 5,
+        "error_categories": {
+          "Syntax Error": 2,
+          "Missing Delimiter": 2,
+          "Malformed Expression": 1
+        },
+        "error_types": {
+          "SyntaxError": 2,
+          "MISSING_PAREN": 1,
+          "MISSING_COLON": 1,
+          "INVALID_EXPRESSION": 1
+        },
+        "errors": [
+          {
+            "language": "python",
+            "error_type": "SyntaxError",
+            "category": "Syntax Error",
+            "line": 1,
+            "column": 16,
+            "message": "Expected ')', got ':'",
+            "token": ":"
+          },
+          {
+            "language": "python",
+            "error_type": "MISSING_PAREN",
+            "category": "Missing Delimiter",
+            "line": 1,
+            "column": 17,
+            "message": "Missing ')' in function definition",
+            "token": "\\n"
+          },
+          {
+            "language": "python",
+            "error_type": "SyntaxError",
+            "category": "Syntax Error",
+            "line": 1,
+            "column": 17,
+            "message": "Expected DELIMITER, got NEWLINE '\\n'",
+            "token": "\\n"
+          },
+          {
+            "language": "python",
+            "error_type": "MISSING_COLON",
+            "category": "Missing Delimiter",
+            "line": 2,
+            "column": 1,
+            "message": "Missing ':' after function signature",
+            "token": "<+4>"
+          },
+          {
+            "language": "python",
+            "error_type": "INVALID_EXPRESSION",
+            "category": "Malformed Expression",
+            "line": 3,
+            "column": 1,
+            "message": "Unexpected token: ERROR 'Unindent does not match any outer indentation level'",
+            "token": "Unindent does not match any outer indentation level"
+          }
+        ]
+      },
+      "ast": {
+        "node_type": "Program",
+        "line": 0,
+        "column": 0,
+        "statements": [
+          {
+            "node_type": "FunctionDecl",
+            "line": 1,
+            "column": 0,
+            "return_type": null,
+            "name": "greet",
+            "parameters": [
+              {
+                "node_type": "Parameter",
+                "line": 0,
+                "column": 0,
+                "param_type": null,
+                "name": "name"
+              }
+            ],
+            "body": {
+              "node_type": "Block",
+              "line": 0,
+              "column": 0,
+              "statements": [
+                {
+                  "node_type": "ExpressionStmt",
+                  "line": 0,
+                  "column": 0,
+                  "expression": {
+                    "node_type": "AssignmentExpr",
+                    "line": 0,
+                    "column": 0,
+                    "target": "message",
+                    "value": {
+                      "node_type": "Identifier",
+                      "line": 2,
+                      "column": 0,
+                      "name": "f"
+                    },
+                    "operator": "="
+                  }
+                },
+                {
+                  "node_type": "ExpressionStmt",
+                  "line": 0,
+                  "column": 0,
+                  "expression": {
+                    "node_type": "Literal",
+                    "line": 2,
+                    "column": 0,
+                    "value": "\"Hello, {name}!\"",
+                    "literal_type": "string"
+                  }
+                }
+              ]
+            },
+            "modifiers": []
+          },
+          {
+            "node_type": "ExpressionStmt",
+            "line": 0,
+            "column": 0,
+            "expression": null
+          },
+          {
+            "node_type": "ExpressionStmt",
+            "line": 0,
+            "column": 0,
+            "expression": {
+              "node_type": "FunctionCall",
+              "line": 0,
+              "column": 0,
+              "name": "print",
+              "arguments": [
+                {
+                  "node_type": "Identifier",
+                  "line": 3,
+                  "column": 0,
+                  "name": "message"
+                }
+              ]
+            }
+          },
+          {
+            "node_type": "ExpressionStmt",
+            "line": 0,
+            "column": 0,
+            "expression": {
+              "node_type": "FunctionCall",
+              "line": 0,
+              "column": 0,
+              "name": "greet",
+              "arguments": [
+                {
+                  "node_type": "Literal",
+                  "line": 5,
+                  "column": 0,
+                  "value": "\"World\"",
+                  "literal_type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "language": "Python"
+      },
+      "parse_time": 0.0020911693572998047
+    },
+    {
+      "success": true,
+      "filepath": "test_samples\\ValidTest.java",
+      "language": "java",
+      "total_tokens": 67,
+      "total_errors": 0,
+      "error_summary": {
+        "language": "java",
+        "total_errors": 0,
+        "error_categories": {},
+        "error_types": {}
+      },
+      "ast": {
+        "node_type": "Program",
+        "line": 0,
+        "column": 0,
+        "statements": [
+          {
+            "node_type": "ClassDecl",
+            "line": 1,
+            "column": 0,
+            "name": "ValidTest",
+            "methods": [
+              {
+                "node_type": "FunctionDecl",
+                "line": 2,
+                "column": 0,
+                "return_type": "int",
+                "name": "add",
+                "parameters": [
+                  {
+                    "node_type": "Parameter",
+                    "line": 0,
+                    "column": 0,
+                    "param_type": "int",
+                    "name": "a"
+                  },
+                  {
+                    "node_type": "Parameter",
+                    "line": 0,
+                    "column": 0,
+                    "param_type": "int",
+                    "name": "b"
+                  }
+                ],
+                "body": {
+                  "node_type": "Block",
+                  "line": 0,
+                  "column": 0,
+                  "statements": [
+                    {
+                      "node_type": "ReturnStmt",
+                      "line": 3,
+                      "column": 0,
+                      "value": {
+                        "node_type": "BinaryOp",
+                        "line": 0,
+                        "column": 0,
+                        "left": {
+                          "node_type": "Identifier",
+                          "line": 3,
+                          "column": 0,
+                          "name": "a"
+                        },
+                        "operator": "+",
+                        "right": {
+                          "node_type": "Identifier",
+                          "line": 3,
+                          "column": 0,
+                          "name": "b"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "modifiers": [
+                  "public",
+                  "static"
+                ]
+              },
+              {
+                "node_type": "FunctionDecl",
+                "line": 6,
+                "column": 0,
+                "return_type": "void",
+                "name": "main",
+                "parameters": [
+                  {
+                    "node_type": "Parameter",
+                    "line": 0,
+                    "column": 0,
+                    "param_type": "String[]",
+                    "name": "args"
+                  }
+                ],
+                "body": {
+                  "node_type": "Block",
+                  "line": 0,
+                  "column": 0,
+                  "statements": [
+                    {
+                      "node_type": "VariableDecl",
+                      "line": 0,
+                      "column": 0,
+                      "var_type": "int",
+                      "name": "result",
+                      "initializer": {
+                        "node_type": "FunctionCall",
+                        "line": 0,
+                        "column": 0,
+                        "name": "add",
+                        "arguments": [
+                          {
+                            "node_type": "Literal",
+                            "line": 7,
+                            "column": 0,
+                            "value": "5",
+                            "literal_type": "number"
+                          },
+                          {
+                            "node_type": "Literal",
+                            "line": 7,
+                            "column": 0,
+                            "value": "10",
+                            "literal_type": "number"
+                          }
+                        ]
+                      },
+                      "is_const": false
+                    },
+                    {
+                      "node_type": "ExpressionStmt",
+                      "line": 0,
+                      "column": 0,
+                      "expression": {
+                        "node_type": "MemberAccess",
+                        "line": 0,
+                        "column": 0,
+                        "object": {
+                          "node_type": "MemberAccess",
+                          "line": 0,
+                          "column": 0,
+                          "object": {
+                            "node_type": "Identifier",
+                            "line": 8,
+                            "column": 0,
+                            "name": "System"
+                          },
+                          "member": "out"
+                        },
+                        "member": "println"
+                      }
+                    }
+                  ]
+                },
+                "modifiers": [
+                  "public",
+                  "static"
+                ]
+              }
+            ],
+            "fields": [],
+            "modifiers": [
+              "public"
+            ],
+            "parent": null
+          }
+        ],
+        "language": "Java"
+      },
+      "parse_time": 0.019658565521240234
+    },
+    {
+      "success": true,
+      "filepath": "test_samples\\valid_test.c",
+      "language": "c",
+      "total_tokens": 71,
+      "total_errors": 0,
+      "error_summary": {
+        "language": "c",
+        "total_errors": 0,
+        "error_categories": {},
+        "error_types": {}
+      },
+      "ast": {
+        "node_type": "Program",
+        "line": 0,
+        "column": 0,
+        "statements": [
+          {
+            "node_type": "ImportStmt",
+            "line": 1,
+            "column": 1,
+            "module": "#include <stdio.h>",
+            "items": []
+          },
+          {
+            "node_type": "FunctionDecl",
+            "line": 3,
+            "column": 0,
+            "return_type": "int",
+            "name": "factorial",
+            "parameters": [
+              {
+                "node_type": "Parameter",
+                "line": 0,
+                "column": 0,
+                "param_type": "int",
+                "name": "n"
+              }
+            ],
+            "body": {
+              "node_type": "Block",
+              "line": 0,
+              "column": 0,
+              "statements": [
+                {
+                  "node_type": "IfStmt",
+                  "line": 4,
+                  "column": 0,
+                  "condition": {
+                    "node_type": "BinaryOp",
+                    "line": 0,
+                    "column": 0,
+                    "left": {
+                      "node_type": "Identifier",
+                      "line": 4,
+                      "column": 0,
+                      "name": "n"
+                    },
+                    "operator": "<=",
+                    "right": {
+                      "node_type": "Literal",
+                      "line": 4,
+                      "column": 0,
+                      "value": "1",
+                      "literal_type": "number"
+                    }
+                  },
+                  "then_block": {
+                    "node_type": "Block",
+                    "line": 0,
+                    "column": 0,
+                    "statements": [
+                      {
+                        "node_type": "ReturnStmt",
+                        "line": 5,
+                        "column": 0,
+                        "value": {
+                          "node_type": "Literal",
+                          "line": 5,
+                          "column": 0,
+                          "value": "1",
+                          "literal_type": "number"
+                        }
+                      }
+                    ]
+                  },
+                  "else_block": null
+                },
+                {
+                  "node_type": "ReturnStmt",
+                  "line": 7,
+                  "column": 0,
+                  "value": {
+                    "node_type": "BinaryOp",
+                    "line": 0,
+                    "column": 0,
+                    "left": {
+                      "node_type": "Identifier",
+                      "line": 7,
+                      "column": 0,
+                      "name": "n"
+                    },
+                    "operator": "*",
+                    "right": {
+                      "node_type": "FunctionCall",
+                      "line": 0,
+                      "column": 0,
+                      "name": "factorial",
+                      "arguments": [
+                        {
+                          "node_type": "BinaryOp",
+                          "line": 0,
+                          "column": 0,
+                          "left": {
+                            "node_type": "Identifier",
+                            "line": 7,
+                            "column": 0,
+                            "name": "n"
+                          },
+                          "operator": "-",
+                          "right": {
+                            "node_type": "Literal",
+                            "line": 7,
+                            "column": 0,
+                            "value": "1",
+                            "literal_type": "number"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "modifiers": []
+          },
+          {
+            "node_type": "FunctionDecl",
+            "line": 10,
+            "column": 0,
+            "return_type": "int",
+            "name": "main",
+            "parameters": [],
+            "body": {
+              "node_type": "Block",
+              "line": 0,
+              "column": 0,
+              "statements": [
+                {
+                  "node_type": "VariableDecl",
+                  "line": 11,
+                  "column": 0,
+                  "var_type": "int",
+                  "name": "num",
+                  "initializer": {
+                    "node_type": "Literal",
+                    "line": 11,
+                    "column": 0,
+                    "value": "5",
+                    "literal_type": "number"
+                  },
+                  "is_const": false
+                },
+                {
+                  "node_type": "ExpressionStmt",
+                  "line": 0,
+                  "column": 0,
+                  "expression": {
+                    "node_type": "FunctionCall",
+                    "line": 0,
+                    "column": 0,
+                    "name": "printf",
+                    "arguments": [
+                      {
+                        "node_type": "Literal",
+                        "line": 12,
+                        "column": 0,
+                        "value": "\"Factorial of %d is %d\\n\"",
+                        "literal_type": "string"
+                      },
+                      {
+                        "node_type": "Identifier",
+                        "line": 12,
+                        "column": 0,
+                        "name": "num"
+                      },
+                      {
+                        "node_type": "FunctionCall",
+                        "line": 0,
+                        "column": 0,
+                        "name": "factorial",
+                        "arguments": [
+                          {
+                            "node_type": "Identifier",
+                            "line": 12,
+                            "column": 0,
+                            "name": "num"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "node_type": "ReturnStmt",
+                  "line": 13,
+                  "column": 0,
+                  "value": {
+                    "node_type": "Literal",
+                    "line": 13,
+                    "column": 0,
+                    "value": "0",
+                    "literal_type": "number"
+                  }
+                }
+              ]
+            },
+            "modifiers": []
+          }
+        ],
+        "language": "C/C++"
+      },
+      "parse_time": 0.0031745433807373047
+    },
+    {
+      "success": false,
+      "filepath": "test_samples\\valid_test.py",
+      "language": "python",
+      "total_tokens": 62,
+      "total_errors": 6,
+      "error_summary": {
+        "language": "python",
+        "total_errors": 6,
+        "error_categories": {
+          "Syntax Error": 2,
+          "Missing Delimiter": 3,
+          "Malformed Expression": 1
+        },
+        "error_types": {
+          "SyntaxError": 2,
+          "MISSING_PAREN": 2,
+          "MISSING_COLON": 1,
+          "INVALID_EXPRESSION": 1
+        },
+        "errors": [
+          {
+            "language": "python",
+            "error_type": "SyntaxError",
+            "category": "Syntax Error",
+            "line": 1,
+            "column": 17,
+            "message": "Expected ')', got ':'",
+            "token": ":"
+          },
+          {
+            "language": "python",
+            "error_type": "MISSING_PAREN",
+            "category": "Missing Delimiter",
+            "line": 1,
+            "column": 18,
+            "message": "Missing ')' in function definition",
+            "token": "\\n"
+          },
+          {
+            "language": "python",
+            "error_type": "SyntaxError",
+            "category": "Syntax Error",
+            "line": 1,
+            "column": 18,
+            "message": "Expected DELIMITER, got NEWLINE '\\n'",
+            "token": "\\n"
+          },
+          {
+            "language": "python",
+            "error_type": "MISSING_COLON",
+            "category": "Missing Delimiter",
+            "line": 2,
+            "column": 1,
+            "message": "Missing ':' after function signature",
+            "token": "<+4>"
+          },
+          {
+            "language": "python",
+            "error_type": "MISSING_PAREN",
+            "category": "Missing Delimiter",
+            "line": 8,
+            "column": 16,
+            "message": "Missing ')' in function call",
+            "token": "\"fib({i}) = {fibonacci(i)}\""
+          },
+          {
+            "language": "python",
+            "error_type": "INVALID_EXPRESSION",
+            "category": "Malformed Expression",
+            "line": 8,
+            "column": 43,
+            "message": "Unexpected token: DELIMITER ')'",
+            "token": ")"
+          }
+        ]
+      },
+      "ast": {
+        "node_type": "Program",
+        "line": 0,
+        "column": 0,
+        "statements": [
+          {
+            "node_type": "FunctionDecl",
+            "line": 1,
+            "column": 0,
+            "return_type": null,
+            "name": "fibonacci",
+            "parameters": [
+              {
+                "node_type": "Parameter",
+                "line": 0,
+                "column": 0,
+                "param_type": null,
+                "name": "n"
+              }
+            ],
+            "body": {
+              "node_type": "Block",
+              "line": 0,
+              "column": 0,
+              "statements": [
+                {
+                  "node_type": "IfStmt",
+                  "line": 2,
+                  "column": 0,
+                  "condition": {
+                    "node_type": "BinaryOp",
+                    "line": 0,
+                    "column": 0,
+                    "left": {
+                      "node_type": "Identifier",
+                      "line": 2,
+                      "column": 0,
+                      "name": "n"
+                    },
+                    "operator": "<=",
+                    "right": {
+                      "node_type": "Literal",
+                      "line": 2,
+                      "column": 0,
+                      "value": "1",
+                      "literal_type": "number"
+                    }
+                  },
+                  "then_block": {
+                    "node_type": "Block",
+                    "line": 0,
+                    "column": 0,
+                    "statements": [
+                      {
+                        "node_type": "ReturnStmt",
+                        "line": 3,
+                        "column": 0,
+                        "value": {
+                          "node_type": "Identifier",
+                          "line": 3,
+                          "column": 0,
+                          "name": "n"
+                        }
+                      }
+                    ]
+                  },
+                  "else_block": null
+                },
+                {
+                  "node_type": "ReturnStmt",
+                  "line": 4,
+                  "column": 0,
+                  "value": {
+                    "node_type": "BinaryOp",
+                    "line": 0,
+                    "column": 0,
+                    "left": {
+                      "node_type": "FunctionCall",
+                      "line": 0,
+                      "column": 0,
+                      "name": "fibonacci",
+                      "arguments": [
+                        {
+                          "node_type": "BinaryOp",
+                          "line": 0,
+                          "column": 0,
+                          "left": {
+                            "node_type": "Identifier",
+                            "line": 4,
+                            "column": 0,
+                            "name": "n"
+                          },
+                          "operator": "-",
+                          "right": {
+                            "node_type": "Literal",
+                            "line": 4,
+                            "column": 0,
+                            "value": "1",
+                            "literal_type": "number"
+                          }
+                        }
+                      ]
+                    },
+                    "operator": "+",
+                    "right": {
+                      "node_type": "FunctionCall",
+                      "line": 0,
+                      "column": 0,
+                      "name": "fibonacci",
+                      "arguments": [
+                        {
+                          "node_type": "BinaryOp",
+                          "line": 0,
+                          "column": 0,
+                          "left": {
+                            "node_type": "Identifier",
+                            "line": 4,
+                            "column": 0,
+                            "name": "n"
+                          },
+                          "operator": "-",
+                          "right": {
+                            "node_type": "Literal",
+                            "line": 4,
+                            "column": 0,
+                            "value": "2",
+                            "literal_type": "number"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "modifiers": []
+          },
+          {
+            "node_type": "IfStmt",
+            "line": 6,
+            "column": 0,
+            "condition": {
+              "node_type": "BinaryOp",
+              "line": 0,
+              "column": 0,
+              "left": {
+                "node_type": "Identifier",
+                "line": 6,
+                "column": 0,
+                "name": "__name__"
+              },
+              "operator": "==",
+              "right": {
+                "node_type": "Literal",
+                "line": 6,
+                "column": 0,
+                "value": "\"__main__\"",
+                "literal_type": "string"
+              }
+            },
+            "then_block": {
+              "node_type": "Block",
+              "line": 0,
+              "column": 0,
+              "statements": [
+                {
+                  "node_type": "ForStmt",
+                  "line": 7,
+                  "column": 0,
+                  "init": null,
+                  "condition": null,
+                  "increment": null,
+                  "body": {
+                    "node_type": "Block",
+                    "line": 0,
+                    "column": 0,
+                    "statements": [
+                      {
+                        "node_type": "ExpressionStmt",
+                        "line": 0,
+                        "column": 0,
+                        "expression": {
+                          "node_type": "FunctionCall",
+                          "line": 0,
+                          "column": 0,
+                          "name": "print",
+                          "arguments": [
+                            {
+                              "node_type": "Identifier",
+                              "line": 8,
+                              "column": 0,
+                              "name": "f"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "node_type": "ExpressionStmt",
+                        "line": 0,
+                        "column": 0,
+                        "expression": {
+                          "node_type": "Literal",
+                          "line": 8,
+                          "column": 0,
+                          "value": "\"fib({i}) = {fibonacci(i)}\"",
+                          "literal_type": "string"
+                        }
+                      },
+                      {
+                        "node_type": "ExpressionStmt",
+                        "line": 0,
+                        "column": 0,
+                        "expression": null
+                      }
+                    ]
+                  },
+                  "iterator": "i",
+                  "iterable": {
+                    "node_type": "FunctionCall",
+                    "line": 0,
+                    "column": 0,
+                    "name": "range",
+                    "arguments": [
+                      {
+                        "node_type": "Literal",
+                        "line": 7,
+                        "column": 0,
+                        "value": "10",
+                        "literal_type": "number"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "else_block": null
+          }
+        ],
+        "language": "Python"
+      },
+      "parse_time": 0.002196788787841797
+    }
+  ],
+  "error_summary": {
+    "total_files": 6,
+    "total_errors": 24,
+    "by_language": {
+      "java": {
+        "files": 2,
+        "errors": 12,
+        "categories": {
+          "Unknown Error": 10,
+          "Syntax Error": 1,
+          "Missing Delimiter": 1
+        },
+        "types": {
+          "UNEXPECTED_TOKEN": 10,
+          "SyntaxError": 1,
+          "MISSING_BRACE": 1
+        }
+      },
+      "c": {
+        "files": 2,
+        "errors": 1,
+        "categories": {
+          "Missing Delimiter": 1
+        },
+        "types": {
+          "MISSING_SEMICOLON": 1
+        }
+      },
+      "python": {
+        "files": 2,
+        "errors": 11,
+        "categories": {
+          "Syntax Error": 4,
+          "Missing Delimiter": 5,
+          "Malformed Expression": 2
+        },
+        "types": {
+          "SyntaxError": 4,
+          "MISSING_PAREN": 3,
+          "MISSING_COLON": 2,
+          "INVALID_EXPRESSION": 2
+        }
+      }
+    },
+    "by_category": {
+      "Unknown Error": 10,
+      "Syntax Error": 5,
+      "Missing Delimiter": 7,
+      "Malformed Expression": 2
+    },
+    "by_error_type": {
+      "UNEXPECTED_TOKEN": 10,
+      "SyntaxError": 5,
+      "MISSING_BRACE": 1,
+      "MISSING_SEMICOLON": 1,
+      "MISSING_PAREN": 3,
+      "MISSING_COLON": 2,
+      "INVALID_EXPRESSION": 2
+    }
+  }
+}

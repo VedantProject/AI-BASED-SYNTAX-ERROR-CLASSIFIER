@@ -1,0 +1,141 @@
+{
+  "definitions": [
+    {
+      "index": 0,
+      "name": "#include <stdio.h>",
+      "line": 1,
+      "def_type": "import",
+      "used": false
+    },
+    {
+      "index": 1,
+      "name": "factorial",
+      "line": 3,
+      "def_type": "function_decl",
+      "used": true
+    },
+    {
+      "index": 2,
+      "name": "n",
+      "line": 0,
+      "def_type": "parameter",
+      "used": true
+    },
+    {
+      "index": 3,
+      "name": "main",
+      "line": 10,
+      "def_type": "function_decl",
+      "used": false
+    },
+    {
+      "index": 4,
+      "name": "num",
+      "line": 11,
+      "def_type": "var_decl",
+      "used": true
+    }
+  ],
+  "uses": [
+    {
+      "index": 0,
+      "name": "n",
+      "line": 4,
+      "reaching_def": 2
+    },
+    {
+      "index": 1,
+      "name": "n",
+      "line": 7,
+      "reaching_def": 2
+    },
+    {
+      "index": 2,
+      "name": "factorial",
+      "line": 0,
+      "reaching_def": 1
+    },
+    {
+      "index": 3,
+      "name": "n",
+      "line": 7,
+      "reaching_def": 2
+    },
+    {
+      "index": 4,
+      "name": "printf",
+      "line": 0,
+      "reaching_def": null
+    },
+    {
+      "index": 5,
+      "name": "num",
+      "line": 12,
+      "reaching_def": 4
+    },
+    {
+      "index": 6,
+      "name": "factorial",
+      "line": 0,
+      "reaching_def": 1
+    },
+    {
+      "index": 7,
+      "name": "num",
+      "line": 12,
+      "reaching_def": 4
+    }
+  ],
+  "use_def_chains": [
+    {
+      "use_name": "n",
+      "use_line": 4,
+      "def_line": 0,
+      "def_type": "parameter"
+    },
+    {
+      "use_name": "n",
+      "use_line": 7,
+      "def_line": 0,
+      "def_type": "parameter"
+    },
+    {
+      "use_name": "factorial",
+      "use_line": 0,
+      "def_line": 3,
+      "def_type": "function_decl"
+    },
+    {
+      "use_name": "n",
+      "use_line": 7,
+      "def_line": 0,
+      "def_type": "parameter"
+    },
+    {
+      "use_name": "num",
+      "use_line": 12,
+      "def_line": 11,
+      "def_type": "var_decl"
+    },
+    {
+      "use_name": "factorial",
+      "use_line": 0,
+      "def_line": 3,
+      "def_type": "function_decl"
+    },
+    {
+      "use_name": "num",
+      "use_line": 12,
+      "def_line": 11,
+      "def_type": "var_decl"
+    }
+  ],
+  "uninitialized_vars": [],
+  "dead_definitions": [],
+  "summary": {
+    "total_definitions": 5,
+    "total_uses": 8,
+    "uninitialized_count": 0,
+    "dead_definition_count": 0
+  }
+}

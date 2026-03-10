@@ -1,0 +1,210 @@
+{
+  "node_type": "Program",
+  "line": 0,
+  "column": 0,
+  "statements": [
+    {
+      "node_type": "ImportStmt",
+      "line": 1,
+      "column": 1,
+      "module": "#include <stdio.h>",
+      "items": []
+    },
+    {
+      "node_type": "FunctionDecl",
+      "line": 3,
+      "column": 0,
+      "return_type": "int",
+      "name": "factorial",
+      "parameters": [
+        {
+          "node_type": "Parameter",
+          "line": 0,
+          "column": 0,
+          "param_type": "int",
+          "name": "n"
+        }
+      ],
+      "body": {
+        "node_type": "Block",
+        "line": 0,
+        "column": 0,
+        "statements": [
+          {
+            "node_type": "IfStmt",
+            "line": 4,
+            "column": 0,
+            "condition": {
+              "node_type": "BinaryOp",
+              "line": 0,
+              "column": 0,
+              "left": {
+                "node_type": "Identifier",
+                "line": 4,
+                "column": 0,
+                "name": "n"
+              },
+              "operator": "<=",
+              "right": {
+                "node_type": "Literal",
+                "line": 4,
+                "column": 0,
+                "value": "1",
+                "literal_type": "number"
+              }
+            },
+            "then_block": {
+              "node_type": "Block",
+              "line": 0,
+              "column": 0,
+              "statements": [
+                {
+                  "node_type": "ReturnStmt",
+                  "line": 5,
+                  "column": 0,
+                  "value": {
+                    "node_type": "Literal",
+                    "line": 5,
+                    "column": 0,
+                    "value": "1",
+                    "literal_type": "number"
+                  }
+                }
+              ]
+            },
+            "else_block": null
+          },
+          {
+            "node_type": "ReturnStmt",
+            "line": 7,
+            "column": 0,
+            "value": {
+              "node_type": "BinaryOp",
+              "line": 0,
+              "column": 0,
+              "left": {
+                "node_type": "Identifier",
+                "line": 7,
+                "column": 0,
+                "name": "n"
+              },
+              "operator": "*",
+              "right": {
+                "node_type": "FunctionCall",
+                "line": 0,
+                "column": 0,
+                "name": "factorial",
+                "arguments": [
+                  {
+                    "node_type": "BinaryOp",
+                    "line": 0,
+                    "column": 0,
+                    "left": {
+                      "node_type": "Identifier",
+                      "line": 7,
+                      "column": 0,
+                      "name": "n"
+                    },
+                    "operator": "-",
+                    "right": {
+                      "node_type": "Literal",
+                      "line": 7,
+                      "column": 0,
+                      "value": "1",
+                      "literal_type": "number"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "modifiers": []
+    },
+    {
+      "node_type": "FunctionDecl",
+      "line": 10,
+      "column": 0,
+      "return_type": "int",
+      "name": "main",
+      "parameters": [],
+      "body": {
+        "node_type": "Block",
+        "line": 0,
+        "column": 0,
+        "statements": [
+          {
+            "node_type": "VariableDecl",
+            "line": 11,
+            "column": 0,
+            "var_type": "int",
+            "name": "num",
+            "initializer": {
+              "node_type": "Literal",
+              "line": 11,
+              "column": 0,
+              "value": "5",
+              "literal_type": "number"
+            },
+            "is_const": false
+          },
+          {
+            "node_type": "ExpressionStmt",
+            "line": 0,
+            "column": 0,
+            "expression": {
+              "node_type": "FunctionCall",
+              "line": 0,
+              "column": 0,
+              "name": "printf",
+              "arguments": [
+                {
+                  "node_type": "Literal",
+                  "line": 12,
+                  "column": 0,
+                  "value": "\"Factorial of %d is %d\\n\"",
+                  "literal_type": "string"
+                },
+                {
+                  "node_type": "Identifier",
+                  "line": 12,
+                  "column": 0,
+                  "name": "num"
+                },
+                {
+                  "node_type": "FunctionCall",
+                  "line": 0,
+                  "column": 0,
+                  "name": "factorial",
+                  "arguments": [
+                    {
+                      "node_type": "Identifier",
+                      "line": 12,
+                      "column": 0,
+                      "name": "num"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "node_type": "ReturnStmt",
+            "line": 13,
+            "column": 0,
+            "value": {
+              "node_type": "Literal",
+              "line": 13,
+              "column": 0,
+              "value": "0",
+              "literal_type": "number"
+            }
+          }
+        ]
+      },
+      "modifiers": []
+    }
+  ],
+  "language": "C/C++"
+}

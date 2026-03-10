@@ -1,0 +1,224 @@
+[
+  {
+    "type": "PREPROCESSOR",
+    "value": "#include <stdio.h>",
+    "line": 1,
+    "column": 1
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 1,
+    "column": 19
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 2,
+    "column": 1
+  },
+  {
+    "type": "KEYWORD",
+    "value": "int",
+    "line": 3,
+    "column": 1
+  },
+  {
+    "type": "IDENTIFIER",
+    "value": "main",
+    "line": 3,
+    "column": 5
+  },
+  {
+    "type": "DELIMITER",
+    "value": "(",
+    "line": 3,
+    "column": 9
+  },
+  {
+    "type": "DELIMITER",
+    "value": ")",
+    "line": 3,
+    "column": 10
+  },
+  {
+    "type": "DELIMITER",
+    "value": "{",
+    "line": 3,
+    "column": 12
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 3,
+    "column": 13
+  },
+  {
+    "type": "KEYWORD",
+    "value": "int",
+    "line": 4,
+    "column": 5
+  },
+  {
+    "type": "IDENTIFIER",
+    "value": "x",
+    "line": 4,
+    "column": 9
+  },
+  {
+    "type": "OPERATOR",
+    "value": "=",
+    "line": 4,
+    "column": 11
+  },
+  {
+    "type": "NUMBER",
+    "value": "10",
+    "line": 4,
+    "column": 13
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 4,
+    "column": 15
+  },
+  {
+    "type": "KEYWORD",
+    "value": "int",
+    "line": 5,
+    "column": 5
+  },
+  {
+    "type": "IDENTIFIER",
+    "value": "y",
+    "line": 5,
+    "column": 9
+  },
+  {
+    "type": "OPERATOR",
+    "value": "=",
+    "line": 5,
+    "column": 11
+  },
+  {
+    "type": "NUMBER",
+    "value": "20",
+    "line": 5,
+    "column": 13
+  },
+  {
+    "type": "DELIMITER",
+    "value": ";",
+    "line": 5,
+    "column": 15
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 5,
+    "column": 16
+  },
+  {
+    "type": "IDENTIFIER",
+    "value": "printf",
+    "line": 6,
+    "column": 5
+  },
+  {
+    "type": "DELIMITER",
+    "value": "(",
+    "line": 6,
+    "column": 11
+  },
+  {
+    "type": "STRING",
+    "value": "\"Sum: %d\\n\"",
+    "line": 6,
+    "column": 12
+  },
+  {
+    "type": "DELIMITER",
+    "value": ",",
+    "line": 6,
+    "column": 23
+  },
+  {
+    "type": "IDENTIFIER",
+    "value": "x",
+    "line": 6,
+    "column": 25
+  },
+  {
+    "type": "OPERATOR",
+    "value": "+",
+    "line": 6,
+    "column": 27
+  },
+  {
+    "type": "IDENTIFIER",
+    "value": "y",
+    "line": 6,
+    "column": 29
+  },
+  {
+    "type": "DELIMITER",
+    "value": ")",
+    "line": 6,
+    "column": 30
+  },
+  {
+    "type": "DELIMITER",
+    "value": ";",
+    "line": 6,
+    "column": 31
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 6,
+    "column": 32
+  },
+  {
+    "type": "KEYWORD",
+    "value": "return",
+    "line": 7,
+    "column": 5
+  },
+  {
+    "type": "NUMBER",
+    "value": "0",
+    "line": 7,
+    "column": 12
+  },
+  {
+    "type": "DELIMITER",
+    "value": ";",
+    "line": 7,
+    "column": 13
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 7,
+    "column": 14
+  },
+  {
+    "type": "DELIMITER",
+    "value": "}",
+    "line": 8,
+    "column": 1
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 8,
+    "column": 2
+  },
+  {
+    "type": "EOF",
+    "value": "",
+    "line": 9,
+    "column": 1
+  }
+]

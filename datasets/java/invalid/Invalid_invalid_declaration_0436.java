@@ -1,0 +1,6 @@
+public class Invalid_0436 {
+    public static void main(String[] args) {
+        int;
+        x = 5;
+    }
+}

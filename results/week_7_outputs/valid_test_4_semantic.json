@@ -1,0 +1,55 @@
+{
+  "language": "c",
+  "symbols": [
+    {
+      "name": "#include <stdio.h>",
+      "sym_type": "import",
+      "scope_level": 0,
+      "declared_at": 1,
+      "column": 1
+    },
+    {
+      "name": "factorial",
+      "sym_type": "function(int)",
+      "scope_level": 0,
+      "declared_at": 3,
+      "column": 0
+    },
+    {
+      "name": "n",
+      "sym_type": "int",
+      "scope_level": 1,
+      "declared_at": 0,
+      "column": 0
+    },
+    {
+      "name": "main",
+      "sym_type": "function(int)",
+      "scope_level": 0,
+      "declared_at": 10,
+      "column": 0
+    },
+    {
+      "name": "num",
+      "sym_type": "int",
+      "scope_level": 1,
+      "declared_at": 11,
+      "column": 0
+    }
+  ],
+  "errors": [],
+  "warnings": [
+    {
+      "code": "UNDECLARED_FUNCTION",
+      "message": "Call to undeclared function 'printf'",
+      "line": 0,
+      "column": 0
+    }
+  ],
+  "statistics": {
+    "total_symbols": 5,
+    "unique_names": 5,
+    "semantic_errors": 0,
+    "semantic_warnings": 1
+  }
+}

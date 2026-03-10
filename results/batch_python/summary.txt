@@ -1,0 +1,23 @@
+============================================================
+PARSING SUMMARY REPORT
+============================================================
+
+Total Files Processed: 239
+Total Errors Found: 1197
+
+--- By Language ---
+
+PYTHON:
+  Files: 239
+  Errors: 1197
+  Error Categories:
+    - Malformed Expression: 241
+    - Missing Delimiter: 478
+    - Syntax Error: 478
+
+--- Overall Error Categories ---
+  Syntax Error: 478
+  Missing Delimiter: 478
+  Malformed Expression: 241
+
+============================================================

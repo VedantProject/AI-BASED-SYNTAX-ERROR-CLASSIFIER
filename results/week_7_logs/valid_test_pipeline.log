@@ -1,0 +1,49 @@
+[2026-02-22T22:58:56.895289] [PHASE] [Stage 0 · Source Loading] START
+[2026-02-22T22:58:56.895523] [INFO] [Load] 15 lines, 227 bytes
+[2026-02-22T22:58:56.895686] [PHASE_DONE] [Source Loading] ✓  Source Loading  (0.1 ms)
+[2026-02-22T22:58:56.895764] [PHASE] [Stage 1 · Lexical Analysis] START
+[2026-02-22T22:58:56.896814] [INFO] [Output] Saved → results/week_7_outputs\valid_test_1_tokens.json
+[2026-02-22T22:58:56.896909] [INFO] [Lexer] 71 tokens, 9 distinct types
+[2026-02-22T22:58:56.896958] [PHASE_DONE] [Lexical Analysis] ✓  Lexical Analysis  (0.2 ms)
+[2026-02-22T22:58:56.896996] [PHASE] [Stage 2 · Syntax / Parse Analysis] START
+[2026-02-22T22:58:56.897497] [INFO] [Output] Saved → results/week_7_outputs\valid_test_2_parse_errors.json
+[2026-02-22T22:58:56.897671] [INFO] [Parser] 0 syntax error(s)
+[2026-02-22T22:58:56.897826] [PHASE_DONE] [Syntax Analysis] ✓  Syntax Analysis  (0.1 ms)
+[2026-02-22T22:58:56.897890] [PHASE] [Stage 3 · AST Serialisation] START
+[2026-02-22T22:58:56.898680] [INFO] [Output] Saved → results/week_7_outputs\valid_test_3_ast.json
+[2026-02-22T22:58:56.898856] [INFO] [AST] 31 nodes serialised
+[2026-02-22T22:58:56.898911] [PHASE_DONE] [AST Serialisation] ✓  AST Serialisation  (0.7 ms)
+[2026-02-22T22:58:56.898953] [PHASE] [Stage 4 · Semantic Analysis] START
+[2026-02-22T22:58:56.899505] [INFO] [Output] Saved → results/week_7_outputs\valid_test_4_semantic.json
+[2026-02-22T22:58:56.899603] [INFO] [Semantic] 5 symbols, 0 errors, 1 warnings
+[2026-02-22T22:58:56.899651] [PHASE_DONE] [Semantic Analysis] ✓  Semantic Analysis  (0.6 ms)
+[2026-02-22T22:58:56.899752] [PHASE] [Stage 5 · Control-Flow Analysis] START
+[2026-02-22T22:58:56.900446] [INFO] [Output] Saved → results/week_7_outputs\valid_test_5_control_flow.json
+[2026-02-22T22:58:56.900566] [INFO] [CFG] 13 blocks, 13 edges, 0 loop(s), 0 unreachable
+[2026-02-22T22:58:56.900666] [PHASE_DONE] [Control-Flow Analysis] ✓  Control-Flow Analysis  (0.7 ms)
+[2026-02-22T22:58:56.900704] [PHASE] [Stage 6 · Data-Flow Analysis] START
+[2026-02-22T22:58:56.901639] [INFO] [Output] Saved → results/week_7_outputs\valid_test_6_data_flow.json
+[2026-02-22T22:58:56.901747] [INFO] [DFA] 5 defs, 8 uses, 0 uninitialised, 0 dead defs
+[2026-02-22T22:58:56.901811] [PHASE_DONE] [Data-Flow Analysis] ✓  Data-Flow Analysis  (0.8 ms)
+[2026-02-22T22:58:56.901856] [PHASE] [Stage 7 · Complexity Analysis] START
+[2026-02-22T22:58:56.902645] [INFO] [Output] Saved → results/week_7_outputs\valid_test_7_complexity.json
+[2026-02-22T22:58:56.902686] [INFO] [Complexity] CC=3, depth=2, rating=low, LOC≈9
+[2026-02-22T22:58:56.902726] [PHASE_DONE] [Complexity Analysis] ✓  Complexity Analysis  (0.7 ms)
+[2026-02-22T22:58:56.902765] [PHASE] [Stage 8 · Constant Folding] START
+[2026-02-22T22:58:56.903372] [INFO] [Output] Saved → results/week_7_outputs\valid_test_8_constant_fold_log.json
+[2026-02-22T22:58:56.903429] [INFO] [ConstFold] 0 fold(s) applied
+[2026-02-22T22:58:56.903473] [PHASE_DONE] [Constant Folding] ✓  Constant Folding  (0.6 ms)
+[2026-02-22T22:58:56.903520] [PHASE] [Stage 9 · Dead-Code Elimination] START
+[2026-02-22T22:58:56.904056] [INFO] [Output] Saved → results/week_7_outputs\valid_test_9_dead_code_log.json
+[2026-02-22T22:58:56.904104] [INFO] [DCE] 0 elimination(s) applied
+[2026-02-22T22:58:56.904151] [PHASE_DONE] [Dead-Code Elimination] ✓  Dead-Code Elimination  (0.5 ms)
+[2026-02-22T22:58:56.904193] [PHASE] [Stage 10 · Code Simplification] START
+[2026-02-22T22:58:56.904782] [INFO] [Output] Saved → results/week_7_outputs\valid_test_10_simplify_log.json
+[2026-02-22T22:58:56.904830] [INFO] [Simplifier] 0 simplification(s) applied
+[2026-02-22T22:58:56.904858] [PHASE_DONE] [Code Simplification] ✓  Code Simplification  (0.5 ms)
+[2026-02-22T22:58:56.905417] [INFO] [Output] Saved → results/week_7_outputs\valid_test_final_ast.json
+[2026-02-22T22:58:56.905460] [PHASE] [Stage 11 · Rule / Heuristic Engine] START
+[2026-02-22T22:58:56.906060] [INFO] [Output] Saved → results/week_7_outputs\valid_test_11_rule_engine.json
+[2026-02-22T22:58:56.906206] [INFO] [Rules] 1/14 rules fired  – 0 error(s), 1 warning(s), grade: B
+[2026-02-22T22:58:56.906319] [PHASE_DONE] [Rule Engine] ✓  Rule Engine  (0.6 ms)
+[2026-02-22T22:58:56.907146] [INFO] [Output] Saved → results/week_7_outputs\valid_test_pipeline_summary.json

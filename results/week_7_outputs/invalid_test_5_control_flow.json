@@ -1,0 +1,139 @@
+{
+  "blocks": [
+    {
+      "block_id": 0,
+      "label": "ENTRY",
+      "stmts": [],
+      "stmt_lines": [],
+      "is_entry": true,
+      "is_exit": false
+    },
+    {
+      "block_id": 1,
+      "label": "STMT(line 1)",
+      "stmts": [
+        "ImportStmt(line 1)"
+      ],
+      "stmt_lines": [
+        1
+      ],
+      "is_entry": false,
+      "is_exit": false
+    },
+    {
+      "block_id": 2,
+      "label": "FUNC:main",
+      "stmts": [
+        "FunctionDecl 'main' (line 3)"
+      ],
+      "stmt_lines": [
+        3
+      ],
+      "is_entry": false,
+      "is_exit": false
+    },
+    {
+      "block_id": 3,
+      "label": "STMT(line 4)",
+      "stmts": [
+        "VariableDecl(line 4)"
+      ],
+      "stmt_lines": [
+        4
+      ],
+      "is_entry": false,
+      "is_exit": false
+    },
+    {
+      "block_id": 4,
+      "label": "STMT(line 5)",
+      "stmts": [
+        "VariableDecl(line 5)"
+      ],
+      "stmt_lines": [
+        5
+      ],
+      "is_entry": false,
+      "is_exit": false
+    },
+    {
+      "block_id": 5,
+      "label": "STMT(line 0)",
+      "stmts": [
+        "ExpressionStmt"
+      ],
+      "stmt_lines": [
+        0
+      ],
+      "is_entry": false,
+      "is_exit": false
+    },
+    {
+      "block_id": 6,
+      "label": "RETURN(line 7)",
+      "stmts": [
+        "return (line 7)"
+      ],
+      "stmt_lines": [
+        7
+      ],
+      "is_entry": false,
+      "is_exit": false
+    },
+    {
+      "block_id": 7,
+      "label": "EXIT",
+      "stmts": [],
+      "stmt_lines": [],
+      "is_entry": false,
+      "is_exit": true
+    }
+  ],
+  "edges": [
+    {
+      "from": 0,
+      "to": 1,
+      "type": "sequential"
+    },
+    {
+      "from": 1,
+      "to": 2,
+      "type": "sequential"
+    },
+    {
+      "from": 2,
+      "to": 3,
+      "type": "sequential"
+    },
+    {
+      "from": 3,
+      "to": 4,
+      "type": "sequential"
+    },
+    {
+      "from": 4,
+      "to": 5,
+      "type": "sequential"
+    },
+    {
+      "from": 5,
+      "to": 6,
+      "type": "sequential"
+    },
+    {
+      "from": 6,
+      "to": 7,
+      "type": "sequential"
+    }
+  ],
+  "loops": [],
+  "branch_count": 0,
+  "unreachable_block_ids": [],
+  "summary": {
+    "total_blocks": 8,
+    "total_edges": 7,
+    "loops_detected": 0,
+    "branches_detected": 0,
+    "unreachable_blocks": 0
+  }
+}

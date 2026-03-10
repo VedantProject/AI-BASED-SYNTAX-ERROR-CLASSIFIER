@@ -1,0 +1,50 @@
+[2026-02-22T21:45:05.191199] [PHASE] [Stage 0 · Source Loading] START
+[2026-02-22T21:45:05.214439] [INFO] [Load] 9 lines, 112 bytes
+[2026-02-22T21:45:05.214785] [PHASE_DONE] [Source Loading] ✓  Source Loading  (22.9 ms)
+[2026-02-22T21:45:05.214878] [PHASE] [Stage 1 · Lexical Analysis] START
+[2026-02-22T21:45:05.216202] [INFO] [Output] Saved → results/week_7_outputs\invalid_test_1_tokens.json
+[2026-02-22T21:45:05.216360] [INFO] [Lexer] 37 tokens, 9 distinct types
+[2026-02-22T21:45:05.216455] [PHASE_DONE] [Lexical Analysis] ✓  Lexical Analysis  (0.2 ms)
+[2026-02-22T21:45:05.216606] [PHASE] [Stage 2 · Syntax / Parse Analysis] START
+[2026-02-22T21:45:05.218369] [INFO] [Output] Saved → results/week_7_outputs\invalid_test_2_parse_errors.json
+[2026-02-22T21:45:05.218581] [INFO] [Parser] 1 syntax error(s)
+[2026-02-22T21:45:05.218824] [WARN] [Parser]   Line 4: Missing semicolon after variable declaration
+[2026-02-22T21:45:05.219052] [PHASE_DONE] [Syntax Analysis] ✓  Syntax Analysis  (0.2 ms)
+[2026-02-22T21:45:05.219195] [PHASE] [Stage 3 · AST Serialisation] START
+[2026-02-22T21:45:05.220465] [INFO] [Output] Saved → results/week_7_outputs\invalid_test_3_ast.json
+[2026-02-22T21:45:05.220576] [INFO] [AST] 16 nodes serialised
+[2026-02-22T21:45:05.220623] [PHASE_DONE] [AST Serialisation] ✓  AST Serialisation  (1.0 ms)
+[2026-02-22T21:45:05.220663] [PHASE] [Stage 4 · Semantic Analysis] START
+[2026-02-22T21:45:05.221737] [INFO] [Output] Saved → results/week_7_outputs\invalid_test_4_semantic.json
+[2026-02-22T21:45:05.221952] [INFO] [Semantic] 4 symbols, 0 errors, 1 warnings
+[2026-02-22T21:45:05.222070] [PHASE_DONE] [Semantic Analysis] ✓  Semantic Analysis  (1.0 ms)
+[2026-02-22T21:45:05.222308] [PHASE] [Stage 5 · Control-Flow Analysis] START
+[2026-02-22T21:45:05.223671] [INFO] [Output] Saved → results/week_7_outputs\invalid_test_5_control_flow.json
+[2026-02-22T21:45:05.224008] [INFO] [CFG] 8 blocks, 7 edges, 0 loop(s), 0 unreachable
+[2026-02-22T21:45:05.224149] [PHASE_DONE] [Control-Flow Analysis] ✓  Control-Flow Analysis  (1.2 ms)
+[2026-02-22T21:45:05.224318] [PHASE] [Stage 6 · Data-Flow Analysis] START
+[2026-02-22T21:45:05.226404] [INFO] [Output] Saved → results/week_7_outputs\invalid_test_6_data_flow.json
+[2026-02-22T21:45:05.226513] [INFO] [DFA] 4 defs, 3 uses, 0 uninitialised, 0 dead defs
+[2026-02-22T21:45:05.226793] [PHASE_DONE] [Data-Flow Analysis] ✓  Data-Flow Analysis  (1.7 ms)
+[2026-02-22T21:45:05.226956] [PHASE] [Stage 7 · Complexity Analysis] START
+[2026-02-22T21:45:05.228099] [INFO] [Output] Saved → results/week_7_outputs\invalid_test_7_complexity.json
+[2026-02-22T21:45:05.228337] [INFO] [Complexity] CC=1, depth=1, rating=low, LOC≈6
+[2026-02-22T21:45:05.228577] [PHASE_DONE] [Complexity Analysis] ✓  Complexity Analysis  (1.0 ms)
+[2026-02-22T21:45:05.228738] [PHASE] [Stage 8 · Constant Folding] START
+[2026-02-22T21:45:05.229812] [INFO] [Output] Saved → results/week_7_outputs\invalid_test_8_constant_fold_log.json
+[2026-02-22T21:45:05.229904] [INFO] [ConstFold] 0 fold(s) applied
+[2026-02-22T21:45:05.229950] [PHASE_DONE] [Constant Folding] ✓  Constant Folding  (0.9 ms)
+[2026-02-22T21:45:05.229998] [PHASE] [Stage 9 · Dead-Code Elimination] START
+[2026-02-22T21:45:05.231162] [INFO] [Output] Saved → results/week_7_outputs\invalid_test_9_dead_code_log.json
+[2026-02-22T21:45:05.231461] [INFO] [DCE] 0 elimination(s) applied
+[2026-02-22T21:45:05.231737] [PHASE_DONE] [Dead-Code Elimination] ✓  Dead-Code Elimination  (1.4 ms)
+[2026-02-22T21:45:05.231840] [PHASE] [Stage 10 · Code Simplification] START
+[2026-02-22T21:45:05.233717] [INFO] [Output] Saved → results/week_7_outputs\invalid_test_10_simplify_log.json
+[2026-02-22T21:45:05.234009] [INFO] [Simplifier] 0 simplification(s) applied
+[2026-02-22T21:45:05.234259] [PHASE_DONE] [Code Simplification] ✓  Code Simplification  (1.9 ms)
+[2026-02-22T21:45:05.235590] [INFO] [Output] Saved → results/week_7_outputs\invalid_test_final_ast.json
+[2026-02-22T21:45:05.235673] [PHASE] [Stage 11 · Rule / Heuristic Engine] START
+[2026-02-22T21:45:05.236959] [INFO] [Output] Saved → results/week_7_outputs\invalid_test_11_rule_engine.json
+[2026-02-22T21:45:05.237212] [INFO] [Rules] 1/14 rules fired  – 0 error(s), 1 warning(s), grade: B
+[2026-02-22T21:45:05.237460] [PHASE_DONE] [Rule Engine] ✓  Rule Engine  (1.1 ms)
+[2026-02-22T21:45:05.238317] [INFO] [Output] Saved → results/week_7_outputs\invalid_test_pipeline_summary.json

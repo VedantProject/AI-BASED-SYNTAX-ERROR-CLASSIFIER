@@ -1,0 +1,59 @@
+============================================================
+FINAL PARSING REPORT - ALL LANGUAGES
+============================================================
+
+OVERALL STATISTICS:
+  Total Files Processed: 3000
+  Successful Parses: 784 (26.1%)
+  Failed Parses: 1455 (48.5%)
+  Files with Syntax Errors: 1455
+  Total Errors Found: 9744
+
+BREAKDOWN BY LANGUAGE:
+
+  C:
+    Files: 1000
+    Successful: 303
+    Failed: 697
+    With Errors: 697
+    Total Errors: 5767
+    Error Categories:
+      - Syntax Error: 2150
+      - Missing Delimiter: 1743
+      - Malformed Expression: 730
+      - Invalid Declaration: 528
+      - Unknown Error: 433
+      - Invalid Syntax: 183
+
+  JAVA:
+    Files: 1000
+    Successful: 481
+    Failed: 519
+    With Errors: 519
+    Total Errors: 2780
+    Error Categories:
+      - Syntax Error: 1348
+      - Unknown Error: 1001
+      - Missing Delimiter: 370
+      - Invalid Declaration: 61
+
+  PYTHON:
+    Files: 1000
+    Successful: 0
+    Failed: 239
+    With Errors: 239
+    Total Errors: 1197
+    Error Categories:
+      - Syntax Error: 478
+      - Missing Delimiter: 478
+      - Malformed Expression: 241
+
+OVERALL ERROR CATEGORIES:
+  - Syntax Error: 3976 (40.8%)
+  - Missing Delimiter: 2591 (26.6%)
+  - Unknown Error: 1434 (14.7%)
+  - Malformed Expression: 971 (10.0%)
+  - Invalid Declaration: 589 (6.0%)
+  - Invalid Syntax: 183 (1.9%)
+
+============================================================

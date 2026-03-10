@@ -1,0 +1,43 @@
+{
+  "applied_rules": [
+    {
+      "rule": "SEMANTIC_WARNINGS",
+      "severity": "WARNING",
+      "category": "quality",
+      "description": "Semantic warnings (e.g., type mismatches) were found.",
+      "message": "1 semantic warning(s). Review the semantic analysis output for details."
+    }
+  ],
+  "skipped_rules": [
+    "HIGH_CYCLOMATIC_COMPLEXITY",
+    "VERY_HIGH_CYCLOMATIC_COMPLEXITY",
+    "DEEP_NESTING",
+    "FUNCTION_TOO_LONG",
+    "UNINITIALIZED_VARIABLE_USE",
+    "DEAD_VARIABLE_DEFINITION",
+    "UNREACHABLE_CODE",
+    "TOO_MANY_BRANCHES",
+    "LOOP_DETECTED",
+    "SEMANTIC_ERRORS",
+    "OPTIMIZATIONS_APPLIED",
+    "MAGIC_NUMBERS_DETECTED",
+    "HIGH_SYMBOL_DENSITY"
+  ],
+  "recommendations": [
+    "1 semantic warning(s). Review the semantic analysis output for details."
+  ],
+  "severity_counts": {
+    "ERROR": 0,
+    "WARNING": 1,
+    "INFO": 0
+  },
+  "overall_grade": "B",
+  "summary": {
+    "total_rules_evaluated": 14,
+    "rules_fired": 1,
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "grade": "B"
+  }
+}

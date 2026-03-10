@@ -1,0 +1,428 @@
+[
+  {
+    "type": "PREPROCESSOR",
+    "value": "#include <stdio.h>",
+    "line": 1,
+    "column": 1
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 1,
+    "column": 19
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 2,
+    "column": 1
+  },
+  {
+    "type": "KEYWORD",
+    "value": "int",
+    "line": 3,
+    "column": 1
+  },
+  {
+    "type": "IDENTIFIER",
+    "value": "factorial",
+    "line": 3,
+    "column": 5
+  },
+  {
+    "type": "DELIMITER",
+    "value": "(",
+    "line": 3,
+    "column": 14
+  },
+  {
+    "type": "KEYWORD",
+    "value": "int",
+    "line": 3,
+    "column": 15
+  },
+  {
+    "type": "IDENTIFIER",
+    "value": "n",
+    "line": 3,
+    "column": 19
+  },
+  {
+    "type": "DELIMITER",
+    "value": ")",
+    "line": 3,
+    "column": 20
+  },
+  {
+    "type": "DELIMITER",
+    "value": "{",
+    "line": 3,
+    "column": 22
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 3,
+    "column": 23
+  },
+  {
+    "type": "KEYWORD",
+    "value": "if",
+    "line": 4,
+    "column": 5
+  },
+  {
+    "type": "DELIMITER",
+    "value": "(",
+    "line": 4,
+    "column": 8
+  },
+  {
+    "type": "IDENTIFIER",
+    "value": "n",
+    "line": 4,
+    "column": 9
+  },
+  {
+    "type": "OPERATOR",
+    "value": "<=",
+    "line": 4,
+    "column": 11
+  },
+  {
+    "type": "NUMBER",
+    "value": "1",
+    "line": 4,
+    "column": 14
+  },
+  {
+    "type": "DELIMITER",
+    "value": ")",
+    "line": 4,
+    "column": 15
+  },
+  {
+    "type": "DELIMITER",
+    "value": "{",
+    "line": 4,
+    "column": 17
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 4,
+    "column": 18
+  },
+  {
+    "type": "KEYWORD",
+    "value": "return",
+    "line": 5,
+    "column": 9
+  },
+  {
+    "type": "NUMBER",
+    "value": "1",
+    "line": 5,
+    "column": 16
+  },
+  {
+    "type": "DELIMITER",
+    "value": ";",
+    "line": 5,
+    "column": 17
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 5,
+    "column": 18
+  },
+  {
+    "type": "DELIMITER",
+    "value": "}",
+    "line": 6,
+    "column": 5
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 6,
+    "column": 6
+  },
+  {
+    "type": "KEYWORD",
+    "value": "return",
+    "line": 7,
+    "column": 5
+  },
+  {
+    "type": "IDENTIFIER",
+    "value": "n",
+    "line": 7,
+    "column": 12
+  },
+  {
+    "type": "OPERATOR",
+    "value": "*",
+    "line": 7,
+    "column": 14
+  },
+  {
+    "type": "IDENTIFIER",
+    "value": "factorial",
+    "line": 7,
+    "column": 16
+  },
+  {
+    "type": "DELIMITER",
+    "value": "(",
+    "line": 7,
+    "column": 25
+  },
+  {
+    "type": "IDENTIFIER",
+    "value": "n",
+    "line": 7,
+    "column": 26
+  },
+  {
+    "type": "OPERATOR",
+    "value": "-",
+    "line": 7,
+    "column": 28
+  },
+  {
+    "type": "NUMBER",
+    "value": "1",
+    "line": 7,
+    "column": 30
+  },
+  {
+    "type": "DELIMITER",
+    "value": ")",
+    "line": 7,
+    "column": 31
+  },
+  {
+    "type": "DELIMITER",
+    "value": ";",
+    "line": 7,
+    "column": 32
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 7,
+    "column": 33
+  },
+  {
+    "type": "DELIMITER",
+    "value": "}",
+    "line": 8,
+    "column": 1
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 8,
+    "column": 2
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 9,
+    "column": 1
+  },
+  {
+    "type": "KEYWORD",
+    "value": "int",
+    "line": 10,
+    "column": 1
+  },
+  {
+    "type": "IDENTIFIER",
+    "value": "main",
+    "line": 10,
+    "column": 5
+  },
+  {
+    "type": "DELIMITER",
+    "value": "(",
+    "line": 10,
+    "column": 9
+  },
+  {
+    "type": "DELIMITER",
+    "value": ")",
+    "line": 10,
+    "column": 10
+  },
+  {
+    "type": "DELIMITER",
+    "value": "{",
+    "line": 10,
+    "column": 12
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 10,
+    "column": 13
+  },
+  {
+    "type": "KEYWORD",
+    "value": "int",
+    "line": 11,
+    "column": 5
+  },
+  {
+    "type": "IDENTIFIER",
+    "value": "num",
+    "line": 11,
+    "column": 9
+  },
+  {
+    "type": "OPERATOR",
+    "value": "=",
+    "line": 11,
+    "column": 13
+  },
+  {
+    "type": "NUMBER",
+    "value": "5",
+    "line": 11,
+    "column": 15
+  },
+  {
+    "type": "DELIMITER",
+    "value": ";",
+    "line": 11,
+    "column": 16
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 11,
+    "column": 17
+  },
+  {
+    "type": "IDENTIFIER",
+    "value": "printf",
+    "line": 12,
+    "column": 5
+  },
+  {
+    "type": "DELIMITER",
+    "value": "(",
+    "line": 12,
+    "column": 11
+  },
+  {
+    "type": "STRING",
+    "value": "\"Factorial of %d is %d\\n\"",
+    "line": 12,
+    "column": 12
+  },
+  {
+    "type": "DELIMITER",
+    "value": ",",
+    "line": 12,
+    "column": 37
+  },
+  {
+    "type": "IDENTIFIER",
+    "value": "num",
+    "line": 12,
+    "column": 39
+  },
+  {
+    "type": "DELIMITER",
+    "value": ",",
+    "line": 12,
+    "column": 42
+  },
+  {
+    "type": "IDENTIFIER",
+    "value": "factorial",
+    "line": 12,
+    "column": 44
+  },
+  {
+    "type": "DELIMITER",
+    "value": "(",
+    "line": 12,
+    "column": 53
+  },
+  {
+    "type": "IDENTIFIER",
+    "value": "num",
+    "line": 12,
+    "column": 54
+  },
+  {
+    "type": "DELIMITER",
+    "value": ")",
+    "line": 12,
+    "column": 57
+  },
+  {
+    "type": "DELIMITER",
+    "value": ")",
+    "line": 12,
+    "column": 58
+  },
+  {
+    "type": "DELIMITER",
+    "value": ";",
+    "line": 12,
+    "column": 59
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 12,
+    "column": 60
+  },
+  {
+    "type": "KEYWORD",
+    "value": "return",
+    "line": 13,
+    "column": 5
+  },
+  {
+    "type": "NUMBER",
+    "value": "0",
+    "line": 13,
+    "column": 12
+  },
+  {
+    "type": "DELIMITER",
+    "value": ";",
+    "line": 13,
+    "column": 13
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 13,
+    "column": 14
+  },
+  {
+    "type": "DELIMITER",
+    "value": "}",
+    "line": 14,
+    "column": 1
+  },
+  {
+    "type": "NEWLINE",
+    "value": "\\n",
+    "line": 14,
+    "column": 2
+  },
+  {
+    "type": "EOF",
+    "value": "",
+    "line": 15,
+    "column": 1
+  }
+]

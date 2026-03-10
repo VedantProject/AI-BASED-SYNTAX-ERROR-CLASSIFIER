@@ -1,0 +1,86 @@
+{
+  "file": "test_samples/invalid_test.c",
+  "language": "c",
+  "timestamp": "2026-02-22T21:45:05.191177",
+  "stages": {
+    "load": {
+      "lines": 9,
+      "bytes": 112
+    },
+    "lexer": {
+      "token_count": 37,
+      "distinct_types": 9,
+      "type_distribution": {
+        "PREPROCESSOR": 1,
+        "NEWLINE": 8,
+        "KEYWORD": 4,
+        "IDENTIFIER": 6,
+        "DELIMITER": 10,
+        "OPERATOR": 3,
+        "NUMBER": 3,
+        "STRING": 1,
+        "EOF": 1
+      }
+    },
+    "parser": {
+      "syntax_error_count": 1,
+      "parse_success": false
+    },
+    "ast_serialise": {
+      "node_count": 16
+    },
+    "semantic": {
+      "total_symbols": 4,
+      "unique_names": 4,
+      "semantic_errors": 0,
+      "semantic_warnings": 1
+    },
+    "control_flow": {
+      "total_blocks": 8,
+      "total_edges": 7,
+      "loops_detected": 0,
+      "branches_detected": 0,
+      "unreachable_blocks": 0
+    },
+    "data_flow": {
+      "total_definitions": 4,
+      "total_uses": 3,
+      "uninitialized_count": 0,
+      "dead_definition_count": 0
+    },
+    "complexity": {
+      "cyclomatic_complexity": 1,
+      "max_nesting_depth": 1,
+      "statement_count": 4,
+      "function_count": 1,
+      "estimated_loc": 6,
+      "complexity_rating": "low"
+    },
+    "constant_folding": {
+      "changes": 0
+    },
+    "dead_code_elimination": {
+      "eliminations": 0
+    },
+    "simplification": {
+      "changes": 0
+    },
+    "transformations": {
+      "constant_fold_changes": 0,
+      "dead_code_eliminations": 0,
+      "simplifications": 0,
+      "total_changes": 0
+    },
+    "rule_engine": {
+      "total_rules_evaluated": 14,
+      "rules_fired": 1,
+      "errors": 0,
+      "warnings": 1,
+      "info": 0,
+      "grade": "B"
+    }
+  },
+  "status": "success",
+  "elapsed_ms": 48.0,
+  "overall_grade": "B"
+}

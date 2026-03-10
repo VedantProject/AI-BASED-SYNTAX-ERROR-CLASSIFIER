@@ -1,0 +1,25 @@
+{
+  "cyclomatic_complexity": 1,
+  "max_nesting_depth": 1,
+  "statement_count": 4,
+  "function_count": 1,
+  "estimated_loc": 6,
+  "complexity_rating": "low",
+  "per_function": [
+    {
+      "name": "main",
+      "line": 3,
+      "cyclomatic_complexity": 1,
+      "max_nesting_depth": 0,
+      "statement_count": 4,
+      "estimated_loc": 4,
+      "complexity_rating": "low"
+    }
+  ],
+  "thresholds": {
+    "low": "CC ≤ 10",
+    "moderate": "CC 11-20",
+    "high": "CC 21-50",
+    "very_high": "CC > 50"
+  }
+}

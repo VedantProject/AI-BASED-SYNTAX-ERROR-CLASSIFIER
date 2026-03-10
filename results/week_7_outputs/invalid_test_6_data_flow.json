@@ -1,0 +1,74 @@
+{
+  "definitions": [
+    {
+      "index": 0,
+      "name": "#include <stdio.h>",
+      "line": 1,
+      "def_type": "import",
+      "used": false
+    },
+    {
+      "index": 1,
+      "name": "main",
+      "line": 3,
+      "def_type": "function_decl",
+      "used": false
+    },
+    {
+      "index": 2,
+      "name": "x",
+      "line": 4,
+      "def_type": "var_decl",
+      "used": true
+    },
+    {
+      "index": 3,
+      "name": "y",
+      "line": 5,
+      "def_type": "var_decl",
+      "used": true
+    }
+  ],
+  "uses": [
+    {
+      "index": 0,
+      "name": "printf",
+      "line": 0,
+      "reaching_def": null
+    },
+    {
+      "index": 1,
+      "name": "x",
+      "line": 6,
+      "reaching_def": 2
+    },
+    {
+      "index": 2,
+      "name": "y",
+      "line": 6,
+      "reaching_def": 3
+    }
+  ],
+  "use_def_chains": [
+    {
+      "use_name": "x",
+      "use_line": 6,
+      "def_line": 4,
+      "def_type": "var_decl"
+    },
+    {
+      "use_name": "y",
+      "use_line": 6,
+      "def_line": 5,
+      "def_type": "var_decl"
+    }
+  ],
+  "uninitialized_vars": [],
+  "dead_definitions": [],
+  "summary": {
+    "total_definitions": 4,
+    "total_uses": 3,
+    "uninitialized_count": 0,
+    "dead_definition_count": 0
+  }
+}

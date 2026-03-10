@@ -1,0 +1,8 @@
+[
+  {
+    "type": "MISSING_SEMICOLON",
+    "message": "Missing semicolon after variable declaration",
+    "line": 4,
+    "column": 15
+  }
+]

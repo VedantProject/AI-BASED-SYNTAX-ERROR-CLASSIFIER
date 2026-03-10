@@ -1,0 +1,25 @@
+============================================================
+PARSING SUMMARY REPORT
+============================================================
+
+Total Files Processed: 1000
+Total Errors Found: 2780
+
+--- By Language ---
+
+JAVA:
+  Files: 1000
+  Errors: 2780
+  Error Categories:
+    - Invalid Declaration: 61
+    - Missing Delimiter: 370
+    - Syntax Error: 1348
+    - Unknown Error: 1001
+
+--- Overall Error Categories ---
+  Syntax Error: 1348
+  Unknown Error: 1001
+  Missing Delimiter: 370
+  Invalid Declaration: 61
+
+============================================================

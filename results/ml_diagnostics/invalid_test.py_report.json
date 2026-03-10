@@ -1,0 +1,172 @@
+{
+  "filepath": "test_samples/invalid_test.py",
+  "language": "python",
+  "total_errors": 5,
+  "diagnostics": [
+    {
+      "line": 1,
+      "column": 16,
+      "error_type": "SyntaxError",
+      "error_message": "Expected ')', got ':'",
+      "unsafe_pattern": "UNSAFE_BLOCK_SCOPE",
+      "pattern_confidence": 0.9052824407863455,
+      "severity_label": "ERROR",
+      "severity_score": 9.662032289563378,
+      "title": "Missing Block Header \u2014 Scope Corruption Risk",
+      "why_unsafe": "A missing colon after if/for/while/def/class leaves the block header malformed. Code meant to be conditional or scoped may execute unconditionally at the outer level, silently bypassing guards and invariants.",
+      "top_fixes": [
+        {
+          "rank": 1,
+          "action": "FIX_OPERATOR_SYNTAX",
+          "description": "Remove or correct the invalid operator combination.",
+          "confidence": 0.5246399107890353
+        },
+        {
+          "rank": 2,
+          "action": "ADD_COLON_DEF",
+          "description": "Add ':' after the function definition header: def name():",
+          "confidence": 0.3505760350028403
+        },
+        {
+          "rank": 3,
+          "action": "ADD_COLON_BLOCK_HEADER",
+          "description": "Add ':' at the end of the block header statement.",
+          "confidence": 0.09324257971142799
+        }
+      ],
+      "is_anomalous": false
+    },
+    {
+      "line": 1,
+      "column": 17,
+      "error_type": "MISSING_PAREN",
+      "error_message": "Missing ')' in function definition",
+      "unsafe_pattern": "UNSAFE_BLOCK_SCOPE",
+      "pattern_confidence": 0.9013950646475711,
+      "severity_label": "ERROR",
+      "severity_score": 9.661369021583635,
+      "title": "Missing Block Header \u2014 Scope Corruption Risk",
+      "why_unsafe": "A missing colon after if/for/while/def/class leaves the block header malformed. Code meant to be conditional or scoped may execute unconditionally at the outer level, silently bypassing guards and invariants.",
+      "top_fixes": [
+        {
+          "rank": 1,
+          "action": "FIX_OPERATOR_SYNTAX",
+          "description": "Remove or correct the invalid operator combination.",
+          "confidence": 0.5766486513747402
+        },
+        {
+          "rank": 2,
+          "action": "ADD_COLON_BLOCK_HEADER",
+          "description": "Add ':' at the end of the block header statement.",
+          "confidence": 0.21823916280857455
+        },
+        {
+          "rank": 3,
+          "action": "ADD_COLON_DEF",
+          "description": "Add ':' after the function definition header: def name():",
+          "confidence": 0.17151335647388932
+        }
+      ],
+      "is_anomalous": false
+    },
+    {
+      "line": 1,
+      "column": 17,
+      "error_type": "SyntaxError",
+      "error_message": "Expected DELIMITER, got NEWLINE '\\n'",
+      "unsafe_pattern": "UNSAFE_BLOCK_SCOPE",
+      "pattern_confidence": 0.9350762859212995,
+      "severity_label": "ERROR",
+      "severity_score": 9.662912738755859,
+      "title": "Missing Block Header \u2014 Scope Corruption Risk",
+      "why_unsafe": "A missing colon after if/for/while/def/class leaves the block header malformed. Code meant to be conditional or scoped may execute unconditionally at the outer level, silently bypassing guards and invariants.",
+      "top_fixes": [
+        {
+          "rank": 1,
+          "action": "ADD_COLON_DEF",
+          "description": "Add ':' after the function definition header: def name():",
+          "confidence": 0.5673471696130653
+        },
+        {
+          "rank": 2,
+          "action": "FIX_OPERATOR_SYNTAX",
+          "description": "Remove or correct the invalid operator combination.",
+          "confidence": 0.37353340983574973
+        },
+        {
+          "rank": 3,
+          "action": "ADD_COLON_BLOCK_HEADER",
+          "description": "Add ':' at the end of the block header statement.",
+          "confidence": 0.03709009344997946
+        }
+      ],
+      "is_anomalous": false
+    },
+    {
+      "line": 2,
+      "column": 1,
+      "error_type": "MISSING_COLON",
+      "error_message": "Missing ':' after function signature",
+      "unsafe_pattern": "UNSAFE_BLOCK_SCOPE",
+      "pattern_confidence": 0.9179229944199788,
+      "severity_label": "ERROR",
+      "severity_score": 9.668093377212058,
+      "title": "Missing Block Header \u2014 Scope Corruption Risk",
+      "why_unsafe": "A missing colon after if/for/while/def/class leaves the block header malformed. Code meant to be conditional or scoped may execute unconditionally at the outer level, silently bypassing guards and invariants.",
+      "top_fixes": [
+        {
+          "rank": 1,
+          "action": "FIX_OPERATOR_SYNTAX",
+          "description": "Remove or correct the invalid operator combination.",
+          "confidence": 0.4598112143389206
+        },
+        {
+          "rank": 2,
+          "action": "ADD_COLON_BLOCK_HEADER",
+          "description": "Add ':' at the end of the block header statement.",
+          "confidence": 0.4562782366088452
+        },
+        {
+          "rank": 3,
+          "action": "ADD_COLON_DEF",
+          "description": "Add ':' after the function definition header: def name():",
+          "confidence": 0.05559857924014411
+        }
+      ],
+      "is_anomalous": false
+    },
+    {
+      "line": 3,
+      "column": 1,
+      "error_type": "INVALID_EXPRESSION",
+      "error_message": "Unexpected token: ERROR 'Unindent does not match any outer indentation level'",
+      "unsafe_pattern": "UNSAFE_BLOCK_SCOPE",
+      "pattern_confidence": 0.9665456429453169,
+      "severity_label": "ERROR",
+      "severity_score": 9.666993145156644,
+      "title": "Missing Block Header \u2014 Scope Corruption Risk",
+      "why_unsafe": "A missing colon after if/for/while/def/class leaves the block header malformed. Code meant to be conditional or scoped may execute unconditionally at the outer level, silently bypassing guards and invariants.",
+      "top_fixes": [
+        {
+          "rank": 1,
+          "action": "FIX_OPERATOR_SYNTAX",
+          "description": "Remove or correct the invalid operator combination.",
+          "confidence": 0.48295788335725404
+        },
+        {
+          "rank": 2,
+          "action": "ADD_COLON_BLOCK_HEADER",
+          "description": "Add ':' at the end of the block header statement.",
+          "confidence": 0.39742137427250984
+        },
+        {
+          "rank": 3,
+          "action": "ADD_COLON_DEF",
+          "description": "Add ':' after the function definition header: def name():",
+          "confidence": 0.08908255583627979
+        }
+      ],
+      "is_anomalous": false
+    }
+  ]
+}

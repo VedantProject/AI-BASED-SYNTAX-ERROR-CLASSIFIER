@@ -1,0 +1,34 @@
+{
+  "cyclomatic_complexity": 3,
+  "max_nesting_depth": 2,
+  "statement_count": 6,
+  "function_count": 2,
+  "estimated_loc": 9,
+  "complexity_rating": "low",
+  "per_function": [
+    {
+      "name": "factorial",
+      "line": 3,
+      "cyclomatic_complexity": 2,
+      "max_nesting_depth": 1,
+      "statement_count": 3,
+      "estimated_loc": 3,
+      "complexity_rating": "low"
+    },
+    {
+      "name": "main",
+      "line": 10,
+      "cyclomatic_complexity": 1,
+      "max_nesting_depth": 0,
+      "statement_count": 3,
+      "estimated_loc": 3,
+      "complexity_rating": "low"
+    }
+  ],
+  "thresholds": {
+    "low": "CC ≤ 10",
+    "moderate": "CC 11-20",
+    "high": "CC 21-50",
+    "very_high": "CC > 50"
+  }
+}
