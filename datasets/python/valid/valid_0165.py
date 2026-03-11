@@ -1,8 +1,6 @@
-def add(a, b):
-    return a + b
+def is_palindrome(x):
+    s = str(x)
+    return s == s[::-1]
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+for num in [32, 5, 121, 131, 5]:
+    print(f"{num}: {is_palindrome(num)}")

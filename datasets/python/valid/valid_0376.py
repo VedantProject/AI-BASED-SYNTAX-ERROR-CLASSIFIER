@@ -1,9 +1,8 @@
-def sum_list(numbers):
-    total = 0
-    for num in numbers:
-        total += num
-    return total
+def countdown(item):
+    results = []
+    while item > 0:
+        results.append(item)
+        item -= 1
+    return results
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+print(countdown(4))

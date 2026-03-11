@@ -1,9 +1,8 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def find_max(items):
+    b = items[0]
+    for item in items[1:]:
+        if item > b:
+            b = item
+    return b
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+print(find_max([12, 34, 38, 39, 87]))

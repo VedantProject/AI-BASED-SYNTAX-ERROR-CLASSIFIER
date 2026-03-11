@@ -1,8 +1,7 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def build_scores(names, values):
+    return {name: val for name, val in zip(names, values)}
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+names = ["alice", "bob", "carol"]
+vals  = [2, 8, 10]
+scores = build_scores(names, vals)
+print(scores)

@@ -1,8 +1,5 @@
-def add(a, b):
-    return a + b
+def build(a, x):
+    return a + x
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+result = build(39, 29)
+print(f"Result: {result}")

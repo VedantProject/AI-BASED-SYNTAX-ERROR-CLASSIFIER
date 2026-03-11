@@ -1,0 +1,7 @@
+def make_adder(z):
+    def adder(count):
+        return z + count
+    return adder
+
+add_10 = make_adder(10)
+print(add_10(34))

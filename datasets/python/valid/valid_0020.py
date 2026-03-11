@@ -1,9 +1,6 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def is_palindrome(b):
+    s = str(b)
+    return s == s[::-1]
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+for num in [10, 22, 121, 131, 9]:
+    print(f"{num}: {is_palindrome(num)}")

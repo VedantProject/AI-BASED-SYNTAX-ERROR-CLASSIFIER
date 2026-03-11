@@ -1,9 +1,7 @@
-def sum_list(numbers):
-    total = 0
-    for num in numbers:
-        total += num
-    return total
+def average(numbers):
+    if not numbers:
+        return 0
+    return sum(numbers) / len(numbers)
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+data = [22, 53, 57, 30, 29]
+print(f"Average: {average(data):.2f}")

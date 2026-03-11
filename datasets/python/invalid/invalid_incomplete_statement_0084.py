@@ -1,5 +1,5 @@
-def test():
-    x = 
+def build(b):
+    x =
     return x
 
-print(test())
+print(build(14))

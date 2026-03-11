@@ -128,8 +128,8 @@ class PythonParser:
         return False
     
     def skip_newlines(self):
-        """Skip newline tokens"""
-        while self.current_token() and self.current_token().type == 'NEWLINE':
+        """Skip newline and stray dedent tokens at the top level."""
+        while self.current_token() and self.current_token().type in ('NEWLINE', 'DEDENT'):
             self.advance()
     
     def panic_mode_recovery(self):
@@ -170,6 +170,10 @@ class PythonParser:
                 if self.current_token() and self.current_token().type != 'EOF':
                     self.error(f"Unexpected token at top level: {self.current_token().value}", "UNEXPECTED_TOKEN")
                     self.panic_mode_recovery()
+                    # If panic mode also made no progress (e.g. stray DEDENT),
+                    # force-consume the token to guarantee termination.
+                    if self.position == prev_pos:
+                        self.advance()
                 else:
                     break
                 continue

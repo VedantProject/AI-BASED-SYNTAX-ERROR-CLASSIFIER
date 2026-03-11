@@ -1,15 +1,7 @@
-class Calculator:
-    def __init__(self):
-        self.result = 0
-    
-    def add(self, x, y):
-        self.result = x + y
-        return self.result
-    
-    def get_result(self):
-        return self.result
+def range_gen(start, stop, step=1):
+    current = start
+    while current < stop:
+        yield current
+        current += step
 
-if __name__ == "__main__":
-    calc = Calculator()
-    calc.add(5, 10)
-    print(f"Result: {calc.get_result()}")
+print(list(range_gen(28, 40, 2)))

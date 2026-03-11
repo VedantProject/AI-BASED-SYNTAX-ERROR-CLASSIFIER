@@ -1,8 +1,6 @@
-def add(a, b):
-    return a + b
+def square_map(n):
+    return {i: i ** 2 for i in range(n)}
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+d = square_map(5)
+for k, v in d.items():
+    print(f"{k}^2 = {v}")

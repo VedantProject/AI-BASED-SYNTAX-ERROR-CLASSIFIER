@@ -1,15 +1,14 @@
-class Calculator:
-    def __init__(self):
-        self.result = 0
-    
-    def add(self, x, y):
-        self.result = x + y
-        return self.result
-    
-    def get_result(self):
-        return self.result
+class Analyzer:
+    def __init__(self, count):
+        self._count = count
 
-if __name__ == "__main__":
-    calc = Calculator()
-    calc.add(5, 10)
-    print(f"Result: {calc.get_result()}")
+    def get_count(self):
+        return self._count
+
+    def set_count(self, y):
+        self._count = y
+
+obj = Analyzer(8)
+print(obj.get_count())
+obj.set_count(18)
+print(obj.get_count())

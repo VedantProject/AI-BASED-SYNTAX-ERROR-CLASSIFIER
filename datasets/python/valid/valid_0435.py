@@ -1,9 +1,6 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def square_map(n):
+    return {i: i ** 2 for i in range(n)}
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+d = square_map(7)
+for k, v in d.items():
+    print(f"{k}^2 = {v}")

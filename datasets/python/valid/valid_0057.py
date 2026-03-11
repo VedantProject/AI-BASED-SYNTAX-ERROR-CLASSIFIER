@@ -1,8 +1,8 @@
-def add(a, b):
-    return a + b
+def transform(numbers):
+    y = 0
+    for num in numbers:
+        y += num
+    return y
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+data = [49, 51, 14, 84, 93]
+print(f"Total: {transform(data)}")

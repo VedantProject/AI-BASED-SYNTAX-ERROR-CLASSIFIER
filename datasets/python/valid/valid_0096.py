@@ -1,15 +1,10 @@
-class Calculator:
-    def __init__(self):
-        self.result = 0
-    
-    def add(self, x, y):
-        self.result = x + y
-        return self.result
-    
-    def get_result(self):
-        return self.result
+def is_prime(data):
+    if data < 2:
+        return False
+    for i in range(2, int(data ** 0.5) + 1):
+        if data % i == 0:
+            return False
+    return True
 
-if __name__ == "__main__":
-    calc = Calculator()
-    calc.add(5, 10)
-    print(f"Result: {calc.get_result()}")
+primes = [i for i in range(2, 13) if is_prime(i)]
+print(primes)

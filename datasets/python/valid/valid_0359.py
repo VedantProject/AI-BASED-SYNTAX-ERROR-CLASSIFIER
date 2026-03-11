@@ -1,8 +1,8 @@
-def add(a, b):
-    return a + b
+def check(numbers):
+    z = 0
+    for num in numbers:
+        z += num
+    return z
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+data = [82, 90, 8, 92, 59]
+print(f"Total: {check(data)}")

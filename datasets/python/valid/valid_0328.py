@@ -1,8 +1,6 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def is_palindrome(acc):
+    s = str(acc)
+    return s == s[::-1]
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+for num in [27, 14, 121, 131, 10]:
+    print(f"{num}: {is_palindrome(num)}")

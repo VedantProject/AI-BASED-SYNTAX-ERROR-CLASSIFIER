@@ -1,6 +1,6 @@
-def calculate():
-    x = 5
-    y = 10
-    return x ++ y
+def test():
+    count = 32
+    if count === 4:
+        print("equal")
 
-print(calculate())
+test()

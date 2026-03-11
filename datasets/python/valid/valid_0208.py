@@ -1,15 +1,5 @@
-class Calculator:
-    def __init__(self):
-        self.result = 0
-    
-    def add(self, x, y):
-        self.result = x + y
-        return self.result
-    
-    def get_result(self):
-        return self.result
+def count_char(text, ch):
+    return text.count(ch)
 
-if __name__ == "__main__":
-    calc = Calculator()
-    calc.add(5, 10)
-    print(f"Result: {calc.get_result()}")
+text = "item solve python testing"
+print(count_char(text, "i"))

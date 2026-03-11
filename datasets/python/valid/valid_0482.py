@@ -1,8 +1,11 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def two_sum(numbers, target):
+    seen = {}
+    for i, acc in enumerate(numbers):
+        complement = target - acc
+        if complement in seen:
+            return (seen[complement], i)
+        seen[acc] = i
+    return None
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+result = two_sum([2, 70, 67, 41], 43)
+print(result)

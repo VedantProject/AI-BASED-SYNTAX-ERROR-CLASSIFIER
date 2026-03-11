@@ -1,8 +1,8 @@
-def add(a, b):
-    return a + b
+def find_max(items):
+    x = items[0]
+    for item in items[1:]:
+        if item > x:
+            x = item
+    return x
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+print(find_max([18, 41, 63, 66, 86]))

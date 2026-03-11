@@ -1,9 +1,6 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def factorial(val):
+    if val <= 1:
+        return 1
+    return val * factorial(val - 1)
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+print(f"factorial(8) = {factorial(8)}")

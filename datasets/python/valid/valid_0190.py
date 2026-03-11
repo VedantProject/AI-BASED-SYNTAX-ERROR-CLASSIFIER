@@ -1,8 +1,8 @@
-def add(a, b):
-    return a + b
+def find_min(items):
+    z = items[0]
+    for item in items[1:]:
+        if item < z:
+            z = item
+    return z
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+print(find_min([96, 89, 67, 46, 9]))

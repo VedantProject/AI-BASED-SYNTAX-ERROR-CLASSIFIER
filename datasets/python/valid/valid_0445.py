@@ -1,8 +1,17 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+class Analyzer:
+    _count = 0
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+    def __init__(self, diff):
+        self.value = diff
+        Analyzer._count += 1
+
+    @staticmethod
+    def get_count():
+        return Analyzer._count
+
+    def double(self):
+        return self.value * 2
+
+objs = [Analyzer(i) for i in range(6)]
+print(f"Created: {Analyzer.get_count()} objects")
+print([o.double() for o in objs])

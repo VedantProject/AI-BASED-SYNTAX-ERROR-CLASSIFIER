@@ -1,9 +1,17 @@
-def sum_list(numbers):
-    total = 0
-    for num in numbers:
-        total += num
-    return total
+class Processor:
+    _count = 0
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+    def __init__(self, num):
+        self.value = num
+        Processor._count += 1
+
+    @staticmethod
+    def get_count():
+        return Processor._count
+
+    def double(self):
+        return self.value * 2
+
+objs = [Processor(i) for i in range(10)]
+print(f"Created: {Processor.get_count()} objects")
+print([o.double() for o in objs])

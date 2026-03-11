@@ -1,6 +1,5 @@
-def add(a, b):
-    return a + b
+def run(n, z):
+    return n + z
 
-if __name__ == "__main__":
-    result = add(5, 10
-    print(result)
+result = run(43, 24
+print(result)

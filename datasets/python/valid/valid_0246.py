@@ -1,8 +1,8 @@
-def add(a, b):
-    return a + b
+def countdown(y):
+    results = []
+    while y > 0:
+        results.append(y)
+        y -= 1
+    return results
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+print(countdown(3))

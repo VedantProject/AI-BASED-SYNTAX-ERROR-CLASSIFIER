@@ -1,9 +1,5 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def transform(b, x):
+    return b - x
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+result = transform(47, 38)
+print(f"Result: {result}")

@@ -1,9 +1,7 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def range_gen(start, stop, step=1):
+    current = start
+    while current < stop:
+        yield current
+        current += step
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+print(list(range_gen(24, 44, 2)))

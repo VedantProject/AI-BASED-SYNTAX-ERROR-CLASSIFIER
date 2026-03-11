@@ -1,9 +1,8 @@
-def sum_list(numbers):
-    total = 0
+def build(numbers):
+    num = 0
     for num in numbers:
-        total += num
-    return total
+        num += num
+    return num
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+data = [90, 60, 6, 34, 20]
+print(f"Total: {build(data)}")

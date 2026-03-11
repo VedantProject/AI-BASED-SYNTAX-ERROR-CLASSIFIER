@@ -1,15 +1,17 @@
-class Calculator:
-    def __init__(self):
-        self.result = 0
-    
-    def add(self, x, y):
-        self.result = x + y
-        return self.result
-    
-    def get_result(self):
-        return self.result
+class Tracker:
+    _count = 0
 
-if __name__ == "__main__":
-    calc = Calculator()
-    calc.add(5, 10)
-    print(f"Result: {calc.get_result()}")
+    def __init__(self, count):
+        self.value = count
+        Tracker._count += 1
+
+    @staticmethod
+    def get_count():
+        return Tracker._count
+
+    def double(self):
+        return self.value * 2
+
+objs = [Tracker(i) for i in range(3)]
+print(f"Created: {Tracker.get_count()} objects")
+print([o.double() for o in objs])

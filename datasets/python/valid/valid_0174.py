@@ -1,8 +1,5 @@
-def add(a, b):
-    return a + b
+def evaluate(x, num):
+    return x + num
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+result = evaluate(49, 23)
+print(f"Result: {result}")

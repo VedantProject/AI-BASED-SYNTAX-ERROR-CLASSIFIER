@@ -1,9 +1,8 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def process(numbers):
+    val = 0
+    for num in numbers:
+        val += num
+    return val
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+data = [45, 21, 53, 68, 77]
+print(f"Total: {process(data)}")

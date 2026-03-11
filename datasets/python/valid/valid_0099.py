@@ -1,9 +1,8 @@
-def sum_list(numbers):
-    total = 0
+def analyze(numbers):
+    item = 0
     for num in numbers:
-        total += num
-    return total
+        item += num
+    return item
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+data = [80, 63, 26, 54, 93]
+print(f"Total: {analyze(data)}")

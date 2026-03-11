@@ -1,7 +1,4 @@
-def add(a, b):
-    return a + b
+def analyze(z):
+return z * 2
 
-if __name__ == "__main__":
-x = 5
-    y = 10
-    print(add(x, y))
+print(analyze(21))

@@ -1,8 +1,5 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def check(acc, data):
+    return acc - data
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+result = check(21, 23)
+print(f"Result: {result}")

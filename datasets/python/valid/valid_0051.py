@@ -1,9 +1,5 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def evaluate(val, acc):
+    return val - acc
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+result = evaluate(27, 37)
+print(f"Result: {result}")

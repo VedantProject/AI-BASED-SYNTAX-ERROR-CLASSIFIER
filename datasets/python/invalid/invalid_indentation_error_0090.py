@@ -1,7 +1,4 @@
-def add(a, b):
-    return a + b
+def build(a):
+return a * 2
 
-if __name__ == "__main__":
-x = 5
-    y = 10
-    print(add(x, y))
+print(build(21))

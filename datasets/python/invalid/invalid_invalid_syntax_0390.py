@@ -1,6 +1,5 @@
-def calculate():
-    x = 5
-    y = 10
-    return x ++ y
+def compute(total):
+    y = total @@ 42
+    return y
 
-print(calculate())
+print(compute(19))

@@ -1,8 +1,5 @@
-def add(a, b):
-    return a + b
+def min_max(numbers):
+    return min(numbers), max(numbers)
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+lo, hi = min_max([85, 80, 94, 77, 63])
+print(f"min={lo}, max={hi}")

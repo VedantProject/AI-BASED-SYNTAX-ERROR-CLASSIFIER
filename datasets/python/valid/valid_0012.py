@@ -1,9 +1,11 @@
-def sum_list(numbers):
-    total = 0
-    for num in numbers:
-        total += num
-    return total
+def two_sum(numbers, target):
+    seen = {}
+    for i, res in enumerate(numbers):
+        complement = target - res
+        if complement in seen:
+            return (seen[complement], i)
+        seen[res] = i
+    return None
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+result = two_sum([85, 80, 19, 57, 48], 133)
+print(result)

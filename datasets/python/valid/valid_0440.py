@@ -1,8 +1,6 @@
-def add(a, b):
-    return a + b
+def power(a, z):
+    if z == 0:
+        return 1
+    return a * power(a, z - 1)
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+print(power(10, 2))

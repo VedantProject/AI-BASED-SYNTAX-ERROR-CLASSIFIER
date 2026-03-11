@@ -1,8 +1,6 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def process_text(text):
+    words = text.split()
+    upper = [w.upper() for w in words]
+    return " ".join(upper)
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+print(process_text("hello filter_vals python code"))

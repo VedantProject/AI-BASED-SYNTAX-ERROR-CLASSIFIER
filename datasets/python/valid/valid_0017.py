@@ -1,8 +1,5 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def min_max(numbers):
+    return min(numbers), max(numbers)
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+lo, hi = min_max([96, 54, 33, 65])
+print(f"min={lo}, max={hi}")

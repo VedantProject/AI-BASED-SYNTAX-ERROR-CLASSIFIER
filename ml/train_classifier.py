@@ -1,20 +1,20 @@
-"""
+﻿"""
 ML Training Pipeline
 ====================
 Trains the full suite of models from datasets/*/invalid/ and datasets/*/valid/:
 
-  Model 1 – Pattern Classifier
+  Model 1 â€“ Pattern Classifier
       VotingClassifier(LogisticRegression + RandomForest)
       wrapped in CalibratedClassifierCV for accurate probabilities.
       Features: TF-IDF(text) + StandardScaler(numeric + co-occurrence)
 
-  Model 2 – Severity Regressor
+  Model 2 â€“ Severity Regressor
       Ridge regression predicts a 0-10 risk score per error.
 
-  Model 3 – Fix Ranker
+  Model 3 â€“ Fix Ranker
       Multi-label LogisticRegression that ranks the top-3 specific fix actions.
 
-  Model 4 – Isolation Forest (anomaly detector for valid-looking code)
+  Model 4 â€“ Isolation Forest (anomaly detector for valid-looking code)
       Saved separately; used by AnomalyDetector at runtime.
 
 Run directly:
@@ -46,7 +46,7 @@ from ml.ast_feature_extractor import (
     LABEL_MAP, ALL_LABELS, ALL_ERROR_TYPES, SEVERITY_BASE,
 )
 
-# ── Fix action vocabulary ─────────────────────────────────────────────────────
+# â”€â”€ Fix action vocabulary â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 # Each "fix action" is a short unique token that the fix-ranker learns to predict.
 # Diagnostic engine maps these back to human-readable strings.
@@ -79,7 +79,7 @@ _FIX_FOR_PATTERN: Dict[str, List[str]] = {
                                     'MOVE_STATEMENT_OUT'],
 }
 
-# ── Dataset construction ──────────────────────────────────────────────────────
+# â”€â”€ Dataset construction â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 _FNAME_RE = re.compile(r"invalid_([a-z_]+)_\d+\.\w+$")
 
@@ -105,7 +105,7 @@ def build_invalid_dataset(dataset_dir: str = "datasets") -> List[ErrorFeatures]:
     invalid_dir = os.path.join(dataset_dir, 'python', 'invalid')
 
     files = sorted(os.listdir(invalid_dir))
-    print(f"  Parsing {len(files)} invalid files …")
+    print(f"  Parsing {len(files)} invalid files â€¦")
 
     for fname in files:
         raw_label = _label_from_filename(fname)
@@ -136,7 +136,7 @@ def build_valid_numeric_features(dataset_dir: str = "datasets") -> np.ndarray:
     rows: List[List[float]] = []
     valid_dir = os.path.join(dataset_dir, 'python', 'valid')
     files     = sorted(os.listdir(valid_dir))
-    print(f"  Parsing {len(files)} valid files for anomaly model …")
+    print(f"  Parsing {len(files)} valid files for anomaly model â€¦")
 
     extractor_cls = _NumericExtractor()
 
@@ -157,7 +157,7 @@ def build_valid_numeric_features(dataset_dir: str = "datasets") -> np.ndarray:
     return np.array(rows, dtype=float) if rows else np.zeros((1, len(_NumericExtractor._FIELDS)))
 
 
-# ── Custom sklearn transformers ───────────────────────────────────────────────
+# â”€â”€ Custom sklearn transformers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 class _TextExtractor(BaseEstimator, TransformerMixin):
     """Concatenates all text fields of ErrorFeatures for TF-IDF ingestion."""
@@ -202,7 +202,7 @@ class _NumericExtractor(BaseEstimator, TransformerMixin):
         return np.hstack([numeric, co_occ])
 
 
-# ── Pipeline builders ─────────────────────────────────────────────────────────
+# â”€â”€ Pipeline builders â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def _build_feature_union() -> FeatureUnion:
     return FeatureUnion([
@@ -210,7 +210,7 @@ def _build_feature_union() -> FeatureUnion:
             ('extract', _TextExtractor()),
             ('tfidf',   TfidfVectorizer(
                 ngram_range=(1, 2),
-                max_features=10_000,
+                max_features=5_000,
                 sublinear_tf=True,
                 min_df=2,
             )),
@@ -227,14 +227,15 @@ def build_pattern_classifier() -> Pipeline:
     VotingClassifier (LR + RF) wrapped in Platt-scaling calibration.
     """
     lr = LogisticRegression(max_iter=1000, C=1.0, class_weight='balanced',
-                            solver='lbfgs')
-    rf = RandomForestClassifier(n_estimators=200, max_depth=12,
-                                class_weight='balanced', random_state=42)
+                            solver='lbfgs', n_jobs=-1)
+    rf = RandomForestClassifier(n_estimators=100, max_depth=12,
+                                class_weight='balanced', random_state=42,
+                                n_jobs=-1)
     voting = VotingClassifier(
         estimators=[('lr', lr), ('rf', rf)],
-        voting='soft',
+        voting='soft', n_jobs=-1,
     )
-    calibrated = CalibratedClassifierCV(voting, cv=3, method='sigmoid')
+    calibrated = CalibratedClassifierCV(voting, cv=2, method='sigmoid')
 
     return Pipeline([
         ('features', _build_feature_union()),
@@ -265,7 +266,7 @@ def build_fix_ranker() -> Pipeline:
     ])
 
 
-# ── Training orchestration ────────────────────────────────────────────────────
+# â”€â”€ Training orchestration â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def _derive_fix_label(feat: ErrorFeatures) -> str:
     """Return the primary fix action for a given labeled ErrorFeature."""
@@ -290,8 +291,8 @@ def train(dataset_dir: str = "datasets",
 
     os.makedirs(output_dir, exist_ok=True)
 
-    # ── Step 1: Build dataset ──────────────────────────────────────────────
-    print("\n[1/5] Building invalid-code dataset …")
+    # â”€â”€ Step 1: Build dataset â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    print("\n[1/5] Building invalid-code dataset â€¦")
     features = build_invalid_dataset(dataset_dir)
     if not features:
         print("ERROR: No training samples found. Check datasets/python/invalid/")
@@ -315,8 +316,8 @@ def train(dataset_dir: str = "datasets",
         test_size=0.2, random_state=42, stratify=stratify,
     )
 
-    # ── Step 2: Pattern classifier ─────────────────────────────────────────
-    print("\n[2/5] Training pattern classifier (LR+RF ensemble + calibration) …")
+    # â”€â”€ Step 2: Pattern classifier â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    print("\n[2/5] Training pattern classifier (LR+RF ensemble + calibration) â€¦")
     clf_pipeline = build_pattern_classifier()
     clf_pipeline.fit(X_tr, y_tr)
 
@@ -325,16 +326,16 @@ def train(dataset_dir: str = "datasets",
     print(classification_report(y_te, y_pred, zero_division=0))
 
     cv_scores = cross_val_score(clf_pipeline, features, labels,
-                                cv=5, scoring='f1_macro')
-    print(f"  5-fold macro-F1: {cv_scores.mean():.3f} ± {cv_scores.std():.3f}")
+                                cv=3, scoring='f1_macro', n_jobs=-1)
+    print(f"  3-fold macro-F1: {cv_scores.mean():.3f} +/- {cv_scores.std():.3f}")
 
     clf_path = os.path.join(output_dir, 'model_classifier.pkl')
     with open(clf_path, 'wb') as f:
         pickle.dump(clf_pipeline, f)
-    print(f"  Saved → {clf_path}")
+    print(f"  Saved â†’ {clf_path}")
 
-    # ── Step 3: Severity regressor ─────────────────────────────────────────
-    print("\n[3/5] Training severity regressor …")
+    # â”€â”€ Step 3: Severity regressor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    print("\n[3/5] Training severity regressor â€¦")
     reg_pipeline = build_severity_regressor()
     reg_pipeline.fit(X_tr, sev_tr)
 
@@ -346,10 +347,10 @@ def train(dataset_dir: str = "datasets",
     reg_path = os.path.join(output_dir, 'model_severity.pkl')
     with open(reg_path, 'wb') as f:
         pickle.dump(reg_pipeline, f)
-    print(f"  Saved → {reg_path}")
+    print(f"  Saved â†’ {reg_path}")
 
-    # ── Step 4: Fix ranker ─────────────────────────────────────────────────
-    print("\n[4/5] Training fix ranker …")
+    # â”€â”€ Step 4: Fix ranker â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    print("\n[4/5] Training fix ranker â€¦")
     fix_pipeline = build_fix_ranker()
     fix_pipeline.fit(X_tr, fix_tr)
 
@@ -359,26 +360,27 @@ def train(dataset_dir: str = "datasets",
     fix_path = os.path.join(output_dir, 'model_fix_ranker.pkl')
     with open(fix_path, 'wb') as f:
         pickle.dump(fix_pipeline, f)
-    print(f"  Saved → {fix_path}")
+    print(f"  Saved â†’ {fix_path}")
 
-    # ── Step 5: Isolation Forest (anomaly detection on valid code) ─────────
-    print("\n[5/5] Training Isolation Forest on valid code …")
+    # â”€â”€ Step 5: Isolation Forest (anomaly detection on valid code) â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    print("\n[5/5] Training Isolation Forest on valid code â€¦")
     valid_X = build_valid_numeric_features(dataset_dir)
     if valid_X.shape[0] > 1:
         iso = IsolationForest(
-            n_estimators=200,
+            n_estimators=100,
             contamination=0.05,
             random_state=42,
+            n_jobs=-1,
         )
         iso.fit(valid_X)
         iso_path = os.path.join(output_dir, 'model_anomaly.pkl')
         with open(iso_path, 'wb') as f:
             pickle.dump(iso, f)
-        print(f"  Trained on {valid_X.shape[0]} valid files. Saved → {iso_path}")
+        print(f"  Trained on {valid_X.shape[0]} valid files. Saved â†’ {iso_path}")
     else:
         print("  Skipped: not enough valid files.")
 
-    # ── Save SGDClassifier skeleton for online learning ────────────────────
+    # â”€â”€ Save SGDClassifier skeleton for online learning â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     from sklearn.utils.class_weight import compute_class_weight
     import numpy as _np2
     classes_arr = _np2.array(ALL_LABELS)
@@ -394,10 +396,11 @@ def train(dataset_dir: str = "datasets",
     sgd_path = os.path.join(output_dir, 'model_online.pkl')
     with open(sgd_path, 'wb') as f:
         pickle.dump(sgd, f)
-    print(f"\n  Online SGD model saved → {sgd_path}")
+    print(f"\n  Online SGD model saved â†’ {sgd_path}")
 
-    print("\n✓ All models trained successfully.")
+    print("\nâœ“ All models trained successfully.")
 
 
 if __name__ == "__main__":
     train()
+

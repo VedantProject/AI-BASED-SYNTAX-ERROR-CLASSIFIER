@@ -1,8 +1,14 @@
-def add(a, b):
-    return a + b
+class Engine:
+    def __init__(self, z):
+        self._z = z
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+    def get_z(self):
+        return self._z
+
+    def set_z(self, m):
+        self._z = m
+
+obj = Engine(3)
+print(obj.get_z())
+obj.set_z(22)
+print(obj.get_z())

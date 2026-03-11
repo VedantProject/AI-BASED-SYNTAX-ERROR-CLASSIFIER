@@ -1,6 +1,3 @@
-def add(a, b):
-    return a + b
-
-if __name__ == "__main__":
-    result = add(5, 10
-    print(result)
+n = 18
+if (n > 0:
+    print("positive")

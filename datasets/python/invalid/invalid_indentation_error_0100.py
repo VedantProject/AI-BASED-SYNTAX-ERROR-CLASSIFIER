@@ -1,7 +1,6 @@
-def add(a, b):
-    return a + b
+def check(z):
+    if z > 0:
+        print("positive")
+   return True
 
-if __name__ == "__main__":
-x = 5
-    y = 10
-    print(add(x, y))
+check(48)

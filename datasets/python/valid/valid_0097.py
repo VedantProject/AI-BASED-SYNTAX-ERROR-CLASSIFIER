@@ -1,9 +1,5 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def greet(name, m):
+    return f"Hello, {name}! Count: {m}"
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+msg = greet("record", 19)
+print(msg)

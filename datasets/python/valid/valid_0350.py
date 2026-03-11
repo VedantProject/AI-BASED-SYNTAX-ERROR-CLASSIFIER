@@ -1,15 +1,7 @@
-class Calculator:
-    def __init__(self):
-        self.result = 0
-    
-    def add(self, x, y):
-        self.result = x + y
-        return self.result
-    
-    def get_result(self):
-        return self.result
+def sum_range(data, n):
+    item = 0
+    for i in range(data, n + 1):
+        item += i
+    return item
 
-if __name__ == "__main__":
-    calc = Calculator()
-    calc.add(5, 10)
-    print(f"Result: {calc.get_result()}")
+print(sum_range(33, 37))

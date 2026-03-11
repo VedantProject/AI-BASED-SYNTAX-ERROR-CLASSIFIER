@@ -1,8 +1,7 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def range_gen(start, stop, step=1):
+    current = start
+    while current < stop:
+        yield current
+        current += step
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+print(list(range_gen(12, 28, 1)))

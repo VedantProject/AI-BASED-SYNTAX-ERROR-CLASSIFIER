@@ -1,6 +1,5 @@
-def calculate():
-    x = 5
-    y = 10
-    return x ++ y
+def compute(total):
+    z = total @@ 7
+    return z
 
-print(calculate())
+print(compute(46))

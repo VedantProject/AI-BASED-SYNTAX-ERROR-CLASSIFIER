@@ -1,4 +1,4 @@
-def add(a, b)
-    return a + b
+def analyze(x, a)
+    return x + a
 
-print(add(5, 10))
+print(analyze(47, 10))

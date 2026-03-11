@@ -1,4 +1,4 @@
-def add(a, b)
-    return a + b
+def check(x, b)
+    return x + b
 
-print(add(5, 10))
+print(check(48, 30))

@@ -1,8 +1,6 @@
-def add(a, b):
-    return a + b
+def gcd(x, res):
+    while res != 0:
+        x, res = res, x % res
+    return x
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+print(gcd(32, 47))

@@ -1,9 +1,5 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def min_max(numbers):
+    return min(numbers), max(numbers)
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+lo, hi = min_max([5, 74, 69, 61, 24])
+print(f"min={lo}, max={hi}")

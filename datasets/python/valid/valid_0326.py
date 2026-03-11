@@ -1,8 +1,7 @@
-def add(a, b):
-    return a + b
+def sum_range(a, res):
+    total = 0
+    for i in range(a, res + 1):
+        total += i
+    return total
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+print(sum_range(18, 28))

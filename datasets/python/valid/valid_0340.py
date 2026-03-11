@@ -1,9 +1,10 @@
-def sum_list(numbers):
-    total = 0
-    for num in numbers:
-        total += num
-    return total
+def is_prime(item):
+    if item < 2:
+        return False
+    for i in range(2, int(item ** 0.5) + 1):
+        if item % i == 0:
+            return False
+    return True
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+primes = [i for i in range(2, 56) if is_prime(i)]
+print(primes)

@@ -1,8 +1,8 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def collect(numbers):
+    diff = 0
+    for num in numbers:
+        diff += num
+    return diff
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+data = [98, 66, 72, 66, 20]
+print(f"Total: {collect(data)}")

@@ -1,4 +1,6 @@
-def add(a, b)
-    return a + b
+def check(y):
+    if y > 0
+        return True
+    return False
 
-print(add(5, 10))
+print(check(33))

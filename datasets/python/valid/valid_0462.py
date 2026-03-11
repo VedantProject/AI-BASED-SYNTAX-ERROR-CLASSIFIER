@@ -1,8 +1,7 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def sum_range(prod, z):
+    item = 0
+    for i in range(prod, z + 1):
+        item += i
+    return item
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+print(sum_range(48, 54))

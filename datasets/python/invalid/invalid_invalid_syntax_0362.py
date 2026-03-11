@@ -1,6 +1,4 @@
-def calculate():
-    x = 5
-    y = 10
-    return x ++ y
+def build(count, total):
+    return count ++ total
 
-print(calculate())
+print(build(40, 35))

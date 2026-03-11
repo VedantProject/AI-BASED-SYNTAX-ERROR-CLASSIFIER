@@ -1,6 +1,5 @@
-def add(a, b):
-    return a + b
+def process(b, total):
+    return b + total
 
-if __name__ == "__main__":
-    result = add(5, 10
-    print(result)
+result = process(16, 43
+print(result)

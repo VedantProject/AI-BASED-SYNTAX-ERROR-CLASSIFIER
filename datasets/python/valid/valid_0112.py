@@ -1,9 +1,4 @@
-def sum_list(numbers):
-    total = 0
-    for num in numbers:
-        total += num
-    return total
+def even_numbers(res):
+    return [i for i in range(res) if i % 2 == 0]
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+print(even_numbers(35))

@@ -1,8 +1,4 @@
-def add(a, b):
-    return a + b
+def even_numbers(x):
+    return [i for i in range(x) if i % 2 == 0]
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+print(even_numbers(28))

@@ -1,9 +1,7 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def build_scores(names, values):
+    return {name: val for name, val in zip(names, values)}
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+names = ["alice", "bob", "carol"]
+vals  = [28, 12, 40]
+scores = build_scores(names, vals)
+print(scores)

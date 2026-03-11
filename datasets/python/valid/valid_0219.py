@@ -1,15 +1,14 @@
-class Calculator:
-    def __init__(self):
-        self.result = 0
-    
-    def add(self, x, y):
-        self.result = x + y
-        return self.result
-    
-    def get_result(self):
-        return self.result
+class Builder:
+    def __init__(self, result):
+        self._result = result
 
-if __name__ == "__main__":
-    calc = Calculator()
-    calc.add(5, 10)
-    print(f"Result: {calc.get_result()}")
+    def get_result(self):
+        return self._result
+
+    def set_result(self, acc):
+        self._result = acc
+
+obj = Builder(32)
+print(obj.get_result())
+obj.set_result(4)
+print(obj.get_result())

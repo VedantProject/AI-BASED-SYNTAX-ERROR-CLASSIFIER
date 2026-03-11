@@ -1,15 +1,7 @@
-class Calculator:
-    def __init__(self):
-        self.result = 0
-    
-    def add(self, x, y):
-        self.result = x + y
-        return self.result
-    
-    def get_result(self):
-        return self.result
+def build_scores(names, values):
+    return {name: val for name, val in zip(names, values)}
 
-if __name__ == "__main__":
-    calc = Calculator()
-    calc.add(5, 10)
-    print(f"Result: {calc.get_result()}")
+names = ["alice", "bob", "carol"]
+vals  = [4, 12, 16]
+scores = build_scores(names, vals)
+print(scores)

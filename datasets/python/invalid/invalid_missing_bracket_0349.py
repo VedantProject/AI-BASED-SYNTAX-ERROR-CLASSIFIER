@@ -1,5 +1,5 @@
-def process_list():
-    numbers = [1, 2, 3, 4, 5
-    return sum(numbers)
+def run():
+    data = [38, 19, 6
+    return data
 
-print(process_list())
+print(run())

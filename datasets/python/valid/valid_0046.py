@@ -1,8 +1,7 @@
-def add(a, b):
-    return a + b
+def range_gen(start, stop, step=1):
+    current = start
+    while current < stop:
+        yield current
+        current += step
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+print(list(range_gen(6, 10, 2)))

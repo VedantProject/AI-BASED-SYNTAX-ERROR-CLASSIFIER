@@ -1,9 +1,8 @@
-def sum_list(numbers):
-    total = 0
-    for num in numbers:
-        total += num
-    return total
+def safe_divide(res, count):
+    try:
+        return res / count
+    except ZeroDivisionError:
+        return None
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+print(safe_divide(18, 25))
+print(safe_divide(18, 0))

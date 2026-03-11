@@ -1,8 +1,8 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def transform(numbers):
+    acc = 0
+    for num in numbers:
+        acc += num
+    return acc
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+data = [87, 97, 57, 96, 39]
+print(f"Total: {transform(data)}")

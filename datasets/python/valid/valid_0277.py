@@ -1,8 +1,8 @@
-def add(a, b):
-    return a + b
+def collect(numbers):
+    z = 0
+    for num in numbers:
+        z += num
+    return z
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+data = [32, 92, 40, 13, 10]
+print(f"Total: {collect(data)}")

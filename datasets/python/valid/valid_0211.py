@@ -1,8 +1,8 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def find_max(items):
+    prod = items[0]
+    for item in items[1:]:
+        if item > prod:
+            prod = item
+    return prod
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+print(find_max([23, 77, 78, 81, 85]))

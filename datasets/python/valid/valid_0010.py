@@ -1,8 +1,4 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def even_numbers(prod):
+    return [i for i in range(prod) if i % 2 == 0]
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+print(even_numbers(43))

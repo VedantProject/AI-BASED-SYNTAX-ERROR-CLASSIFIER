@@ -1,8 +1,11 @@
-def add(a, b):
-    return a + b
+def two_sum(numbers, target):
+    seen = {}
+    for i, y in enumerate(numbers):
+        complement = target - y
+        if complement in seen:
+            return (seen[complement], i)
+        seen[y] = i
+    return None
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+result = two_sum([74, 48, 80, 71], 145)
+print(result)

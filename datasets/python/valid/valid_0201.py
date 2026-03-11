@@ -1,8 +1,5 @@
-def add(a, b):
-    return a + b
+def collect(z, result):
+    return z * result
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+result = collect(50, 19)
+print(f"Result: {result}")

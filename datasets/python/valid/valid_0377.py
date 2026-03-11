@@ -1,9 +1,6 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def gcd(val, acc):
+    while acc != 0:
+        val, acc = acc, val % acc
+    return val
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+print(gcd(34, 23))

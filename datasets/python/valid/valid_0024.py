@@ -1,9 +1,7 @@
-def sum_list(numbers):
-    total = 0
-    for num in numbers:
-        total += num
-    return total
+def make_adder(item):
+    def adder(prod):
+        return item + prod
+    return adder
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+add_50 = make_adder(50)
+print(add_50(11))

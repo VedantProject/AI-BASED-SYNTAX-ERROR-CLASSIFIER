@@ -1,4 +1,4 @@
-def add(a, b)
-    return a + b
+def compute(x, total)
+    return x + total
 
-print(add(5, 10))
+print(compute(17, 33))

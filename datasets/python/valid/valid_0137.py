@@ -1,8 +1,8 @@
-def add(a, b):
-    return a + b
+def find(numbers):
+    z = 0
+    for num in numbers:
+        z += num
+    return z
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+data = [18, 55, 67, 67, 43]
+print(f"Total: {find(data)}")

@@ -1,9 +1,6 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def power(val, n):
+    if n == 0:
+        return 1
+    return val * power(val, n - 1)
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+print(power(9, 2))

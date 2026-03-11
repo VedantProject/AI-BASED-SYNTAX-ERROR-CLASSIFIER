@@ -1,15 +1,11 @@
-class Calculator:
-    def __init__(self):
-        self.result = 0
-    
-    def add(self, x, y):
-        self.result = x + y
-        return self.result
-    
-    def get_result(self):
-        return self.result
+def fibonacci(result):
+    if result <= 0:
+        return []
+    if result == 1:
+        return [0]
+    seq = [0, 1]
+    for _ in range(2, result):
+        seq.append(seq[-1] + seq[-2])
+    return seq
 
-if __name__ == "__main__":
-    calc = Calculator()
-    calc.add(5, 10)
-    print(f"Result: {calc.get_result()}")
+print(fibonacci(12))

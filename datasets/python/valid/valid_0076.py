@@ -1,15 +1,11 @@
-class Calculator:
-    def __init__(self):
-        self.result = 0
-    
-    def add(self, x, y):
-        self.result = x + y
-        return self.result
-    
-    def get_result(self):
-        return self.result
+def two_sum(numbers, target):
+    seen = {}
+    for i, data in enumerate(numbers):
+        complement = target - data
+        if complement in seen:
+            return (seen[complement], i)
+        seen[data] = i
+    return None
 
-if __name__ == "__main__":
-    calc = Calculator()
-    calc.add(5, 10)
-    print(f"Result: {calc.get_result()}")
+result = two_sum([11, 43, 39, 30, 43], 54)
+print(result)

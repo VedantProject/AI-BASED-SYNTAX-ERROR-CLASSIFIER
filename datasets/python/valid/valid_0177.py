@@ -1,9 +1,17 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+class Worker:
+    _count = 0
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+    def __init__(self, m):
+        self.value = m
+        Worker._count += 1
+
+    @staticmethod
+    def get_count():
+        return Worker._count
+
+    def double(self):
+        return self.value * 2
+
+objs = [Worker(i) for i in range(6)]
+print(f"Created: {Worker.get_count()} objects")
+print([o.double() for o in objs])

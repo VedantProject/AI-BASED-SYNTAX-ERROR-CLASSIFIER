@@ -1,9 +1,8 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def find_min(items):
+    val = items[0]
+    for item in items[1:]:
+        if item < val:
+            val = item
+    return val
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+print(find_min([94, 77, 52, 47, 40]))

@@ -1,9 +1,14 @@
-def sum_list(numbers):
-    total = 0
-    for num in numbers:
-        total += num
-    return total
+class Analyzer:
+    def __init__(self, temp):
+        self._temp = temp
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+    def get_temp(self):
+        return self._temp
+
+    def set_temp(self, acc):
+        self._temp = acc
+
+obj = Analyzer(35)
+print(obj.get_temp())
+obj.set_temp(35)
+print(obj.get_temp())

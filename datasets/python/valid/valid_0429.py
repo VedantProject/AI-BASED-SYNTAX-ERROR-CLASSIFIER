@@ -1,8 +1,14 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+class Manager:
+    def __init__(self, size):
+        self._size = size
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+    def get_size(self):
+        return self._size
+
+    def set_size(self, a):
+        self._size = a
+
+obj = Manager(27)
+print(obj.get_size())
+obj.set_size(28)
+print(obj.get_size())

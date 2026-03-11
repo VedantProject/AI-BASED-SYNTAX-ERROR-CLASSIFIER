@@ -1,9 +1,7 @@
-def sum_list(numbers):
+def sum_range(item, prod):
     total = 0
-    for num in numbers:
-        total += num
+    for i in range(item, prod + 1):
+        total += i
     return total
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+print(sum_range(14, 17))

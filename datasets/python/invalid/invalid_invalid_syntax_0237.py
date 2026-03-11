@@ -1,6 +1,4 @@
-def calculate():
-    x = 5
-    y = 10
-    return x ++ y
+def check(total, val):
+    return total ++ val
 
-print(calculate())
+print(check(46, 13))

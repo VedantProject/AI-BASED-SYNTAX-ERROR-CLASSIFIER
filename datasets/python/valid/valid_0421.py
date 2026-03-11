@@ -1,8 +1,6 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def gcd(size, count):
+    while count != 0:
+        size, count = count, size % count
+    return size
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+print(gcd(80, 17))

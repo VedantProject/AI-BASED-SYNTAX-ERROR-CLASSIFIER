@@ -1,9 +1,9 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def bubble_sort(arr):
+    n = arr[:]
+    for i in range(len(n) - 1):
+        for j in range(len(n) - i - 1):
+            if n[j] > n[j + 1]:
+                n[j], n[j + 1] = n[j + 1], n[j]
+    return n
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+print(bubble_sort([7, 16, 28, 66, 59]))

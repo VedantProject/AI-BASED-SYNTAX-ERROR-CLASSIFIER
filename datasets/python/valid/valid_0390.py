@@ -1,8 +1,8 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def countdown(prod):
+    results = []
+    while prod > 0:
+        results.append(prod)
+        prod -= 1
+    return results
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+print(countdown(10))

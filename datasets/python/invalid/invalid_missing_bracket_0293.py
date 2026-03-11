@@ -1,5 +1,3 @@
-def process_list():
-    numbers = [1, 2, 3, 4, 5
-    return sum(numbers)
-
-print(process_list())
+matrix = [[1, 2], [3, 4], [5, 6]
+for row in matrix:
+    print(row)

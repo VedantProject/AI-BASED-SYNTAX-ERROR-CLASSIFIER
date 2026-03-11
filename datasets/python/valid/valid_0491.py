@@ -1,9 +1,14 @@
-def sum_list(numbers):
-    total = 0
-    for num in numbers:
-        total += num
-    return total
+class Handler:
+    def __init__(self, res):
+        self._res = res
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+    def get_res(self):
+        return self._res
+
+    def set_res(self, item):
+        self._res = item
+
+obj = Handler(16)
+print(obj.get_res())
+obj.set_res(25)
+print(obj.get_res())

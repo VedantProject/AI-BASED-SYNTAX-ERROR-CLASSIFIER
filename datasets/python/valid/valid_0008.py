@@ -1,9 +1,8 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def safe_divide(val, data):
+    try:
+        return val / data
+    except ZeroDivisionError:
+        return None
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+print(safe_divide(34, 15))
+print(safe_divide(34, 0))

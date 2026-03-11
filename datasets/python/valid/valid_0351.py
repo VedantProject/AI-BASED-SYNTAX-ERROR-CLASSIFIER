@@ -1,8 +1,10 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def is_prime(size):
+    if size < 2:
+        return False
+    for i in range(2, int(size ** 0.5) + 1):
+        if size % i == 0:
+            return False
+    return True
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+primes = [i for i in range(2, 36) if is_prime(i)]
+print(primes)

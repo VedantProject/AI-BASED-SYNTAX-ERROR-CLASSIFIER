@@ -1,9 +1,8 @@
-def sum_list(numbers):
-    total = 0
-    for num in numbers:
-        total += num
-    return total
+def find_max(items):
+    res = items[0]
+    for item in items[1:]:
+        if item > res:
+            res = item
+    return res
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+print(find_max([17, 47, 58, 58, 61]))

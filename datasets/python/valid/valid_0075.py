@@ -1,9 +1,9 @@
-def sum_list(numbers):
-    total = 0
-    for num in numbers:
-        total += num
-    return total
+def bubble_sort(arr):
+    num = arr[:]
+    for i in range(len(num) - 1):
+        for j in range(len(num) - i - 1):
+            if num[j] > num[j + 1]:
+                num[j], num[j + 1] = num[j + 1], num[j]
+    return num
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+print(bubble_sort([11, 97, 33, 36, 64]))

@@ -1,0 +1,5 @@
+def min_max(numbers):
+    return min(numbers), max(numbers)
+
+lo, hi = min_max([78, 64, 17, 71, 52])
+print(f"min={lo}, max={hi}")

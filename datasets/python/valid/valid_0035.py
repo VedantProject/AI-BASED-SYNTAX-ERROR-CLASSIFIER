@@ -1,8 +1,7 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def make_adder(diff):
+    def adder(result):
+        return diff + result
+    return adder
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+add_49 = make_adder(49)
+print(add_49(35))

@@ -1,8 +1,5 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def count_char(text, ch):
+    return text.count(ch)
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+text = "entry check python testing"
+print(count_char(text, "e"))

@@ -1,9 +1,7 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def make_adder(n):
+    def adder(prod):
+        return n + prod
+    return adder
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+add_13 = make_adder(13)
+print(add_13(32))

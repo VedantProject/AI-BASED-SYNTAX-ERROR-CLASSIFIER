@@ -1,9 +1,5 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def count_char(text, ch):
+    return text.count(ch)
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+text = "test run python testing"
+print(count_char(text, "t"))

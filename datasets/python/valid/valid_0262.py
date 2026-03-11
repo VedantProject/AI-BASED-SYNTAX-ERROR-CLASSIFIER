@@ -1,15 +1,8 @@
-class Calculator:
-    def __init__(self):
-        self.result = 0
-    
-    def add(self, x, y):
-        self.result = x + y
-        return self.result
-    
-    def get_result(self):
-        return self.result
+def safe_divide(result, diff):
+    try:
+        return result / diff
+    except ZeroDivisionError:
+        return None
 
-if __name__ == "__main__":
-    calc = Calculator()
-    calc.add(5, 10)
-    print(f"Result: {calc.get_result()}")
+print(safe_divide(46, 38))
+print(safe_divide(46, 0))

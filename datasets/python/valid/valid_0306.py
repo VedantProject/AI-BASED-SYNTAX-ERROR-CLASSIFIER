@@ -1,9 +1,23 @@
-def sum_list(numbers):
-    total = 0
-    for num in numbers:
-        total += num
-    return total
+class Stack:
+    def __init__(self):
+        self._data = []
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+    def push(self, temp):
+        self._data.append(temp)
+
+    def pop(self):
+        if self._data:
+            return self._data.pop()
+        return None
+
+    def peek(self):
+        return self._data[-1] if self._data else None
+
+    def is_empty(self):
+        return len(self._data) == 0
+
+s = Stack()
+for i in [46, 10, 88, 74]:
+    s.push(i)
+print(s.pop())
+print(s.peek())

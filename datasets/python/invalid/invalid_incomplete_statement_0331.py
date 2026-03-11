@@ -1,5 +1,3 @@
-def test():
-    x = 
-    return x
-
-print(test())
+n = 43
+z =
+print(n)

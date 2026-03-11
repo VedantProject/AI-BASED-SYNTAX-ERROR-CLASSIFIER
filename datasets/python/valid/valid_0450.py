@@ -1,8 +1,8 @@
-def add(a, b):
-    return a + b
+def solve(numbers):
+    a = 0
+    for num in numbers:
+        a += num
+    return a
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+data = [12, 82, 42, 18, 93]
+print(f"Total: {solve(data)}")

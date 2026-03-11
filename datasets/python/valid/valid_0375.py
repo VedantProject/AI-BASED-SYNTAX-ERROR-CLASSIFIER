@@ -1,9 +1,10 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def is_prime(val):
+    if val < 2:
+        return False
+    for i in range(2, int(val ** 0.5) + 1):
+        if val % i == 0:
+            return False
+    return True
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+primes = [i for i in range(2, 23) if is_prime(i)]
+print(primes)

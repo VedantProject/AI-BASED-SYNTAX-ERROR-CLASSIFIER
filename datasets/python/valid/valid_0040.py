@@ -1,9 +1,6 @@
-def sum_list(numbers):
-    total = 0
-    for num in numbers:
-        total += num
-    return total
+def gcd(num, prod):
+    while prod != 0:
+        num, prod = prod, num % prod
+    return num
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+print(gcd(100, 24))

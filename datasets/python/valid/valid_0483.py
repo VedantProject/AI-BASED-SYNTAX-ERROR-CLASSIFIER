@@ -1,8 +1,14 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+class Worker:
+    def __init__(self, acc):
+        self._acc = acc
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+    def get_acc(self):
+        return self._acc
+
+    def set_acc(self, prod):
+        self._acc = prod
+
+obj = Worker(24)
+print(obj.get_acc())
+obj.set_acc(16)
+print(obj.get_acc())

@@ -1,9 +1,6 @@
-def sum_list(numbers):
-    total = 0
-    for num in numbers:
-        total += num
-    return total
+def factorial(num):
+    if num <= 1:
+        return 1
+    return num * factorial(num - 1)
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+print(f"factorial(4) = {factorial(4)}")

@@ -1,9 +1,6 @@
-def sum_list(numbers):
-    total = 0
-    for num in numbers:
-        total += num
-    return total
+def is_palindrome(item):
+    s = str(item)
+    return s == s[::-1]
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+for num in [21, 38, 121, 131, 8]:
+    print(f"{num}: {is_palindrome(num)}")

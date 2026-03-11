@@ -1,15 +1,5 @@
-class Calculator:
-    def __init__(self):
-        self.result = 0
-    
-    def add(self, x, y):
-        self.result = x + y
-        return self.result
-    
-    def get_result(self):
-        return self.result
+def min_max(numbers):
+    return min(numbers), max(numbers)
 
-if __name__ == "__main__":
-    calc = Calculator()
-    calc.add(5, 10)
-    print(f"Result: {calc.get_result()}")
+lo, hi = min_max([8, 75, 64, 17, 36])
+print(f"min={lo}, max={hi}")

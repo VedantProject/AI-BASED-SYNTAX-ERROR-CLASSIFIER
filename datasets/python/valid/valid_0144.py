@@ -1,9 +1,11 @@
-def sum_list(numbers):
-    total = 0
-    for num in numbers:
-        total += num
-    return total
+def fibonacci(num):
+    if num <= 0:
+        return []
+    if num == 1:
+        return [0]
+    seq = [0, 1]
+    for _ in range(2, num):
+        seq.append(seq[-1] + seq[-2])
+    return seq
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+print(fibonacci(11))

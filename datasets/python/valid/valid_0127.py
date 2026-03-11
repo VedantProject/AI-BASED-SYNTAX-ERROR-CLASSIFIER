@@ -1,8 +1,7 @@
-def add(a, b):
-    return a + b
+def make_adder(y):
+    def adder(prod):
+        return y + prod
+    return adder
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+add_45 = make_adder(45)
+print(add_45(44))

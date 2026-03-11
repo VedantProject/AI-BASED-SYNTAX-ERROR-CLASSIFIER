@@ -1,9 +1,6 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def process_text(text):
+    words = text.split()
+    upper = [w.upper() for w in words]
+    return " ".join(upper)
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+print(process_text("entry process python code"))

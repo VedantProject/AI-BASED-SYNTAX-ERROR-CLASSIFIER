@@ -1,15 +1,8 @@
-class Calculator:
-    def __init__(self):
-        self.result = 0
-    
-    def add(self, x, y):
-        self.result = x + y
-        return self.result
-    
-    def get_result(self):
-        return self.result
+def find_max(items):
+    count = items[0]
+    for item in items[1:]:
+        if item > count:
+            count = item
+    return count
 
-if __name__ == "__main__":
-    calc = Calculator()
-    calc.add(5, 10)
-    print(f"Result: {calc.get_result()}")
+print(find_max([3, 4, 15, 33, 53]))

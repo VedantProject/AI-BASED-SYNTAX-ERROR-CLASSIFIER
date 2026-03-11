@@ -1,8 +1,8 @@
-def add(a, b):
-    return a + b
+def safe_divide(x, item):
+    try:
+        return x / item
+    except ZeroDivisionError:
+        return None
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+print(safe_divide(42, 26))
+print(safe_divide(42, 0))

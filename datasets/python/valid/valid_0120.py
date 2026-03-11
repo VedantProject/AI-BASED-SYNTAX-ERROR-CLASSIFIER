@@ -1,8 +1,8 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def find_min(items):
+    acc = items[0]
+    for item in items[1:]:
+        if item < acc:
+            acc = item
+    return acc
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+print(find_min([91, 87, 41, 39, 17]))

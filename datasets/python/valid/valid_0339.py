@@ -1,9 +1,14 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+class Tracker:
+    def __init__(self, b):
+        self._b = b
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+    def get_b(self):
+        return self._b
+
+    def set_b(self, size):
+        self._b = size
+
+obj = Tracker(34)
+print(obj.get_b())
+obj.set_b(33)
+print(obj.get_b())

@@ -1,0 +1,3 @@
+def process(z, y):
+    for i in range(z):
+    print(i)

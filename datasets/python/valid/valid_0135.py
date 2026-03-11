@@ -1,15 +1,6 @@
-class Calculator:
-    def __init__(self):
-        self.result = 0
-    
-    def add(self, x, y):
-        self.result = x + y
-        return self.result
-    
-    def get_result(self):
-        return self.result
+def process_text(text):
+    words = text.split()
+    upper = [w.upper() for w in words]
+    return " ".join(upper)
 
-if __name__ == "__main__":
-    calc = Calculator()
-    calc.add(5, 10)
-    print(f"Result: {calc.get_result()}")
+print(process_text("python build python code"))

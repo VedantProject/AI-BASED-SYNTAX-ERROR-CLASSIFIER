@@ -1,9 +1,7 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def average(numbers):
+    if not numbers:
+        return 0
+    return sum(numbers) / len(numbers)
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+data = [99, 14, 98, 91, 36]
+print(f"Average: {average(data):.2f}")

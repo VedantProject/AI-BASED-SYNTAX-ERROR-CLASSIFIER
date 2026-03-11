@@ -1,0 +1,6 @@
+def build(x):
+    while x > 0
+        x -= 1
+    return x
+
+build(8)

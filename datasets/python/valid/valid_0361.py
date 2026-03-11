@@ -1,8 +1,7 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def average(numbers):
+    if not numbers:
+        return 0
+    return sum(numbers) / len(numbers)
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+data = [49, 76, 40, 54, 4]
+print(f"Average: {average(data):.2f}")

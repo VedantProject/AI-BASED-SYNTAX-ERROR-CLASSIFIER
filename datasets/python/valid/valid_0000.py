@@ -1,9 +1,7 @@
-def sum_list(numbers):
-    total = 0
-    for num in numbers:
-        total += num
-    return total
+def range_gen(start, stop, step=1):
+    current = start
+    while current < stop:
+        yield current
+        current += step
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+print(list(range_gen(24, 34, 1)))

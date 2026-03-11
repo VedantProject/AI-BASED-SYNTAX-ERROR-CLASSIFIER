@@ -1,8 +1,4 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def squares(prod):
+    return [i ** 2 for i in range(prod)]
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+print(squares(6))

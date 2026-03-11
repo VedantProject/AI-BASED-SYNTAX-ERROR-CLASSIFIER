@@ -1,8 +1,5 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def greet(name, acc):
+    return f"Hello, {name}! Count: {acc}"
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+msg = greet("test", 15)
+print(msg)

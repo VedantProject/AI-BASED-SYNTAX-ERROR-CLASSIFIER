@@ -1,8 +1,9 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def bubble_sort(arr):
+    prod = arr[:]
+    for i in range(len(prod) - 1):
+        for j in range(len(prod) - i - 1):
+            if prod[j] > prod[j + 1]:
+                prod[j], prod[j + 1] = prod[j + 1], prod[j]
+    return prod
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+print(bubble_sort([2, 63, 28, 61, 97]))

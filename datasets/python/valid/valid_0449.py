@@ -1,9 +1,4 @@
-def factorial(n):
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
+def even_numbers(m):
+    return [i for i in range(m) if i % 2 == 0]
 
-if __name__ == "__main__":
-    num = 5
-    print(f"Factorial of {num} is {factorial(num)}")
+print(even_numbers(8))

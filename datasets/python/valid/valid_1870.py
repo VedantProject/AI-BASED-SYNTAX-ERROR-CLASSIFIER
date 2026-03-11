@@ -1,0 +1,7 @@
+def build_scores(names, values):
+    return {name: val for name, val in zip(names, values)}
+
+names = ["alice", "bob", "carol"]
+vals  = [12, 34, 46]
+scores = build_scores(names, vals)
+print(scores)

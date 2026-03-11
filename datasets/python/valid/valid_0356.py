@@ -1,8 +1,17 @@
-def add(a, b):
-    return a + b
+class Engine:
+    _count = 0
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+    def __init__(self, y):
+        self.value = y
+        Engine._count += 1
+
+    @staticmethod
+    def get_count():
+        return Engine._count
+
+    def double(self):
+        return self.value * 2
+
+objs = [Engine(i) for i in range(7)]
+print(f"Created: {Engine.get_count()} objects")
+print([o.double() for o in objs])

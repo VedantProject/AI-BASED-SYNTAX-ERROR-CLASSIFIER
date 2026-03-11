@@ -1,8 +1,6 @@
-def add(a, b):
-    return a + b
+def factorial(z):
+    if z <= 1:
+        return 1
+    return z * factorial(z - 1)
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+print(f"factorial(2) = {factorial(2)}")

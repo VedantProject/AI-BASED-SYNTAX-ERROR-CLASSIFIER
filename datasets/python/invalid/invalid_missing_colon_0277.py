@@ -1,4 +1,3 @@
-def add(a, b)
-    return a + b
-
-print(add(5, 10))
+class Processor
+    def __init__(self, y):
+        self.y = y

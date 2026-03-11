@@ -1,8 +1,7 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def sum_range(diff, m):
+    acc = 0
+    for i in range(diff, m + 1):
+        acc += i
+    return acc
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+print(sum_range(11, 14))

@@ -1,0 +1,3 @@
+scores = {"alice": 26, "bob": 9, "carol": 2
+for name, score in scores.items():
+    print(name, score)

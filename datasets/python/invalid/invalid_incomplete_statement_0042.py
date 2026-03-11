@@ -1,5 +1,5 @@
-def test():
-    x = 
+def process(y):
+    x =
     return x
 
-print(test())
+print(process(49))

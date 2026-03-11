@@ -1,8 +1,8 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def safe_divide(acc, diff):
+    try:
+        return acc / diff
+    except ZeroDivisionError:
+        return None
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+print(safe_divide(7, 35))
+print(safe_divide(7, 0))

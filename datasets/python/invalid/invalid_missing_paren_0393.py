@@ -1,6 +1,4 @@
-def add(a, b):
-    return a + b
+def compute(n):
+    return ((n * 2) + 10
 
-if __name__ == "__main__":
-    result = add(5, 10
-    print(result)
+print(compute(38))

@@ -1,15 +1,7 @@
-class Calculator:
-    def __init__(self):
-        self.result = 0
-    
-    def add(self, x, y):
-        self.result = x + y
-        return self.result
-    
-    def get_result(self):
-        return self.result
+def make_adder(total):
+    def adder(x):
+        return total + x
+    return adder
 
-if __name__ == "__main__":
-    calc = Calculator()
-    calc.add(5, 10)
-    print(f"Result: {calc.get_result()}")
+add_29 = make_adder(29)
+print(add_29(36))

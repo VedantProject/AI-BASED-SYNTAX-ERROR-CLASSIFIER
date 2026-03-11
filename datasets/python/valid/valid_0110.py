@@ -1,9 +1,5 @@
-def sum_list(numbers):
-    total = 0
-    for num in numbers:
-        total += num
-    return total
+def min_max(numbers):
+    return min(numbers), max(numbers)
 
-if __name__ == "__main__":
-    nums = [1, 2, 3, 4, 5]
-    print(f"Sum: {sum_list(nums)}")
+lo, hi = min_max([66, 11, 20, 57, 81])
+print(f"min={lo}, max={hi}")

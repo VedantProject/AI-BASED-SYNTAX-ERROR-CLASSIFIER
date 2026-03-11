@@ -1,5 +1,4 @@
-def test():
-    x = 
-    return x
+def compute(m, a):
+    return
 
-print(test())
+print(compute(9, 31))

@@ -1,8 +1,6 @@
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
+def reverse_string(s):
+    return s[::-1]
 
-if __name__ == "__main__":
-    print(f"Max: {max_value(10, 20)}")
+words = ["test", "python", "code", "test"]
+for w in words:
+    print(f"{w} -> {reverse_string(w)}")

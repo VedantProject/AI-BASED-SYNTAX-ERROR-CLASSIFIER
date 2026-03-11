@@ -1,8 +1,6 @@
-def add(a, b):
-    return a + b
+def reverse_string(s):
+    return s[::-1]
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+words = ["entry", "python", "code", "test"]
+for w in words:
+    print(f"{w} -> {reverse_string(w)}")

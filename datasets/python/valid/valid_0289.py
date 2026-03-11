@@ -1,15 +1,9 @@
-class Calculator:
-    def __init__(self):
-        self.result = 0
-    
-    def add(self, x, y):
-        self.result = x + y
-        return self.result
-    
-    def get_result(self):
-        return self.result
+def bubble_sort(arr):
+    count = arr[:]
+    for i in range(len(count) - 1):
+        for j in range(len(count) - i - 1):
+            if count[j] > count[j + 1]:
+                count[j], count[j + 1] = count[j + 1], count[j]
+    return count
 
-if __name__ == "__main__":
-    calc = Calculator()
-    calc.add(5, 10)
-    print(f"Result: {calc.get_result()}")
+print(bubble_sort([77, 91, 54, 21, 94]))

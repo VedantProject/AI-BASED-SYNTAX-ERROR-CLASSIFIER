@@ -1,8 +1,6 @@
-def add(a, b):
-    return a + b
+def process_text(text):
+    words = text.split()
+    upper = [w.upper() for w in words]
+    return " ".join(upper)
 
-if __name__ == "__main__":
-    x = 5
-    y = 10
-    result = add(x, y)
-    print(f"Result: {result}")
+print(process_text("test compute python code"))
