@@ -218,7 +218,25 @@ class ErrorNode(ASTNode):
         return f"ErrorNode({self.error_type}, line={self.line}, msg='{self.message}')"
 
 
+
+@dataclass
+class RepairNote:
+    """
+    Attached to an ErrorNode after the self-healing pass to record the
+    repair that was (or was not) applied.
+    """
+    applied:        bool  = False   # True if a patch was written
+    verified:       bool  = False   # True if re-parse confirmed improvement
+    description:    str   = ""      # Human-readable summary of the action
+    original_line:  str   = ""      # Source text before repair
+    repaired_line:  str   = ""      # Source text after repair
+    confidence:     float = 0.0     # 0.0 – 1.0
+    skipped:        bool  = False
+    skip_reason:    str   = ""
+
+
 def ast_to_dict(node: ASTNode) -> dict:
+
     """Convert AST node to dictionary for JSON serialization"""
     if node is None:
         return None

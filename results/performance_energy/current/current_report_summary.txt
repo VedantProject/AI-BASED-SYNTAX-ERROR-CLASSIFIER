@@ -1,0 +1,22 @@
+Current Code Performance & Energy Report
+
+Language: PYTHON
+Program: <editor>
+LOC: 10 (0-20 LOC)
+Estimated energy consumption: 1.525 mJ
+Total analysis time: 0.45 ms
+Parse time: 0.29 ms
+IR build time: 0.04 ms
+Analysis pass time: 0.11 ms
+Throughput: 22031.29 LOC/s
+Efficiency score: 69.00
+Useful work units: 13.58
+CFG blocks / edges / TAC: 4 / 2 / 9
+Cyclomatic complexity: 5 (low)
+Max nesting depth: 3
+Loops / branches / diagnostics: 0 / 1 / 5
+
+Hotspots:
+- greet [function] score 14.72 at line 1: CC 3, Nesting 2, 8 statements, 9 LOC
+- calculate [function] score 9.18 at line 5: CC 2, Nesting 1, 6 statements, 6 LOC
+- greet:entry [block] score 8.80 at line 2: 8 TAC instructions, 1 outgoing edges

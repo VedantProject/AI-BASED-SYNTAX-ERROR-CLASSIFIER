@@ -16,6 +16,14 @@ from analysis.data_flow      import run_data_flow_analysis
 from analysis.pattern_detector import run_pattern_detection
 
 
+def _line_indent(source: str, line_no: int) -> int:
+    lines = source.splitlines()
+    if line_no <= 0 or line_no > len(lines):
+        return 0
+    line = lines[line_no - 1]
+    return len(line) - len(line.lstrip(" \t"))
+
+
 def run_all_analyses(ir_program: IRProgram, ast_tree,
                      source: str = "") -> list:
     """
@@ -39,6 +47,18 @@ def run_all_analyses(ir_program: IRProgram, ast_tree,
         results.extend(run_pattern_detection(ast_tree))
     except Exception:
         pass
+
+    # Guard against a known parser/CFG edge case where statements that have
+    # dedented back to the top level can be attached to a function's synthetic
+    # dead block after a return, producing a spurious unreachable warning.
+    results = [
+        d for d in results
+        if not (
+            d.error_type == "UNREACHABLE_CODE"
+            and "dead block 'dead_" in d.message
+            and _line_indent(source, d.line) == 0
+        )
+    ]
 
     # Sort by line number
     results.sort(key=lambda d: (d.line, d.column))

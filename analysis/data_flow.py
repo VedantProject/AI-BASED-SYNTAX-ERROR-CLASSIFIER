@@ -203,6 +203,14 @@ def _is_temp(name: str) -> bool:
     return name.startswith("_t") and name[2:].isdigit()
 
 
+def _is_symbol_binding(instr) -> bool:
+    return (
+        instr.op == Op.ASSIGN
+        and isinstance(instr.arg1, str)
+        and (instr.arg1.startswith("<func ") or instr.arg1.startswith("<class "))
+    )
+
+
 def analyse_dataflow_for_cfg(name: str, cfg: CFG,
                               params: List[str] = None) -> List[DFADiagnostic]:
     """Run both analyses on one CFG and produce diagnostics."""
@@ -222,6 +230,7 @@ def analyse_dataflow_for_cfg(name: str, cfg: CFG,
         for instr in block.instrs:
             if (instr.dest and
                     instr.op in (Op.ASSIGN, Op.BINOP, Op.UNOP, Op.CALL, Op.LOAD)
+                    and not _is_symbol_binding(instr)
                     and not _is_temp(instr.dest)
                     and instr.dest not in _BUILTINS
                     and instr.dest not in param_set):
@@ -249,6 +258,7 @@ def analyse_dataflow_for_cfg(name: str, cfg: CFG,
         last_assign: Dict[str, int] = {}  # var → line of last assign
         for instr in block.instrs:
             if (instr.dest and instr.op == Op.ASSIGN
+                    and not _is_symbol_binding(instr)
                     and not _is_temp(instr.dest)
                     and instr.dest not in _BUILTINS
                     and instr.dest not in param_set):

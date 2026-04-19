@@ -82,7 +82,8 @@ def _all_paths_have_return(cfg: CFG) -> bool:
 # ─── Main analysis functions ──────────────────────────────────────────────────
 
 def analyse_cfg(name: str, cfg: CFG, is_function: bool = False,
-                fn_line: int = 0) -> List[CFADiagnostic]:
+                fn_line: int = 0,
+                report_missing_return: bool = False) -> List[CFADiagnostic]:
     """Run control flow analysis on one CFG and return diagnostics."""
     diagnostics: List[CFADiagnostic] = []
     reachable = cfg.reachable_from_entry()
@@ -122,7 +123,7 @@ def analyse_cfg(name: str, cfg: CFG, is_function: bool = False,
                     ))
 
     # ── Missing return in function ────────────────────────────────────────
-    if is_function:
+    if is_function and report_missing_return:
         if not _all_paths_have_return(cfg):
             diagnostics.append(CFADiagnostic(
                 error_type="MISSING_RETURN",
@@ -133,16 +134,26 @@ def analyse_cfg(name: str, cfg: CFG, is_function: bool = False,
     return diagnostics
 
 
-def run_control_flow_analysis(ir_program: IRProgram) -> List[CFADiagnostic]:
+def run_control_flow_analysis(ir_program: IRProgram,
+                              report_missing_return: bool = False) -> List[CFADiagnostic]:
     """Run CFA on the module + all functions. Return merged diagnostics."""
     results: List[CFADiagnostic] = []
 
     # Module-level (not a function, so skip missing-return check)
-    results.extend(analyse_cfg("<module>", ir_program.module_cfg, is_function=False))
+    results.extend(analyse_cfg(
+        "<module>", ir_program.module_cfg,
+        is_function=False,
+        report_missing_return=report_missing_return,
+    ))
 
     for ir_fn in ir_program.functions:
-        results.extend(analyse_cfg(ir_fn.name, ir_fn.cfg,
-                                   is_function=True, fn_line=ir_fn.line))
+        results.extend(analyse_cfg(
+            ir_fn.name,
+            ir_fn.cfg,
+            is_function=True,
+            fn_line=ir_fn.line,
+            report_missing_return=report_missing_return,
+        ))
 
     return results
 

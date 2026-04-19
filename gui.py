@@ -15,6 +15,7 @@ import os
 import re
 import sys
 import threading
+import time
 import tkinter as tk
 from tkinter import filedialog, font, messagebox, scrolledtext, ttk
 
@@ -23,31 +24,31 @@ _ROOT = os.path.dirname(os.path.abspath(__file__))
 if _ROOT not in sys.path:
     sys.path.insert(0, _ROOT)
 
-# ── Colour palette (VS Code – inspired dark theme) ──────────────────────────
+# ── Colour palette (light theme) ────────────────────────────────────────────
 C = {
-    "bg":          "#1e1e2e",   # main background
-    "bg2":         "#181825",   # sidebar / panels
-    "bg3":         "#313244",   # input editor bg
-    "surface":     "#45475a",   # separator / subtle elements
-    "accent":      "#89b4fa",   # blue accent
-    "accent2":     "#cba6f7",   # purple accent
-    "accent3":     "#a6e3a1",   # green (clean)
-    "error":       "#f38ba8",   # red (errors)
-    "warn":        "#fab387",   # orange (warnings)
-    "info":        "#89dceb",   # cyan (info)
-    "text":        "#cdd6f4",   # main text
-    "text_dim":    "#7f849c",   # dimmed text
-    "lineno":      "#45475a",   # line number gutter bg
-    "status_ok":   "#a6e3a1",
-    "status_err":  "#f38ba8",
-    "btn_bg":      "#89b4fa",
-    "btn_fg":      "#1e1e2e",
-    "btn_hover":   "#74c7ec",
-    "btn2_bg":     "#313244",
-    "btn2_fg":     "#cdd6f4",
-    "btn2_hover":  "#45475a",
-    "tab_active":  "#313244",
-    "tab_inactive":"#181825",
+    "bg":          "#ffffff",   # main background
+    "bg2":         "#ffffff",   # headers / panels
+    "bg3":         "#f8fafc",   # editor bg
+    "surface":     "#dbe4ee",   # separator / subtle elements
+    "accent":      "#2563eb",   # primary accent
+    "accent2":     "#7c3aed",   # secondary accent
+    "accent3":     "#15803d",   # green (clean)
+    "error":       "#dc2626",   # red (errors)
+    "warn":        "#d97706",   # orange (warnings)
+    "info":        "#0891b2",   # cyan (info)
+    "text":        "#0f172a",   # main text
+    "text_dim":    "#64748b",   # dimmed text
+    "lineno":      "#eef2f7",   # line number gutter bg
+    "status_ok":   "#15803d",
+    "status_err":  "#dc2626",
+    "btn_bg":      "#2563eb",
+    "btn_fg":      "#ffffff",
+    "btn_hover":   "#1d4ed8",
+    "btn2_bg":     "#e2e8f0",
+    "btn2_fg":     "#0f172a",
+    "btn2_hover":  "#cbd5e1",
+    "tab_active":  "#ffffff",
+    "tab_inactive":"#f8fafc",
 }
 
 # ── Syntax-highlight token patterns (Python) ────────────────────────────────
@@ -146,9 +147,9 @@ class StdoutCapture(io.StringIO):
 
 
 
-def _build_ir_view(source: str) -> list:
+def _render_ir_program_view(ir_program) -> list:
     """
-    Build the IR from source and return a list of (text, tag) chunks
+    Render an already-built IR program into a list of (text, tag) chunks
     for display in the IR View tab.
     """
     lines = []
@@ -157,13 +158,8 @@ def _build_ir_view(source: str) -> list:
         lines.append((text, tag))
 
     try:
-        from lexers import tokenize_python
-        from parsers import parse_python
-        from ir import build_ir
-
-        tokens = tokenize_python(source)
-        ast_tree, _ = parse_python(tokens)
-        ir_program = build_ir(ast_tree)
+        if ir_program is None:
+            return lines
 
         all_cfgs = ir_program.all_cfgs()
         total_blocks  = sum(len(cfg.blocks) for _, cfg in all_cfgs)
@@ -215,6 +211,24 @@ def _build_ir_view(source: str) -> list:
     return lines
 
 
+def _build_ir_view(source: str) -> list:
+    """
+    Build the IR from source and return a list of (text, tag) chunks
+    for display in the IR View tab.
+    """
+    try:
+        from lexers import tokenize_python
+        from parsers import parse_python
+        from ir import build_ir
+
+        tokens = tokenize_python(source)
+        ast_tree, _ = parse_python(tokens)
+        ir_program = build_ir(ast_tree)
+        return _render_ir_program_view(ir_program)
+    except Exception as exc:
+        return [(f"[IR Build Error] {exc}\n", "ir_op")]
+
+
 def run_analysis(source: str, language: str) -> str:
     """
     Run the appropriate analyzer and return its text output as a string.
@@ -228,10 +242,10 @@ def run_analysis(source: str, language: str) -> str:
     try:
         if language == "python":
             from analyze_code import analyse_python
-            analyse_python(source, filepath="<editor>")
+            analyse_python(source, filepath="<editor>", record_profile=False)
         elif language in ("c", "java"):
             from analyze_code import analyse_parser_only
-            analyse_parser_only(source, filepath="<editor>", language=language)
+            analyse_parser_only(source, filepath="<editor>", language=language, record_profile=False)
         else:
             buf.write("Unsupported language.\n")
     except Exception as exc:
@@ -276,6 +290,81 @@ def build_ast(source: str, language: str):
             return ast_tree
     except Exception:
         return None
+
+
+def build_report_payload(source: str, language: str) -> dict:
+    """
+    Rebuild AST/IR artifacts for performance-energy reporting without touching
+    parser or self-healing logic. Returns a payload compatible with
+    analysis.performance_energy.build_reports().
+    """
+    payload = {
+        "ast_root": None,
+        "ir_program": None,
+        "errors": [],
+        "timing": {
+            "parse_time_ms": 0.0,
+            "ir_build_time_ms": 0.0,
+            "analysis_pass_ms": 0.0,
+            "total_analysis_ms": 0.0,
+        },
+    }
+
+    started = time.perf_counter()
+    parse_started = time.perf_counter()
+    try:
+        if language == "python":
+            from lexers import tokenize_python
+            from parsers import parse_python
+            tokens = tokenize_python(source)
+            ast_root, errors = parse_python(tokens)
+        elif language == "c":
+            from lexers import tokenize_c
+            from parsers import parse_c
+            tokens = tokenize_c(source)
+            ast_root, errors = parse_c(tokens)
+        elif language == "java":
+            from lexers import tokenize_java
+            from parsers import parse_java
+            tokens = tokenize_java(source)
+            ast_root, errors = parse_java(tokens)
+        else:
+            return payload
+        payload["ast_root"] = ast_root
+        payload["errors"] = list(errors or [])
+    except Exception:
+        return payload
+    payload["timing"]["parse_time_ms"] = (time.perf_counter() - parse_started) * 1000.0
+
+    if language == "python" and payload["ast_root"] is not None:
+        try:
+            from ir import build_ir
+            from analysis import run_all_analyses
+            from syntax_tree import ast_nodes as _ast
+
+            ir_started = time.perf_counter()
+            payload["ir_program"] = build_ir(payload["ast_root"])
+            payload["timing"]["ir_build_time_ms"] = (time.perf_counter() - ir_started) * 1000.0
+
+            analysis_started = time.perf_counter()
+            analysis_diags = run_all_analyses(payload["ir_program"], payload["ast_root"], source)
+            payload["timing"]["analysis_pass_ms"] = (time.perf_counter() - analysis_started) * 1000.0
+
+            for diag in analysis_diags:
+                payload["errors"].append(_ast.ErrorNode(
+                    error_type=diag.error_type,
+                    message=diag.message,
+                    token=getattr(diag, "token", None),
+                    line=diag.line,
+                    column=getattr(diag, "column", 0),
+                ))
+
+            payload["errors"].sort(key=lambda e: (e.line, e.column))
+        except Exception:
+            pass
+
+    payload["timing"]["total_analysis_ms"] = (time.perf_counter() - started) * 1000.0
+    return payload
 
 
 # ── Node-type → display colour tag ──────────────────────────────────────────
@@ -612,9 +701,11 @@ class SyntaxAnalyzerGUI(tk.Tk):
         self._language = "python"  # fixed — Python only
         self._status_text = tk.StringVar(value="Ready — paste your code and click  Analyze Code")
         self._busy = False
+        self._report_data = None
 
         self._setup_styles()
         self._build_ui()
+        self._render_report_tabs(None)
         self._load_sample()
 
     # ── Styles ───────────────────────────────────────────────────────────────
@@ -835,6 +926,62 @@ class SyntaxAnalyzerGUI(tk.Tk):
         self.ir_view.tag_config("ir_edge",    foreground=C["text_dim"])
         self.ir_view.tag_config("ir_summary", foreground=C["accent3"])
 
+        current_frame = tk.Frame(self._notebook, bg=C["bg2"])
+        self._notebook.add(current_frame, text="  ⚡  Current Report  ")
+
+        self.current_summary_frame = tk.Frame(current_frame, bg=C["bg"])
+        self.current_summary_frame.pack(fill="x", padx=10, pady=(10, 8))
+
+        self.current_report_text = tk.Text(
+            current_frame, bg=C["bg2"], fg=C["text"],
+            font=("Consolas", 10), relief="flat",
+            padx=10, pady=8, height=1, state="disabled",
+            selectbackground=C["surface"], wrap="word",
+        )
+
+        current_graphs = tk.Frame(current_frame, bg=C["bg2"])
+        current_graphs.pack(fill="both", expand=True)
+
+        self.current_loc_canvas = tk.Canvas(
+            current_graphs, bg="#ffffff", highlightthickness=1,
+            highlightbackground=C["surface"], height=300,
+        )
+        self.current_loc_canvas.pack(fill="both", expand=True, padx=10, pady=(0, 10))
+
+        self.current_hotspot_canvas = tk.Canvas(
+            current_graphs, bg="#ffffff", highlightthickness=1,
+            highlightbackground=C["surface"], height=300,
+        )
+        self.current_hotspot_canvas.pack(fill="both", expand=True, padx=10, pady=(0, 10))
+
+        cumulative_frame = tk.Frame(self._notebook, bg=C["bg2"])
+        self._notebook.add(cumulative_frame, text="  📈  Cumulative Report  ")
+
+        self.cumulative_summary_frame = tk.Frame(cumulative_frame, bg=C["bg"])
+        self.cumulative_summary_frame.pack(fill="x", padx=10, pady=(10, 8))
+
+        self.cumulative_report_text = tk.Text(
+            cumulative_frame, bg=C["bg2"], fg=C["text"],
+            font=("Consolas", 10), relief="flat",
+            padx=10, pady=8, height=1, state="disabled",
+            selectbackground=C["surface"], wrap="word",
+        )
+
+        cumulative_top = tk.Frame(cumulative_frame, bg=C["bg2"])
+        cumulative_top.pack(fill="both", expand=True)
+
+        self.energy_trend_canvas = tk.Canvas(
+            cumulative_top, bg="#ffffff", highlightthickness=1,
+            highlightbackground=C["surface"], height=300,
+        )
+        self.energy_trend_canvas.pack(fill="both", expand=True, padx=10, pady=(0, 10))
+
+        self.cumulative_loc_canvas = tk.Canvas(
+            cumulative_frame, bg="#ffffff", highlightthickness=1,
+            highlightbackground=C["surface"], height=300,
+        )
+        self.cumulative_loc_canvas.pack(fill="both", expand=False, padx=10, pady=(0, 10))
+
         # ── Status bar ────────────────────────────────────────────────────
         self._status_bar = tk.Frame(self, bg=C["bg2"], height=32)
         self._status_bar.pack(fill="x", side="bottom")
@@ -909,6 +1056,22 @@ class SyntaxAnalyzerGUI(tk.Tk):
         self.ir_view.config(state="normal")
         self.ir_view.delete("1.0", "end")
         self.ir_view.config(state="disabled")
+        self.current_report_text.config(state="normal")
+        self.current_report_text.delete("1.0", "end")
+        self.current_report_text.config(state="disabled")
+        self.cumulative_report_text.config(state="normal")
+        self.cumulative_report_text.delete("1.0", "end")
+        self.cumulative_report_text.config(state="disabled")
+        self._clear_frame(self.current_summary_frame)
+        self._clear_frame(self.cumulative_summary_frame)
+        for canvas in (
+            self.current_loc_canvas,
+            self.current_hotspot_canvas,
+            self.energy_trend_canvas,
+            self.cumulative_loc_canvas,
+        ):
+            canvas.delete("all")
+        self._report_data = None
 
     # ── Analysis ─────────────────────────────────────────────────────────────
 
@@ -931,14 +1094,29 @@ class SyntaxAnalyzerGUI(tk.Tk):
         # Run in a background thread to keep the GUI responsive
         def _worker():
             output    = run_analysis(source, "python")
-            ast_root  = build_ast(source, "python")
-            ast_lines = render_ast_tree(ast_root, "python")
-            ir_lines  = _build_ir_view(source)
-            self.after(0, lambda: self._display_results(output, ast_lines, ir_lines))
+            payload = build_report_payload(source, "python")
+            ast_lines = render_ast_tree(payload["ast_root"], "python")
+            ir_lines  = _render_ir_program_view(payload["ir_program"])
+            report_data = None
+            try:
+                from analysis.performance_energy import build_reports
+                report_data = build_reports(
+                    source=source,
+                    language="python",
+                    filepath="<editor>",
+                    ast_tree=payload["ast_root"],
+                    ir_program=payload["ir_program"],
+                    errors=payload["errors"],
+                    timing_breakdown=payload["timing"],
+                    persist=True,
+                )
+            except Exception:
+                report_data = None
+            self.after(0, lambda: self._display_results(output, ast_lines, ir_lines, report_data))
 
         threading.Thread(target=_worker, daemon=True).start()
 
-    def _display_results(self, output: str, ast_lines: list, ir_lines: list):
+    def _display_results(self, output: str, ast_lines: list, ir_lines: list, report_data: dict | None):
         """Called on the main thread after analysis completes."""
         self._progress.stop()
         self._progress.pack_forget()
@@ -990,6 +1168,255 @@ class SyntaxAnalyzerGUI(tk.Tk):
                 self.ir_view.insert("end", text_chunk)
         self.ir_view.config(state="disabled")
         self.ir_view.see("1.0")
+        self._render_report_tabs(report_data)
+
+    def _set_text_content(self, widget: tk.Text, text: str):
+        widget.config(state="normal")
+        widget.delete("1.0", "end")
+        widget.insert("1.0", text)
+        widget.config(state="disabled")
+        widget.see("1.0")
+
+    def _clear_frame(self, frame: tk.Frame):
+        for child in frame.winfo_children():
+            child.destroy()
+
+    def _parse_summary_text(self, text: str):
+        lines = [line.strip() for line in text.splitlines() if line.strip()]
+        title = lines[0] if lines else "Report"
+        metrics = []
+        sections = {}
+        current_section = "Details"
+
+        for line in lines[1:]:
+            if line.endswith(":") and ": " not in line:
+                current_section = line[:-1]
+                sections.setdefault(current_section, [])
+                continue
+            if line.startswith("- "):
+                sections.setdefault(current_section, []).append(line[2:])
+                continue
+            if ": " in line:
+                key, value = line.split(": ", 1)
+                metrics.append((key, value))
+                continue
+            sections.setdefault(current_section, []).append(line)
+
+        return title, metrics, sections
+
+    def _make_summary_card(self, parent: tk.Frame, key: str, value: str, accent: str):
+        card = tk.Frame(parent, bg="#ffffff", highlightthickness=1, highlightbackground=C["surface"])
+        top = tk.Frame(card, bg=accent, height=4)
+        top.pack(fill="x", side="top")
+        body = tk.Frame(card, bg="#ffffff")
+        body.pack(fill="both", expand=True, padx=14, pady=12)
+
+        tk.Label(
+            body, text=key.upper(), bg="#ffffff", fg=C["text_dim"],
+            font=("Segoe UI", 8, "bold"), anchor="w",
+        ).pack(anchor="w")
+        tk.Label(
+            body, text=value, bg="#ffffff", fg=C["text"],
+            font=("Segoe UI", 13, "bold"), anchor="w", justify="left", wraplength=220,
+        ).pack(anchor="w", pady=(6, 0))
+        return card
+
+    def _render_summary_panel(self, frame: tk.Frame, text: str, accent: str):
+        self._clear_frame(frame)
+        title, metrics, sections = self._parse_summary_text(text)
+
+        hero = tk.Frame(frame, bg="#ffffff", highlightthickness=1, highlightbackground=C["surface"])
+        hero.pack(fill="x")
+        hero_bar = tk.Frame(hero, bg=accent, height=5)
+        hero_bar.pack(fill="x", side="top")
+        hero_body = tk.Frame(hero, bg="#ffffff")
+        hero_body.pack(fill="x", padx=16, pady=14)
+
+        tk.Label(
+            hero_body, text=title, bg="#ffffff", fg=C["text"],
+            font=("Segoe UI", 16, "bold"), anchor="w",
+        ).pack(anchor="w")
+        tk.Label(
+            hero_body, text="Overview of the latest analysis results",
+            bg="#ffffff", fg=C["text_dim"], font=("Segoe UI", 9), anchor="w",
+        ).pack(anchor="w", pady=(4, 0))
+
+        cards_host = tk.Frame(frame, bg=C["bg"])
+        cards_host.pack(fill="x", pady=(10, 8))
+        for col in range(3):
+            cards_host.grid_columnconfigure(col, weight=1)
+
+        for idx, (key, value) in enumerate(metrics[:6]):
+            card = self._make_summary_card(cards_host, key, value, accent)
+            card.grid(row=idx // 3, column=idx % 3, sticky="nsew", padx=6, pady=6)
+
+        remaining_metrics = metrics[6:]
+        detail_lines = [f"{key}: {value}" for key, value in remaining_metrics]
+        for section_name, items in sections.items():
+            if items:
+                detail_lines.append(f"{section_name}:")
+                detail_lines.extend([f"- {item}" for item in items])
+
+        if detail_lines:
+            detail_card = tk.Frame(frame, bg="#ffffff", highlightthickness=1, highlightbackground=C["surface"])
+            detail_card.pack(fill="x", pady=(2, 0))
+            tk.Label(
+                detail_card, text="Details", bg="#ffffff", fg=C["text"],
+                font=("Segoe UI", 11, "bold"), anchor="w",
+            ).pack(anchor="w", padx=16, pady=(12, 2))
+            tk.Label(
+                detail_card, text="\n".join(detail_lines), bg="#ffffff", fg=C["text_dim"],
+                font=("Segoe UI", 9), anchor="w", justify="left", wraplength=980,
+            ).pack(anchor="w", padx=16, pady=(0, 12))
+
+    def _draw_placeholder(self, canvas: tk.Canvas, title: str, message: str):
+        canvas.delete("all")
+        width = max(canvas.winfo_width(), 320)
+        height = max(canvas.winfo_height(), 200)
+        canvas.create_rectangle(0, 0, width, height, fill="#ffffff", outline="", width=0)
+        canvas.create_rectangle(4, 4, width - 4, height - 4, fill="#ffffff", outline=C["surface"], width=1)
+        canvas.create_rectangle(4, 4, width - 4, 42, fill="#f8fbff", outline="")
+        canvas.create_text(20, 23, anchor="w", text=title,
+                           fill=C["text"], font=("Segoe UI", 12, "bold"))
+        canvas.create_text(width / 2, height / 2, text=message,
+                           fill=C["text_dim"], font=("Segoe UI", 10),
+                           width=width - 40, justify="center")
+
+    def _draw_line_chart(self, canvas: tk.Canvas, title: str, points: list, color: str):
+        canvas.delete("all")
+        width = max(canvas.winfo_width(), 520)
+        height = max(canvas.winfo_height(), 260)
+        canvas.create_rectangle(0, 0, width, height, fill="#ffffff", outline="", width=0)
+        canvas.create_rectangle(4, 4, width - 4, height - 4, fill="#ffffff", outline=C["surface"], width=1)
+        canvas.create_rectangle(4, 4, width - 4, 44, fill="#f8fbff", outline="")
+        canvas.create_text(20, 24, anchor="w", text=title,
+                           fill=C["text"], font=("Segoe UI", 12, "bold"))
+
+        if not points:
+            self._draw_placeholder(canvas, title, "No data available yet.")
+            return
+
+        left, top, right, bottom = 72, 64, width - 28, height - 46
+        max_y = max(float(p.get("value", 0.0)) for p in points)
+        max_y = max(max_y, 1.0)
+        min_x = min(float(p.get("x", idx + 1)) for idx, p in enumerate(points))
+        max_x = max(float(p.get("x", idx + 1)) for idx, p in enumerate(points))
+        span_x = max(max_x - min_x, 1.0)
+
+        for step in range(5):
+            value = max_y * step / 4
+            y = bottom - ((value / max_y) * (bottom - top))
+            canvas.create_line(left, y, right, y, fill=C["surface"])
+            canvas.create_text(18, y, anchor="w", text=f"{value:.2f}",
+                               fill=C["text_dim"], font=("Segoe UI", 9))
+
+        canvas.create_line(left, top, left, bottom, fill=C["text_dim"], width=1)
+        canvas.create_line(left, bottom, right, bottom, fill=C["text_dim"], width=1)
+
+        coords = []
+        for idx, point in enumerate(points):
+            x_val = float(point.get("x", idx + 1))
+            y_val = float(point.get("value", 0.0))
+            x = left + ((x_val - min_x) / span_x) * (right - left)
+            y = bottom - ((y_val / max_y) * (bottom - top))
+            coords.extend([x, y])
+            canvas.create_line(x, y, x, bottom, fill="#e8eef7", dash=(2, 3))
+            canvas.create_oval(x - 5, y - 5, x + 5, y + 5, fill=color, outline="#ffffff", width=2)
+            canvas.create_text(x, bottom + 18, text=str(point.get("label", idx + 1)),
+                               fill=C["text_dim"], font=("Segoe UI", 9))
+        if len(coords) >= 4:
+            canvas.create_line(*coords, fill=color, width=3)
+
+    def _draw_bar_chart(self, canvas: tk.Canvas, title: str, items: list, color: str):
+        canvas.delete("all")
+        width = max(canvas.winfo_width(), 520)
+        height = max(canvas.winfo_height(), 260)
+        canvas.create_rectangle(0, 0, width, height, fill="#ffffff", outline="", width=0)
+        canvas.create_rectangle(4, 4, width - 4, height - 4, fill="#ffffff", outline=C["surface"], width=1)
+        canvas.create_rectangle(4, 4, width - 4, 44, fill="#f8fbff", outline="")
+        canvas.create_text(20, 24, anchor="w", text=title,
+                           fill=C["text"], font=("Segoe UI", 12, "bold"))
+
+        if not items:
+            self._draw_placeholder(canvas, title, "No data available yet.")
+            return
+
+        left, top, right, bottom = 72, 64, width - 28, height - 58
+        max_y = max(float(item.get("value", 0.0)) for item in items)
+        max_y = max(max_y, 1.0)
+        count = len(items)
+        gap = 18
+        bar_w = max((right - left - gap * (count + 1)) / max(count, 1), 18)
+
+        for step in range(5):
+            value = max_y * step / 4
+            y = bottom - ((value / max_y) * (bottom - top))
+            canvas.create_line(left, y, right, y, fill=C["surface"])
+            canvas.create_text(18, y, anchor="w", text=f"{value:.2f}",
+                               fill=C["text_dim"], font=("Segoe UI", 9))
+
+        canvas.create_line(left, top, left, bottom, fill=C["text_dim"], width=1)
+        canvas.create_line(left, bottom, right, bottom, fill=C["text_dim"], width=1)
+
+        for idx, item in enumerate(items):
+            value = float(item.get("value", 0.0))
+            x1 = left + gap + idx * (bar_w + gap)
+            x2 = x1 + bar_w
+            y1 = bottom - ((value / max_y) * (bottom - top))
+            canvas.create_rectangle(x1, y1, x2, bottom, fill=color, outline="", width=0)
+            canvas.create_text((x1 + x2) / 2, y1 - 10, text=f"{value:.2f}",
+                               fill=C["text"], font=("Segoe UI", 9, "bold"))
+            label = str(item.get("label", ""))[:24]
+            canvas.create_text((x1 + x2) / 2, bottom + 18, text=label,
+                               fill=C["text_dim"], font=("Segoe UI", 9), width=bar_w + 22)
+
+    def _render_report_tabs(self, report_data: dict | None):
+        self._report_data = report_data
+        if not report_data:
+            self._set_text_content(self.current_report_text, "Current report unavailable.")
+            self._set_text_content(self.cumulative_report_text, "Cumulative report unavailable.")
+            self._render_summary_panel(self.current_summary_frame, "Current report unavailable.", C["accent"])
+            self._render_summary_panel(self.cumulative_summary_frame, "Cumulative report unavailable.", C["accent3"])
+            self._draw_placeholder(self.current_loc_canvas, "Energy Consumption by LOC Range", "Run an analysis to populate this report.")
+            self._draw_placeholder(self.current_hotspot_canvas, "Current Hotspots", "Run an analysis to populate this report.")
+            self._draw_placeholder(self.energy_trend_canvas, "Cumulative Energy vs Code Sample Number", "Run history will appear here.")
+            self._draw_placeholder(self.cumulative_loc_canvas, "Cumulative Energy by LOC Range", "Run history will appear here.")
+            return
+
+        self._set_text_content(self.current_report_text, report_data["current"]["summary"])
+        self._set_text_content(self.cumulative_report_text, report_data["cumulative"]["summary"])
+        self._render_summary_panel(self.current_summary_frame, report_data["current"]["summary"], C["accent"])
+        self._render_summary_panel(self.cumulative_summary_frame, report_data["cumulative"]["summary"], C["accent3"])
+
+        self.update_idletasks()
+        self._draw_bar_chart(
+            self.current_loc_canvas,
+            "Energy Consumption by LOC Range",
+            report_data["current"].get("energy_loc_bars", []),
+            C["accent"],
+        )
+        hotspot_items = [
+            {"label": item["name"], "value": item["score"]}
+            for item in report_data["current"].get("hotspots", [])
+        ]
+        self._draw_bar_chart(
+            self.current_hotspot_canvas,
+            "Current Hotspots",
+            hotspot_items,
+            C["warn"],
+        )
+        self._draw_line_chart(
+            self.energy_trend_canvas,
+            "Cumulative Energy vs Code Sample Number",
+            report_data["cumulative"].get("energy_trend", {}).get("points", []),
+            C["accent"],
+        )
+        self._draw_bar_chart(
+            self.cumulative_loc_canvas,
+            "Cumulative Energy by LOC Range",
+            report_data["cumulative"].get("loc_bucket_energy", []),
+            C["accent3"],
+        )
 
     def _classify_line(self, line: str) -> str:
         """Pick a colour tag based on content of an output line."""
@@ -1000,6 +1427,8 @@ class SyntaxAnalyzerGUI(tk.Tk):
             return "error"
         if re.search(r"\[WARNING\]", s):
             return "warning"
+        if re.search(r"\[LINT\]", s):
+            return "info"
         if re.search(r"\[INFO\]", s):
             return "info"
         if re.search(r"✓.*clean|No syntax errors|no.*error", s, re.I):
@@ -1025,22 +1454,36 @@ class SyntaxAnalyzerGUI(tk.Tk):
     def _copy_results(self):
         # Copy whichever tab is currently visible
         active = self._notebook.index(self._notebook.select())
-        text = (self.results if active == 0 else self.ast_view).get("1.0", "end-1c")
+        tab_map = {
+            0: ("Diagnostics", self.results),
+            1: ("AST", self.ast_view),
+            2: ("IR", self.ir_view),
+            3: ("Current report", self.current_report_text),
+            4: ("Cumulative report", self.cumulative_report_text),
+        }
+        label, widget = tab_map.get(active, ("Report", self.results))
+        text = widget.get("1.0", "end-1c")
         if text.strip():
             self.clipboard_clear()
             self.clipboard_append(text)
-            label = "Diagnostics" if active == 0 else "AST"
             self._status_text.set(f"{label} report copied to clipboard.")
         else:
             messagebox.showinfo("Nothing to copy", "Run the analysis first.")
 
     def _save_report(self):
         active = self._notebook.index(self._notebook.select())
-        text = (self.results if active == 0 else self.ast_view).get("1.0", "end-1c")
+        tab_map = {
+            0: ("diagnostics", self.results),
+            1: ("ast", self.ast_view),
+            2: ("ir", self.ir_view),
+            3: ("current_report", self.current_report_text),
+            4: ("cumulative_report", self.cumulative_report_text),
+        }
+        label, widget = tab_map.get(active, ("diagnostics", self.results))
+        text = widget.get("1.0", "end-1c")
         if not text.strip():
             messagebox.showinfo("Nothing to save", "Run the analysis first.")
             return
-        label = "diagnostics" if active == 0 else "ast"
         path = filedialog.asksaveasfilename(
             defaultextension=".txt",
             initialfile=f"report_{label}.txt",

@@ -1,0 +1,19 @@
+Cumulative Performance & Energy Report
+
+Total analyzed runs: 7
+Cumulative estimated energy: 3500.190 mJ
+Average energy per run: 500.027 mJ
+Average analysis time: 3.44 ms
+Average per-run efficiency score: 29.21
+Latest run bucket: 0-20 LOC
+
+Comparison vs previous run:
+- Energy delta: -1459.010 mJ
+- Runtime delta: -7.776 ms
+- Efficiency delta: +68.979
+- LOC delta: -226
+
+Most efficient runs:
+- Run 2 | <editor> | 69.01 efficiency | 10 LOC | 1.524 mJ
+- Run 7 | <editor> | 69.00 efficiency | 10 LOC | 1.525 mJ
+- Run 1 | <test> | 63.17 efficiency | 3 LOC | 1.304 mJ
