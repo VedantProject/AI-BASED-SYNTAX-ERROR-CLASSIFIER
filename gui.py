@@ -13,7 +13,10 @@ from __future__ import annotations
 import io
 import os
 import re
+import subprocess
 import sys
+import tempfile
+import textwrap
 import threading
 import time
 import tkinter as tk
@@ -262,6 +265,55 @@ def count_errors(output: str) -> int:
     """Extract error count from the analyzer header line."""
     m = re.search(r"\((\d+)\s+error", output)
     return int(m.group(1)) if m else 0
+
+
+def detect_input_calls(source: str) -> int:
+    """
+    Count how many times input() is called in the source code.
+    Uses a simple regex; handles most common patterns.
+    """
+    # Match input() or input("...") — not inside comments
+    lines = source.splitlines()
+    count = 0
+    for line in lines:
+        code_part = line.split("#")[0]  # strip comments
+        count += len(re.findall(r"\binput\s*\(", code_part))
+    return count
+
+
+def run_code(source: str, user_inputs: list[str], timeout: int = 15) -> tuple[str, str, int]:
+    """
+    Execute Python source code and return (stdout, stderr, returncode).
+    user_inputs is joined with newlines and piped to stdin.
+    """
+    # Write source to a temp file so tracebacks show correct line numbers
+    with tempfile.NamedTemporaryFile(
+        mode="w", suffix=".py", delete=False, encoding="utf-8"
+    ) as tmp:
+        tmp.write(source)
+        tmp_path = tmp.name
+
+    try:
+        stdin_data = "\n".join(user_inputs) + "\n" if user_inputs else ""
+        result = subprocess.run(
+            [sys.executable, tmp_path],
+            input=stdin_data,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            encoding="utf-8",
+            errors="replace",
+        )
+        return result.stdout, result.stderr, result.returncode
+    except subprocess.TimeoutExpired:
+        return "", f"[Execution timed out after {timeout}s]", -1
+    except Exception as exc:
+        return "", f"[Execution error] {exc}", -1
+    finally:
+        try:
+            os.unlink(tmp_path)
+        except OSError:
+            pass
 
 
 def build_ast(source: str, language: str):
@@ -702,6 +754,8 @@ class SyntaxAnalyzerGUI(tk.Tk):
         self._status_text = tk.StringVar(value="Ready — paste your code and click  Analyze Code")
         self._busy = False
         self._report_data = None
+        self._last_source = ""        # source code from last successful analysis
+        self._can_run = False          # True when last analysis had 0 blocking errors
 
         self._setup_styles()
         self._build_ui()
@@ -795,6 +849,16 @@ class SyntaxAnalyzerGUI(tk.Tk):
             command=self._analyze, padx=20, pady=8,
         )
         self._analyze_btn.pack(side="left", padx=12, pady=8)
+
+        # ── Run Code button (enabled only after clean analysis) ───────────
+        self._run_btn = HoverButton(
+            btn_bar, text="▶▶  Run Code",
+            hover_bg="#15803d", normal_bg="#16a34a",
+            fg="#ffffff", font=("Segoe UI", 11, "bold"),
+            command=self._run_code, padx=16, pady=8,
+            state="disabled",
+        )
+        self._run_btn.pack(side="left", padx=4, pady=8)
 
         HoverButton(
             btn_bar, text="🗑  Clear Editor",
@@ -926,61 +990,189 @@ class SyntaxAnalyzerGUI(tk.Tk):
         self.ir_view.tag_config("ir_edge",    foreground=C["text_dim"])
         self.ir_view.tag_config("ir_summary", foreground=C["accent3"])
 
+        security_frame = tk.Frame(self._notebook, bg=C["bg2"])
+        self._notebook.add(security_frame, text="  Security Report  ")
+
+        self.security_view = tk.Text(
+            security_frame, bg=C["bg2"], fg=C["text"],
+            font=("Consolas", 10), relief="flat",
+            padx=10, pady=8, state="disabled",
+            selectbackground=C["surface"], wrap="word",
+        )
+        vbar_sec = tk.Scrollbar(security_frame, orient="vertical",
+                                command=self.security_view.yview, bg=C["bg2"])
+        self.security_view.config(yscrollcommand=vbar_sec.set)
+        vbar_sec.pack(side="right", fill="y")
+        self.security_view.pack(fill="both", expand=True)
+
         current_frame = tk.Frame(self._notebook, bg=C["bg2"])
         self._notebook.add(current_frame, text="  ⚡  Current Report  ")
 
-        self.current_summary_frame = tk.Frame(current_frame, bg=C["bg"])
-        self.current_summary_frame.pack(fill="x", padx=10, pady=(10, 8))
+        # Scrollable container for the Current Report tab
+        cur_scroll_canvas = tk.Canvas(current_frame, bg=C["bg"],
+                                      highlightthickness=0)
+        cur_vbar = tk.Scrollbar(current_frame, orient="vertical",
+                                command=cur_scroll_canvas.yview)
+        cur_scroll_canvas.configure(yscrollcommand=cur_vbar.set)
+        cur_vbar.pack(side="right", fill="y")
+        cur_scroll_canvas.pack(side="left", fill="both", expand=True)
 
-        self.current_report_text = tk.Text(
-            current_frame, bg=C["bg2"], fg=C["text"],
-            font=("Consolas", 10), relief="flat",
-            padx=10, pady=8, height=1, state="disabled",
-            selectbackground=C["surface"], wrap="word",
-        )
+        cur_inner = tk.Frame(cur_scroll_canvas, bg=C["bg"])
+        cur_inner_id = cur_scroll_canvas.create_window((0, 0), window=cur_inner,
+                                                        anchor="nw")
 
-        current_graphs = tk.Frame(current_frame, bg=C["bg2"])
-        current_graphs.pack(fill="both", expand=True)
+        def _cur_configure(event):
+            cur_scroll_canvas.configure(
+                scrollregion=cur_scroll_canvas.bbox("all"))
+            cur_scroll_canvas.itemconfig(
+                cur_inner_id, width=cur_scroll_canvas.winfo_width())
+        cur_inner.bind("<Configure>", _cur_configure)
+        cur_scroll_canvas.bind("<Configure>",
+            lambda e: cur_scroll_canvas.itemconfig(
+                cur_inner_id, width=e.width))
+        cur_scroll_canvas.bind_all("<MouseWheel>",
+            lambda e: cur_scroll_canvas.yview_scroll(
+                int(-1 * (e.delta / 120)), "units"))
 
+        # Summary card panel (dynamic widgets added at render time)
+        self.current_summary_frame = tk.Frame(cur_inner, bg=C["bg"])
+        self.current_summary_frame.pack(fill="x", padx=10, pady=(10, 4))
+
+        # Charts
         self.current_loc_canvas = tk.Canvas(
-            current_graphs, bg="#ffffff", highlightthickness=1,
-            highlightbackground=C["surface"], height=300,
+            cur_inner, bg="#ffffff", highlightthickness=1,
+            highlightbackground=C["surface"], height=320,
         )
-        self.current_loc_canvas.pack(fill="both", expand=True, padx=10, pady=(0, 10))
+        self.current_loc_canvas.pack(fill="x", padx=10, pady=(4, 6))
 
         self.current_hotspot_canvas = tk.Canvas(
-            current_graphs, bg="#ffffff", highlightthickness=1,
-            highlightbackground=C["surface"], height=300,
+            cur_inner, bg="#ffffff", highlightthickness=1,
+            highlightbackground=C["surface"], height=320,
         )
-        self.current_hotspot_canvas.pack(fill="both", expand=True, padx=10, pady=(0, 10))
+        self.current_hotspot_canvas.pack(fill="x", padx=10, pady=(0, 10))
 
         cumulative_frame = tk.Frame(self._notebook, bg=C["bg2"])
         self._notebook.add(cumulative_frame, text="  📈  Cumulative Report  ")
 
-        self.cumulative_summary_frame = tk.Frame(cumulative_frame, bg=C["bg"])
-        self.cumulative_summary_frame.pack(fill="x", padx=10, pady=(10, 8))
+        # Scrollable container for the Cumulative Report tab
+        cum_scroll_canvas = tk.Canvas(cumulative_frame, bg=C["bg"],
+                                       highlightthickness=0)
+        cum_vbar = tk.Scrollbar(cumulative_frame, orient="vertical",
+                                command=cum_scroll_canvas.yview)
+        cum_scroll_canvas.configure(yscrollcommand=cum_vbar.set)
+        cum_vbar.pack(side="right", fill="y")
+        cum_scroll_canvas.pack(side="left", fill="both", expand=True)
 
-        self.cumulative_report_text = tk.Text(
-            cumulative_frame, bg=C["bg2"], fg=C["text"],
-            font=("Consolas", 10), relief="flat",
-            padx=10, pady=8, height=1, state="disabled",
-            selectbackground=C["surface"], wrap="word",
-        )
+        cum_inner = tk.Frame(cum_scroll_canvas, bg=C["bg"])
+        cum_inner_id = cum_scroll_canvas.create_window((0, 0), window=cum_inner,
+                                                        anchor="nw")
 
-        cumulative_top = tk.Frame(cumulative_frame, bg=C["bg2"])
-        cumulative_top.pack(fill="both", expand=True)
+        def _cum_configure(event):
+            cum_scroll_canvas.configure(
+                scrollregion=cum_scroll_canvas.bbox("all"))
+            cum_scroll_canvas.itemconfig(
+                cum_inner_id, width=cum_scroll_canvas.winfo_width())
+        cum_inner.bind("<Configure>", _cum_configure)
+        cum_scroll_canvas.bind("<Configure>",
+            lambda e: cum_scroll_canvas.itemconfig(
+                cum_inner_id, width=e.width))
 
+        # Summary card panel
+        self.cumulative_summary_frame = tk.Frame(cum_inner, bg=C["bg"])
+        self.cumulative_summary_frame.pack(fill="x", padx=10, pady=(10, 4))
+
+        # Charts
         self.energy_trend_canvas = tk.Canvas(
-            cumulative_top, bg="#ffffff", highlightthickness=1,
-            highlightbackground=C["surface"], height=300,
+            cum_inner, bg="#ffffff", highlightthickness=1,
+            highlightbackground=C["surface"], height=320,
         )
-        self.energy_trend_canvas.pack(fill="both", expand=True, padx=10, pady=(0, 10))
+        self.energy_trend_canvas.pack(fill="x", padx=10, pady=(4, 6))
 
         self.cumulative_loc_canvas = tk.Canvas(
-            cumulative_frame, bg="#ffffff", highlightthickness=1,
-            highlightbackground=C["surface"], height=300,
+            cum_inner, bg="#ffffff", highlightthickness=1,
+            highlightbackground=C["surface"], height=320,
         )
-        self.cumulative_loc_canvas.pack(fill="both", expand=False, padx=10, pady=(0, 10))
+        self.cumulative_loc_canvas.pack(fill="x", padx=10, pady=(0, 10))
+
+        # Hidden text widgets kept for copy/save compatibility (not displayed)
+        self.current_report_text = tk.Text(current_frame, height=1, state="disabled")
+        self.cumulative_report_text = tk.Text(cumulative_frame, height=1, state="disabled")
+
+        # ── Tab 7: Carbon & Power Report ──────────────────────────────────
+        carbon_frame = tk.Frame(self._notebook, bg=C["bg2"])
+        self._notebook.add(carbon_frame, text="  🌱  Carbon & Power  ")
+
+        # Scrollable container
+        cp_scroll_cv = tk.Canvas(carbon_frame, bg="#0f1117", highlightthickness=0)
+        cp_vbar = tk.Scrollbar(carbon_frame, orient="vertical",
+                               command=cp_scroll_cv.yview)
+        cp_scroll_cv.configure(yscrollcommand=cp_vbar.set)
+        cp_vbar.pack(side="right", fill="y")
+        cp_scroll_cv.pack(side="left", fill="both", expand=True)
+
+        self._carbon_inner = tk.Frame(cp_scroll_cv, bg="#0f1117")
+        _cp_win_id = cp_scroll_cv.create_window((0, 0), window=self._carbon_inner, anchor="nw")
+
+        def _cp_cfg(e):
+            cp_scroll_cv.configure(scrollregion=cp_scroll_cv.bbox("all"))
+            cp_scroll_cv.itemconfig(_cp_win_id, width=cp_scroll_cv.winfo_width())
+        self._carbon_inner.bind("<Configure>", _cp_cfg)
+        cp_scroll_cv.bind("<Configure>",
+            lambda e: cp_scroll_cv.itemconfig(_cp_win_id, width=e.width))
+
+        # Placeholder message (replaced after analysis)
+        self._carbon_placeholder = tk.Label(
+            self._carbon_inner,
+            text="Run an analysis to see Carbon & Power metrics.",
+            bg="#0f1117", fg="#6e7681",
+            font=("Segoe UI", 12), anchor="center",
+        )
+        self._carbon_placeholder.pack(expand=True, pady=60)
+
+        # ── Tab 8: Execution Output ────────────────────────────────────────
+        exec_frame = tk.Frame(self._notebook, bg=C["bg2"])
+        self._notebook.add(exec_frame, text="  ▶  Execution  ")
+
+        # Execution toolbar
+        exec_toolbar = tk.Frame(exec_frame, bg=C["bg"], height=40)
+        exec_toolbar.pack(fill="x")
+        exec_toolbar.pack_propagate(False)
+        tk.Label(
+            exec_toolbar, text="  ▶  Program Execution Output",
+            bg=C["bg"], fg=C["accent3"], font=("Segoe UI", 10, "bold"),
+        ).pack(side="left", padx=8, pady=8)
+        self._exec_status_label = tk.Label(
+            exec_toolbar, text="Run Code to see output",
+            bg=C["bg"], fg=C["text_dim"], font=("Segoe UI", 9),
+        )
+        self._exec_status_label.pack(side="right", padx=12, pady=8)
+
+        self.exec_view = tk.Text(
+            exec_frame, bg="#0d1117", fg="#e6edf3",
+            font=("Consolas", 11), relief="flat",
+            padx=12, pady=10, state="disabled",
+            selectbackground="#264f78", wrap="word",
+            insertbackground="#58a6ff",
+        )
+        vbar_exec = tk.Scrollbar(exec_frame, orient="vertical",
+                                  command=self.exec_view.yview, bg=C["bg2"])
+        hbar_exec = tk.Scrollbar(exec_frame, orient="horizontal",
+                                  command=self.exec_view.xview, bg=C["bg2"])
+        self.exec_view.config(yscrollcommand=vbar_exec.set,
+                               xscrollcommand=hbar_exec.set)
+        hbar_exec.pack(side="bottom", fill="x")
+        vbar_exec.pack(side="right",  fill="y")
+        self.exec_view.pack(fill="both", expand=True)
+
+        # Execution text colour tags
+        self.exec_view.tag_config("exec_header",  foreground="#58a6ff",  font=("Consolas", 11, "bold"))
+        self.exec_view.tag_config("exec_stdout",  foreground="#e6edf3")
+        self.exec_view.tag_config("exec_stderr",  foreground="#ff7b72",  font=("Consolas", 11, "bold"))
+        self.exec_view.tag_config("exec_input",   foreground="#3fb950",  font=("Consolas", 11, "bold"))
+        self.exec_view.tag_config("exec_ok",      foreground="#3fb950",  font=("Consolas", 11, "bold"))
+        self.exec_view.tag_config("exec_fail",    foreground="#ff7b72",  font=("Consolas", 11, "bold"))
+        self.exec_view.tag_config("exec_dim",     foreground="#6e7681")
+        self.exec_view.tag_config("exec_sep",     foreground="#30363d")
 
         # ── Status bar ────────────────────────────────────────────────────
         self._status_bar = tk.Frame(self, bg=C["bg2"], height=32)
@@ -1056,12 +1248,29 @@ class SyntaxAnalyzerGUI(tk.Tk):
         self.ir_view.config(state="normal")
         self.ir_view.delete("1.0", "end")
         self.ir_view.config(state="disabled")
+        self.security_view.config(state="normal")
+        self.security_view.delete("1.0", "end")
+        self.security_view.config(state="disabled")
         self.current_report_text.config(state="normal")
         self.current_report_text.delete("1.0", "end")
         self.current_report_text.config(state="disabled")
         self.cumulative_report_text.config(state="normal")
         self.cumulative_report_text.delete("1.0", "end")
         self.cumulative_report_text.config(state="disabled")
+        self.exec_view.config(state="normal")
+        self.exec_view.delete("1.0", "end")
+        self.exec_view.config(state="disabled")
+        self._exec_status_label.config(text="Run Code to see output", fg=C["text_dim"])
+        # Reset carbon panel
+        for w in self._carbon_inner.winfo_children():
+            w.destroy()
+        self._carbon_placeholder = tk.Label(
+            self._carbon_inner,
+            text="Run an analysis to see Carbon & Power metrics.",
+            bg="#0f1117", fg="#6e7681",
+            font=("Segoe UI", 12), anchor="center",
+        )
+        self._carbon_placeholder.pack(expand=True, pady=60)
         self._clear_frame(self.current_summary_frame)
         self._clear_frame(self.cumulative_summary_frame)
         for canvas in (
@@ -1072,6 +1281,14 @@ class SyntaxAnalyzerGUI(tk.Tk):
         ):
             canvas.delete("all")
         self._report_data = None
+        # Disable run button when results are cleared
+        self._can_run = False
+        self._last_source = ""
+        self._run_btn.config(
+            state="disabled",
+            bg="#16a34a",
+            text="▶▶  Run Code",
+        )
 
     # ── Analysis ─────────────────────────────────────────────────────────────
 
@@ -1092,16 +1309,23 @@ class SyntaxAnalyzerGUI(tk.Tk):
         self._progress.start(12)
 
         # Run in a background thread to keep the GUI responsive
+        _source = source  # capture for closure
         def _worker():
-            output    = run_analysis(source, "python")
-            payload = build_report_payload(source, "python")
+            output    = run_analysis(_source, "python")
+            payload = build_report_payload(_source, "python")
             ast_lines = render_ast_tree(payload["ast_root"], "python")
             ir_lines  = _render_ir_program_view(payload["ir_program"])
+            security_report = None
+            try:
+                from analysis.security_vulnerability import build_security_report
+                security_report = build_security_report(payload["ast_root"])
+            except Exception:
+                security_report = None
             report_data = None
             try:
                 from analysis.performance_energy import build_reports
                 report_data = build_reports(
-                    source=source,
+                    source=_source,
                     language="python",
                     filepath="<editor>",
                     ast_tree=payload["ast_root"],
@@ -1112,11 +1336,11 @@ class SyntaxAnalyzerGUI(tk.Tk):
                 )
             except Exception:
                 report_data = None
-            self.after(0, lambda: self._display_results(output, ast_lines, ir_lines, report_data))
+            self.after(0, lambda: self._display_results(output, ast_lines, ir_lines, report_data, security_report, _source))
 
         threading.Thread(target=_worker, daemon=True).start()
 
-    def _display_results(self, output: str, ast_lines: list, ir_lines: list, report_data: dict | None):
+    def _display_results(self, output: str, ast_lines: list, ir_lines: list, report_data: dict | None, security_report: dict | None, source: str = ""):
         """Called on the main thread after analysis completes."""
         self._progress.stop()
         self._progress.pack_forget()
@@ -1127,15 +1351,31 @@ class SyntaxAnalyzerGUI(tk.Tk):
 
         if n_errors == 0:
             self._status_label.config(fg=C["status_ok"])
-            self._status_text.set("✓  Analysis complete — No errors found!")
+            self._status_text.set("✓  Analysis complete — No errors found! Click  ▶▶ Run Code  to execute.")
             self._error_count_label.config(
                 text="✓  Clean", fg=C["status_ok"])
+            # Enable execution mode
+            self._can_run = True
+            self._last_source = source
+            self._run_btn.config(
+                state="normal",
+                bg="#16a34a",
+                text="▶▶  Run Code",
+            )
         else:
             self._status_label.config(fg=C["status_err"])
-            self._status_text.set(f"✗  Analysis complete — {n_errors} error(s) detected.")
+            self._status_text.set(f"✗  Analysis complete — {n_errors} error(s) detected. Fix errors before running.")
             self._error_count_label.config(
                 text=f"✗  {n_errors} Error{'s' if n_errors != 1 else ''}",
                 fg=C["status_err"],
+            )
+            # Disable execution mode
+            self._can_run = False
+            self._last_source = ""
+            self._run_btn.config(
+                state="disabled",
+                bg="#16a34a",
+                text="▶▶  Run Code",
             )
 
         # ── Diagnostics tab ───────────────────────────────────────────────
@@ -1168,7 +1408,14 @@ class SyntaxAnalyzerGUI(tk.Tk):
                 self.ir_view.insert("end", text_chunk)
         self.ir_view.config(state="disabled")
         self.ir_view.see("1.0")
+        self.security_view.config(state="normal")
+        self.security_view.delete("1.0", "end")
+        self.security_view.insert("1.0", (security_report or {}).get("summary", "Security report unavailable."))
+        self.security_view.config(state="disabled")
+        self.security_view.see("1.0")
         self._render_report_tabs(report_data)
+        # Render Carbon & Power panel
+        self._render_carbon_panel(report_data)
 
     def _set_text_content(self, widget: tk.Text, text: str):
         widget.config(state="normal")
@@ -1372,51 +1619,94 @@ class SyntaxAnalyzerGUI(tk.Tk):
 
     def _render_report_tabs(self, report_data: dict | None):
         self._report_data = report_data
+
+        # ── helpers ──────────────────────────────────────────────────────────
+
+        def _safe_width(canvas: tk.Canvas, fallback: int = 560) -> int:
+            """Return the canvas's real pixel width, with a sensible fallback."""
+            w = canvas.winfo_width()
+            return w if w > 10 else fallback
+
+        def _draw_charts_after_layout():
+            """Draw all four charts once Tkinter has finished layout."""
+            if not self._report_data:
+                return
+            rd = self._report_data
+
+            w1 = _safe_width(self.current_loc_canvas)
+            self.current_loc_canvas.config(width=w1)
+            self._draw_bar_chart(
+                self.current_loc_canvas,
+                "Energy Consumption by LOC Range",
+                rd["current"].get("energy_loc_bars", []),
+                C["accent"],
+            )
+
+            w2 = _safe_width(self.current_hotspot_canvas)
+            self.current_hotspot_canvas.config(width=w2)
+            hs_items = [
+                {"label": item["name"], "value": item["score"]}
+                for item in rd["current"].get("hotspots", [])
+            ]
+            self._draw_bar_chart(
+                self.current_hotspot_canvas,
+                "Current Hotspots",
+                hs_items,
+                C["warn"],
+            )
+
+            w3 = _safe_width(self.energy_trend_canvas)
+            self.energy_trend_canvas.config(width=w3)
+            self._draw_line_chart(
+                self.energy_trend_canvas,
+                "Cumulative Energy vs Code Sample Number",
+                rd["cumulative"].get("energy_trend", {}).get("points", []),
+                C["accent"],
+            )
+
+            w4 = _safe_width(self.cumulative_loc_canvas)
+            self.cumulative_loc_canvas.config(width=w4)
+            self._draw_bar_chart(
+                self.cumulative_loc_canvas,
+                "Cumulative Energy by LOC Range",
+                rd["cumulative"].get("loc_bucket_energy", []),
+                C["accent3"],
+            )
+
+        # ── no data path ─────────────────────────────────────────────────────
         if not report_data:
             self._set_text_content(self.current_report_text, "Current report unavailable.")
             self._set_text_content(self.cumulative_report_text, "Cumulative report unavailable.")
-            self._render_summary_panel(self.current_summary_frame, "Current report unavailable.", C["accent"])
-            self._render_summary_panel(self.cumulative_summary_frame, "Cumulative report unavailable.", C["accent3"])
-            self._draw_placeholder(self.current_loc_canvas, "Energy Consumption by LOC Range", "Run an analysis to populate this report.")
-            self._draw_placeholder(self.current_hotspot_canvas, "Current Hotspots", "Run an analysis to populate this report.")
-            self._draw_placeholder(self.energy_trend_canvas, "Cumulative Energy vs Code Sample Number", "Run history will appear here.")
-            self._draw_placeholder(self.cumulative_loc_canvas, "Cumulative Energy by LOC Range", "Run history will appear here.")
+            self._render_summary_panel(
+                self.current_summary_frame, "Current report unavailable.", C["accent"])
+            self._render_summary_panel(
+                self.cumulative_summary_frame, "Cumulative report unavailable.", C["accent3"])
+            self.after(50, lambda: (
+                self._draw_placeholder(self.current_loc_canvas,
+                    "Energy Consumption by LOC Range",
+                    "Run an analysis to populate this report."),
+                self._draw_placeholder(self.current_hotspot_canvas,
+                    "Current Hotspots",
+                    "Run an analysis to populate this report."),
+                self._draw_placeholder(self.energy_trend_canvas,
+                    "Cumulative Energy vs Code Sample Number",
+                    "Run history will appear here."),
+                self._draw_placeholder(self.cumulative_loc_canvas,
+                    "Cumulative Energy by LOC Range",
+                    "Run history will appear here."),
+            ))
             return
 
+        # ── data path ─────────────────────────────────────────────────────────
         self._set_text_content(self.current_report_text, report_data["current"]["summary"])
         self._set_text_content(self.cumulative_report_text, report_data["cumulative"]["summary"])
-        self._render_summary_panel(self.current_summary_frame, report_data["current"]["summary"], C["accent"])
-        self._render_summary_panel(self.cumulative_summary_frame, report_data["cumulative"]["summary"], C["accent3"])
+        self._render_summary_panel(
+            self.current_summary_frame, report_data["current"]["summary"], C["accent"])
+        self._render_summary_panel(
+            self.cumulative_summary_frame, report_data["cumulative"]["summary"], C["accent3"])
 
-        self.update_idletasks()
-        self._draw_bar_chart(
-            self.current_loc_canvas,
-            "Energy Consumption by LOC Range",
-            report_data["current"].get("energy_loc_bars", []),
-            C["accent"],
-        )
-        hotspot_items = [
-            {"label": item["name"], "value": item["score"]}
-            for item in report_data["current"].get("hotspots", [])
-        ]
-        self._draw_bar_chart(
-            self.current_hotspot_canvas,
-            "Current Hotspots",
-            hotspot_items,
-            C["warn"],
-        )
-        self._draw_line_chart(
-            self.energy_trend_canvas,
-            "Cumulative Energy vs Code Sample Number",
-            report_data["cumulative"].get("energy_trend", {}).get("points", []),
-            C["accent"],
-        )
-        self._draw_bar_chart(
-            self.cumulative_loc_canvas,
-            "Cumulative Energy by LOC Range",
-            report_data["cumulative"].get("loc_bucket_energy", []),
-            C["accent3"],
-        )
+        # Defer chart drawing so Tkinter finishes layout first
+        self.after(80, _draw_charts_after_layout)
 
     def _classify_line(self, line: str) -> str:
         """Pick a colour tag based on content of an output line."""
@@ -1449,6 +1739,445 @@ class SyntaxAnalyzerGUI(tk.Tk):
             return "dim"
         return ""   # default colour
 
+    # ── Carbon & Power panel ─────────────────────────────────────────────────
+
+    def _render_carbon_panel(self, report_data: dict | None):
+        """Draw the Carbon & Power dashboard inside self._carbon_inner."""
+        frame = self._carbon_inner
+        for w in frame.winfo_children():
+            w.destroy()
+
+        BG       = "#0f1117"
+        CARD_BG  = "#161b22"
+        BORDER   = "#30363d"
+        GREEN    = "#3fb950"
+        BLUE     = "#58a6ff"
+        ORANGE   = "#d29922"
+        RED      = "#ff7b72"
+        DIM      = "#6e7681"
+        WHITE    = "#e6edf3"
+
+        def _card(parent, title: str, value: str, unit: str, color: str, note: str = ""):
+            c = tk.Frame(parent, bg=CARD_BG,
+                         highlightthickness=1, highlightbackground=BORDER)
+            bar = tk.Frame(c, bg=color, height=4)
+            bar.pack(fill="x", side="top")
+            body = tk.Frame(c, bg=CARD_BG)
+            body.pack(fill="both", expand=True, padx=14, pady=10)
+            tk.Label(body, text=title.upper(), bg=CARD_BG, fg=DIM,
+                     font=("Segoe UI", 8, "bold"), anchor="w").pack(anchor="w")
+            tk.Label(body, text=value, bg=CARD_BG, fg=color,
+                     font=("Consolas", 20, "bold"), anchor="w").pack(anchor="w", pady=(4, 0))
+            tk.Label(body, text=unit, bg=CARD_BG, fg=DIM,
+                     font=("Segoe UI", 8), anchor="w").pack(anchor="w")
+            if note:
+                tk.Label(body, text=note, bg=CARD_BG, fg=WHITE,
+                         font=("Segoe UI", 8), anchor="w",
+                         wraplength=260, justify="left").pack(anchor="w", pady=(6, 0))
+            return c
+
+        if not report_data:
+            tk.Label(frame, text="Run an analysis to see Carbon & Power metrics.",
+                     bg=BG, fg=DIM, font=("Segoe UI", 12)).pack(pady=60)
+            return
+
+        curr = report_data.get("current", {})
+        cum  = report_data.get("cumulative", {})
+        run  = report_data.get("run", {})
+
+        power_mw      = curr.get("power_mw",      run.get("power_mw",      0.0))
+        carbon_ug     = curr.get("carbon_ug_co2", run.get("carbon_ug_co2", 0.0))
+        energy_mj     = run.get("estimated_energy_mj", 0.0)
+        total_carbon  = cum.get("total_carbon_ug",  0.0)
+        avg_power     = cum.get("avg_power_mw",     0.0)
+
+        # Format helpers
+        def _fmt_ug(ug: float) -> str:
+            if ug < 1_000:
+                return f"{ug:.4f}"
+            if ug < 1_000_000:
+                return f"{ug / 1_000:.4f}"
+            return f"{ug / 1_000_000:.6f}"
+
+        def _ug_unit(ug: float) -> str:
+            if ug < 1_000:    return "µg CO₂"
+            if ug < 1_000_000: return "mg CO₂"
+            return "g CO₂"
+
+        # Header
+        hdr = tk.Frame(frame, bg="#0d1117", height=56)
+        hdr.pack(fill="x")
+        hdr.pack_propagate(False)
+        tk.Label(hdr, text="  🌱  Carbon Emission & Power Consumption",
+                 bg="#0d1117", fg=GREEN,
+                 font=("Segoe UI", 14, "bold")).pack(side="left", padx=16, pady=12)
+        tk.Label(hdr, text="Based on global avg grid intensity: 233 g CO₂ / kWh",
+                 bg="#0d1117", fg=DIM,
+                 font=("Segoe UI", 8)).pack(side="right", padx=16, pady=12)
+
+        # Card grid — row 1
+        row1 = tk.Frame(frame, bg=BG)
+        row1.pack(fill="x", padx=14, pady=(12, 6))
+        for col in range(3):
+            row1.grid_columnconfigure(col, weight=1)
+
+        _card(row1,
+              "Power Draw (this run)",
+              f"{power_mw:.4f}", "milliwatts (mW)",
+              BLUE).grid(row=0, column=0, sticky="nsew", padx=6, pady=6)
+
+        _card(row1,
+              "Carbon Emission (this run)",
+              _fmt_ug(carbon_ug), _ug_unit(carbon_ug),
+              GREEN).grid(row=0, column=1, sticky="nsew", padx=6, pady=6)
+
+        _card(row1,
+              "Energy Consumed (this run)",
+              f"{energy_mj:.4f}", "millijoules (mJ)",
+              ORANGE).grid(row=0, column=2, sticky="nsew", padx=6, pady=6)
+
+        # Card grid — row 2 (cumulative)
+        row2 = tk.Frame(frame, bg=BG)
+        row2.pack(fill="x", padx=14, pady=(0, 6))
+        for col in range(2):
+            row2.grid_columnconfigure(col, weight=1)
+
+        _card(row2,
+              "Cumulative Carbon (all runs)",
+              _fmt_ug(total_carbon), _ug_unit(total_carbon),
+              RED).grid(row=0, column=0, sticky="nsew", padx=6, pady=6)
+
+        _card(row2,
+              "Avg Power Draw (all runs)",
+              f"{avg_power:.4f}", "milliwatts (mW)",
+              BLUE).grid(row=0, column=1, sticky="nsew", padx=6, pady=6)
+
+        # Equivalence context
+        ctx_frame = tk.Frame(frame, bg=CARD_BG,
+                             highlightthickness=1, highlightbackground=BORDER)
+        ctx_frame.pack(fill="x", padx=20, pady=(4, 10))
+        tk.Frame(ctx_frame, bg=GREEN, height=4).pack(fill="x", side="top")
+        ctx_body = tk.Frame(ctx_frame, bg=CARD_BG)
+        ctx_body.pack(fill="x", padx=16, pady=12)
+        tk.Label(ctx_body, text="EQUIVALENCE CONTEXT",
+                 bg=CARD_BG, fg=DIM,
+                 font=("Segoe UI", 8, "bold"), anchor="w").pack(anchor="w")
+
+        # LED equivalent
+        led_ug_per_sec = (233_000 / 3_600_000) * 5.0 * 1000 / 3600
+        led_s = carbon_ug / led_ug_per_sec if led_ug_per_sec > 0 else 0
+        runs_per_gram = (1_000_000 / carbon_ug) if carbon_ug > 0 else 0
+
+        ctx_lines = [
+            f"• This analysis emitted ≈ {_fmt_ug(carbon_ug)} {_ug_unit(carbon_ug)} CO₂.",
+            f"• Equivalent to running a 5 W LED for ≈ {led_s:.4f} seconds.",
+        ]
+        if runs_per_gram >= 1:
+            ctx_lines.append(f"• ≈ {runs_per_gram:,.0f} such analyses would emit 1 gram of CO₂.")
+        ctx_lines.append(f"• Cumulative carbon across all {report_data.get('run', {}).get('run_number', '?')} run(s): {_fmt_ug(total_carbon)} {_ug_unit(total_carbon)} CO₂.")
+
+        for line in ctx_lines:
+            tk.Label(ctx_body, text=line,
+                     bg=CARD_BG, fg=WHITE,
+                     font=("Segoe UI", 10), anchor="w",
+                     justify="left", wraplength=900).pack(anchor="w", pady=2)
+
+        # Tips
+        tips_frame = tk.Frame(frame, bg="#0d1117",
+                              highlightthickness=1, highlightbackground=BORDER)
+        tips_frame.pack(fill="x", padx=20, pady=(0, 14))
+        tk.Frame(tips_frame, bg=ORANGE, height=4).pack(fill="x", side="top")
+        tips_body = tk.Frame(tips_frame, bg="#0d1117")
+        tips_body.pack(fill="x", padx=16, pady=12)
+        tk.Label(tips_body, text="💡  GREEN CODING TIPS",
+                 bg="#0d1117", fg=ORANGE,
+                 font=("Segoe UI", 9, "bold"), anchor="w").pack(anchor="w")
+        tips = [
+            "• Reduce cyclomatic complexity — fewer branches = less CPU work.",
+            "• Avoid deeply nested loops over large datasets.",
+            "• Prefer built-in functions (implemented in C) over pure-Python equivalents.",
+            "• Remove dead code and unreachable branches to reduce parse/IR overhead.",
+            "• Use generators instead of building full lists when streaming data.",
+        ]
+        for tip in tips:
+            tk.Label(tips_body, text=tip,
+                     bg="#0d1117", fg=DIM,
+                     font=("Segoe UI", 9), anchor="w",
+                     justify="left").pack(anchor="w", pady=1)
+
+    # ── Execution mode ───────────────────────────────────────────────────────
+
+    def _show_input_dialog(self, n_inputs: int) -> list[str] | None:
+        """
+        Open a dialog that prompts the user to enter values for each input() call.
+        Returns a list of strings (one per detected input call), or None if cancelled.
+        """
+        dialog = tk.Toplevel(self)
+        dialog.title("Program Input Required")
+        dialog.configure(bg=C["bg"])
+        dialog.resizable(False, False)
+        dialog.grab_set()  # modal
+
+        # Header
+        hdr = tk.Frame(dialog, bg=C["accent"], height=48)
+        hdr.pack(fill="x")
+        hdr.pack_propagate(False)
+        tk.Label(
+            hdr, text="⌨  Program Input Required",
+            bg=C["accent"], fg="#ffffff",
+            font=("Segoe UI", 13, "bold"),
+        ).pack(side="left", padx=16, pady=10)
+
+        body = tk.Frame(dialog, bg=C["bg"])
+        body.pack(fill="both", padx=20, pady=16)
+
+        tk.Label(
+            body,
+            text=f"This program calls input() {n_inputs} time(s).\n"
+                  "Enter each value below (one per line in the order they will be requested).",
+            bg=C["bg"], fg=C["text"],
+            font=("Segoe UI", 10),
+            justify="left",
+        ).pack(anchor="w", pady=(0, 12))
+
+        # Multi-line entry for all inputs
+        tk.Label(
+            body, text="Input values (one per line):",
+            bg=C["bg"], fg=C["text_dim"],
+            font=("Segoe UI", 9, "bold"),
+        ).pack(anchor="w")
+
+        entry_frame = tk.Frame(body, bg=C["surface"], highlightthickness=1,
+                               highlightbackground=C["surface"])
+        entry_frame.pack(fill="x", pady=(4, 16))
+
+        input_text = tk.Text(
+            entry_frame, height=max(n_inputs, 3), width=52,
+            font=("Consolas", 11), bg=C["bg3"], fg=C["text"],
+            relief="flat", padx=8, pady=6,
+            insertbackground=C["accent"],
+        )
+        input_text.pack(fill="x")
+        input_text.focus_set()
+
+        result_holder: list = [None]
+
+        def _ok():
+            raw = input_text.get("1.0", "end-1c")
+            # Split by newlines; pad/trim to match n_inputs
+            vals = raw.splitlines()
+            # Pad with empty strings if the user gave fewer than expected
+            while len(vals) < n_inputs:
+                vals.append("")
+            result_holder[0] = vals
+            dialog.destroy()
+
+        def _cancel():
+            result_holder[0] = None
+            dialog.destroy()
+
+        btn_row = tk.Frame(body, bg=C["bg"])
+        btn_row.pack(fill="x")
+        HoverButton(
+            btn_row, text="▶  Run Program",
+            hover_bg=C["btn_hover"], normal_bg=C["btn_bg"],
+            fg=C["btn_fg"], font=("Segoe UI", 10, "bold"),
+            command=_ok, padx=16, pady=6,
+        ).pack(side="left")
+        HoverButton(
+            btn_row, text="Cancel",
+            hover_bg=C["btn2_hover"], normal_bg=C["btn2_bg"],
+            fg=C["btn2_fg"], font=("Segoe UI", 10),
+            command=_cancel, padx=16, pady=6,
+        ).pack(side="left", padx=8)
+
+        # Escape cancels; Enter types a newline in the text box (normal behaviour).
+        # Ctrl+Enter is provided as a keyboard shortcut to submit.
+        dialog.bind("<Escape>", lambda _: _cancel())
+        input_text.bind("<Control-Return>", lambda _: _ok())
+
+        # Center the dialog over the main window
+        self.update_idletasks()
+        x = self.winfo_rootx() + (self.winfo_width()  - dialog.winfo_reqwidth())  // 2
+        y = self.winfo_rooty() + (self.winfo_height() - dialog.winfo_reqheight()) // 2
+        dialog.geometry(f"+{x}+{y}")
+
+        self.wait_window(dialog)
+        return result_holder[0]
+
+    def _run_code(self):
+        """Execute the last successfully-analyzed source code."""
+        if not self._can_run or not self._last_source:
+            messagebox.showwarning(
+                "Cannot Run",
+                "Please analyze the code first and ensure there are no errors."
+            )
+            return
+
+        source = self._last_source
+        heal_note = ""   # message shown in Execution tab if we auto-repaired
+
+        # ── Pre-execution syntax check & auto-heal ────────────────────────
+        # Our custom parser may have cleared errors during analysis, but Python's
+        # own compiler may still see syntax problems (e.g. missing ':').
+        # Run the healer iteratively until compile() passes or we give up.
+        try:
+            compile(source, "<editor>", "exec")
+        except SyntaxError:
+            try:
+                from self_heal import heal_source as _heal
+                from lexers import tokenize_python
+                from parsers import parse_python
+
+                working = source
+                for _pass in range(8):
+                    try:
+                        compile(working, "<editor>", "exec")
+                        break          # clean — stop
+                    except SyntaxError:
+                        pass
+
+                    errors = []
+                    try:
+                        _, errors = parse_python(tokenize_python(working))
+                    except Exception:
+                        pass
+
+                    if not errors:
+                        # Parser sees no errors but compile() still fails —
+                        # likely a construct our parser misses; use Python's
+                        # own error to guide the fix.
+                        try:
+                            compile(working, "<editor>", "exec")
+                        except SyntaxError as se:
+                            # Build a minimal error stub for the healer
+                            from types import SimpleNamespace
+                            stub = SimpleNamespace(
+                                error_type="MISSING_COLON",
+                                message=str(se.msg),
+                                line=se.lineno or 1,
+                                column=se.offset or 1,
+                                token=None,
+                            )
+                            errors = [stub]
+
+                    result = _heal(working, errors, language="python",
+                                   defined_names=set())
+                    if result.healed_source and result.healed_source != working:
+                        working = result.healed_source
+                    else:
+                        break   # healer made no progress
+
+                # Final check
+                try:
+                    compile(working, "<editor>", "exec")
+                    source = working
+                    heal_note = (
+                        "⚙  Auto-repaired syntax before execution "
+                        "(e.g. added missing ':').\n"
+                        "   Consider fixing your source code to match.\n"
+                    )
+                except SyntaxError as se:
+                    # Healer couldn't fully fix it — still try with best effort
+                    source = working
+                    heal_note = (
+                        f"⚠  Partial auto-repair applied; Python may still "
+                        f"report errors (line {se.lineno}: {se.msg}).\n"
+                    )
+            except Exception:
+                pass    # If anything goes wrong, just run original source
+
+        # Detect input() calls
+        n_inputs = detect_input_calls(source)
+        user_inputs: list[str] = []
+
+        if n_inputs > 0:
+            user_inputs_or_none = self._show_input_dialog(n_inputs)
+            if user_inputs_or_none is None:
+                return  # user cancelled
+            user_inputs = user_inputs_or_none
+
+        # Switch to Execution tab
+        self._notebook.select(7)
+
+        # Show running indicator
+        self.exec_view.config(state="normal")
+        self.exec_view.delete("1.0", "end")
+        sep = "═" * 64 + "\n"
+        self.exec_view.insert("end", sep, "exec_sep")
+        self.exec_view.insert("end", "  ▶  Program Execution\n", "exec_header")
+        self.exec_view.insert("end", sep, "exec_sep")
+        if heal_note:
+            self.exec_view.insert("end", f"\n  {heal_note}\n", "exec_input")
+        if user_inputs:
+            self.exec_view.insert("end", "\n  📥 Provided Inputs:\n", "exec_input")
+            for i, val in enumerate(user_inputs, 1):
+                display_val = val if val else "(empty)"
+                self.exec_view.insert("end", f"     [{i}] {display_val}\n", "exec_input")
+        self.exec_view.insert("end", "\n  ⏳ Running…\n", "exec_dim")
+        self.exec_view.config(state="disabled")
+        self._exec_status_label.config(text="Running…", fg=C["warn"])
+        self._run_btn.config(state="disabled", text="⏳  Running…")
+        self.update_idletasks()
+
+        def _worker():
+            stdout, stderr, returncode = run_code(source, user_inputs)
+            self.after(0, lambda: self._display_execution(stdout, stderr, returncode, user_inputs))
+
+        threading.Thread(target=_worker, daemon=True).start()
+
+    def _display_execution(self, stdout: str, stderr: str, returncode: int, user_inputs: list[str]):
+        """Render execution results in the Execution tab."""
+        self._run_btn.config(state="normal", text="▶▶  Run Code", bg="#16a34a")
+
+        self.exec_view.config(state="normal")
+        self.exec_view.delete("1.0", "end")
+
+        sep = "═" * 64 + "\n"
+        thin_sep = "─" * 64 + "\n"
+
+        self.exec_view.insert("end", sep, "exec_sep")
+        self.exec_view.insert("end", "  ▶  Program Execution\n", "exec_header")
+        self.exec_view.insert("end", sep, "exec_sep")
+
+        # Provided inputs section
+        if user_inputs:
+            self.exec_view.insert("end", "\n  📥 Provided Inputs:\n", "exec_input")
+            for i, val in enumerate(user_inputs, 1):
+                display_val = val if val else "(empty)"
+                self.exec_view.insert("end", f"     [{i}] {display_val}\n", "exec_input")
+            self.exec_view.insert("end", "\n", "")
+
+        # Stdout section
+        self.exec_view.insert("end", thin_sep, "exec_sep")
+        self.exec_view.insert("end", "  📤 Output:\n", "exec_header")
+        self.exec_view.insert("end", thin_sep, "exec_sep")
+        if stdout.strip():
+            for line in stdout.splitlines(keepends=True):
+                self.exec_view.insert("end", "  " + line, "exec_stdout")
+        else:
+            self.exec_view.insert("end", "  (no output)\n", "exec_dim")
+
+        # Stderr section (only if there's something)
+        if stderr.strip():
+            self.exec_view.insert("end", "\n" + thin_sep, "exec_sep")
+            self.exec_view.insert("end", "  ⚠  Stderr / Traceback:\n", "exec_stderr")
+            self.exec_view.insert("end", thin_sep, "exec_sep")
+            for line in stderr.splitlines(keepends=True):
+                self.exec_view.insert("end", "  " + line, "exec_stderr")
+
+        # Exit status
+        self.exec_view.insert("end", "\n" + sep, "exec_sep")
+        if returncode == 0:
+            self.exec_view.insert("end", "  ✓  Process exited successfully (code 0)\n", "exec_ok")
+            self._exec_status_label.config(text="Exit code 0  ✓", fg="#15803d")
+        else:
+            self.exec_view.insert("end", f"  ✗  Process exited with code {returncode}\n", "exec_fail")
+            self._exec_status_label.config(text=f"Exit code {returncode}  ✗", fg=C["error"])
+        self.exec_view.insert("end", sep, "exec_sep")
+        self.exec_view.config(state="disabled")
+        self.exec_view.see("1.0")
+
     # ── Clipboard / save ─────────────────────────────────────────────────────
 
     def _copy_results(self):
@@ -1458,8 +2187,10 @@ class SyntaxAnalyzerGUI(tk.Tk):
             0: ("Diagnostics", self.results),
             1: ("AST", self.ast_view),
             2: ("IR", self.ir_view),
-            3: ("Current report", self.current_report_text),
-            4: ("Cumulative report", self.cumulative_report_text),
+            3: ("Security report", self.security_view),
+            4: ("Current report", self.current_report_text),
+            5: ("Cumulative report", self.cumulative_report_text),
+            7: ("Execution output", self.exec_view),
         }
         label, widget = tab_map.get(active, ("Report", self.results))
         text = widget.get("1.0", "end-1c")
@@ -1476,8 +2207,10 @@ class SyntaxAnalyzerGUI(tk.Tk):
             0: ("diagnostics", self.results),
             1: ("ast", self.ast_view),
             2: ("ir", self.ir_view),
-            3: ("current_report", self.current_report_text),
-            4: ("cumulative_report", self.cumulative_report_text),
+            3: ("security_report", self.security_view),
+            4: ("current_report", self.current_report_text),
+            5: ("cumulative_report", self.cumulative_report_text),
+            7: ("execution_output", self.exec_view),
         }
         label, widget = tab_map.get(active, ("diagnostics", self.results))
         text = widget.get("1.0", "end-1c")

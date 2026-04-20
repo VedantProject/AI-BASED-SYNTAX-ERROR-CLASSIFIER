@@ -820,6 +820,12 @@ def analyse_python(source: str, filepath: str = "<input>",
 
     src_lines = source.splitlines()
     _print_header(filepath, "Python", len(errors))
+    security_report = None
+    try:
+        from analysis.security_vulnerability import build_security_report
+        security_report = build_security_report(ast_tree)
+    except Exception:
+        security_report = None
 
     def _emit_perf_report() -> None:
         try:
@@ -851,6 +857,8 @@ def analyse_python(source: str, filepath: str = "<input>",
         if not no_heal:
             heal_and_display(source, [], language="python",
                              defined_names=set())
+        if security_report is not None:
+            _print_security_report(security_report)
         _emit_perf_report()
         return
 
@@ -948,6 +956,8 @@ def analyse_python(source: str, filepath: str = "<input>",
     if not no_heal and errors:
         heal_and_display(source, errors, language="python",
                          defined_names=defined_names)
+    if security_report is not None:
+        _print_security_report(security_report)
     _emit_perf_report()
     print()
 
@@ -1338,6 +1348,15 @@ def _print_performance_energy_sections(report_data: dict) -> None:
     print(f"    - Energy trend: {report_data['cumulative']['exports']['energy_trend_svg']}")
     print(f"    - LOC range totals: {report_data['cumulative']['exports']['loc_bucket_svg']}")
     print(f"  Persistent history: {report_data['history_path']}")
+    print(BORDER)
+
+
+def _print_security_report(security_report: dict) -> None:
+    print()
+    print(BORDER)
+    print("  Security Vulnerability Analysis Report")
+    print(BORDER)
+    print(security_report["summary"])
     print(BORDER)
 
 

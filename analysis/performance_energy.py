@@ -57,6 +57,48 @@ def _non_empty_loc(source: str) -> int:
     return sum(1 for line in source.splitlines() if line.strip())
 
 
+# ── Carbon & power constants ─────────────────────────────────────────────────
+# Global average grid carbon intensity: 233 g CO₂ per kWh
+# 1 kWh = 3 600 000 J  →  1 mJ = 233 / 3_600_000 µg CO₂  ≈ 6.472e-5 g CO₂/mJ
+# We store in µg (micrograms) for readability at analysis-run scale.
+_CARBON_UG_PER_MJ   = 233_000 / 3_600_000   # ≈ 0.06472 µg CO₂ per mJ
+_CARBON_G_PER_KWH   = 233.0                  # reference: global avg kg CO₂ / kWh
+_MJ_PER_KWH         = 3_600_000.0            # 1 kWh = 3 600 000 mJ
+_UG_CO2_LED_PER_HOUR = 2_000.0               # typical 5 W LED: ~2 g CO₂/h = 2_000 000 µg/h → simplified
+
+
+def _format_power(mw: float) -> str:
+    return f"{mw:.4f} mW"
+
+
+def _format_carbon(ug: float) -> str:
+    """Human-readable carbon display: µg → mg → g as scale grows."""
+    if ug < 1_000:
+        return f"{ug:.4f} µg CO₂"
+    if ug < 1_000_000:
+        return f"{ug / 1000:.4f} mg CO₂"
+    return f"{ug / 1_000_000:.6f} g CO₂"
+
+
+def _carbon_context(ug: float) -> str:
+    """Produce a friendly equivalence sentence for the carbon figure."""
+    if ug <= 0:
+        return "Negligible carbon footprint."
+    # Compare against running a 5 W LED for 1 second (≈ 0.32 µg CO₂)
+    led_one_second_ug = _CARBON_UG_PER_MJ * 5.0 * 1000 / 3600  # 5 W × 1 s → mJ → µg
+    led_equiv = ug / led_one_second_ug if led_one_second_ug > 0 else 0
+    # How many million runs equal 1 g CO₂?
+    runs_per_gram = (1_000_000 / ug) if ug > 0 else 0
+    parts = []
+    if led_equiv >= 0.01:
+        parts.append(f"≈ running a 5 W LED for {led_equiv:.3f} s")
+    if runs_per_gram >= 1_000:
+        parts.append(f"≈ {runs_per_gram:,.0f} such analyses equal 1 g CO₂")
+    elif runs_per_gram >= 1:
+        parts.append(f"≈ {runs_per_gram:,.1f} analyses equal 1 g CO₂")
+    return "  |  ".join(parts) if parts else "Trace-level carbon footprint."
+
+
 def _bucket_label(loc: int) -> str:
     for upper, label in LOC_BUCKETS:
         if loc <= upper:
@@ -268,13 +310,21 @@ def _build_current_loc_projection(run_entry: Dict[str, Any]) -> List[Dict[str, A
 
 
 def _summarize_current(run_entry: Dict[str, Any], hotspots: List[Dict[str, Any]]) -> str:
+    power_mw   = _safe_float(run_entry.get("power_mw"))
+    carbon_ug  = _safe_float(run_entry.get("carbon_ug_co2"))
     lines = [
         "Current Code Performance & Energy Report",
         "",
         f"Language: {run_entry['language'].upper()}",
         f"Program: {run_entry['filepath']}",
         f"LOC: {run_entry['loc']} ({run_entry['loc_bucket']})",
+        # ── Energy ─────────────────────────────────────────────────────────
         f"Estimated energy consumption: {_format_energy(run_entry['estimated_energy_mj'])}",
+        f"Estimated power draw: {_format_power(power_mw)}",
+        # ── Carbon ─────────────────────────────────────────────────────────
+        f"Carbon emission (this run): {_format_carbon(carbon_ug)}",
+        f"Carbon context: {_carbon_context(carbon_ug)}",
+        # ── Timing ─────────────────────────────────────────────────────────
         f"Total analysis time: {_format_ms(run_entry['total_analysis_ms'])}",
         f"Parse time: {_format_ms(run_entry['parse_time_ms'])}",
         f"IR build time: {_format_ms(run_entry['ir_build_time_ms'])}",
@@ -305,10 +355,13 @@ def _summarize_current(run_entry: Dict[str, Any], hotspots: List[Dict[str, Any]]
 
 def _summarize_cumulative(run_entry: Dict[str, Any],
                           history_runs: List[Dict[str, Any]]) -> str:
-    total_runs = len(history_runs)
-    total_energy = sum(_safe_float(item.get("estimated_energy_mj")) for item in history_runs)
-    avg_energy = total_energy / total_runs if total_runs else 0.0
-    avg_runtime = (
+    total_runs    = len(history_runs)
+    total_energy  = sum(_safe_float(item.get("estimated_energy_mj")) for item in history_runs)
+    total_carbon  = sum(_safe_float(item.get("carbon_ug_co2"))        for item in history_runs)
+    avg_energy    = total_energy / total_runs if total_runs else 0.0
+    avg_carbon    = total_carbon / total_runs if total_runs else 0.0
+    avg_power     = sum(_safe_float(item.get("power_mw")) for item in history_runs) / total_runs if total_runs else 0.0
+    avg_runtime   = (
         sum(_safe_float(item.get("total_analysis_ms")) for item in history_runs) / total_runs
         if total_runs else 0.0
     )
@@ -323,6 +376,9 @@ def _summarize_cumulative(run_entry: Dict[str, Any],
         "",
         f"Total analyzed runs: {total_runs}",
         f"Cumulative estimated energy: {_format_energy(total_energy)}",
+        f"Cumulative carbon emission: {_format_carbon(total_carbon)}",
+        f"Average carbon per run: {_format_carbon(avg_carbon)}",
+        f"Average power draw per run: {_format_power(avg_power)}",
         f"Average energy per run: {_format_energy(avg_energy)}",
         f"Average analysis time: {_format_ms(avg_runtime)}",
         f"Average per-run efficiency score: {avg_efficiency:.2f}",
@@ -330,10 +386,13 @@ def _summarize_cumulative(run_entry: Dict[str, Any],
     ]
 
     if previous:
+        prev_carbon = _safe_float(previous.get("carbon_ug_co2"))
+        cur_carbon  = _safe_float(run_entry.get("carbon_ug_co2"))
         lines.extend([
             "",
             "Comparison vs previous run:",
             f"- Energy delta: {_format_delta(run_entry['estimated_energy_mj'], _safe_float(previous.get('estimated_energy_mj')), ' mJ')}",
+            f"- Carbon delta: {_format_delta(cur_carbon, prev_carbon, ' µg CO₂')}",
             f"- Runtime delta: {_format_delta(run_entry['total_analysis_ms'], _safe_float(previous.get('total_analysis_ms')), ' ms')}",
             f"- Efficiency delta: {_format_delta(run_entry['efficiency_score'], _safe_float(previous.get('efficiency_score')))}",
             f"- LOC delta: {_safe_int(run_entry['loc']) - _safe_int(previous.get('loc')):+d}",
@@ -345,7 +404,8 @@ def _summarize_cumulative(run_entry: Dict[str, Any],
         lines.append(
             f"- Run {item.get('run_number', '?')} | {item.get('filepath', '<input>')} | "
             f"{item.get('efficiency_score', 0):.2f} efficiency | "
-            f"{item.get('loc', 0)} LOC | {_format_energy(_safe_float(item.get('estimated_energy_mj')))}"
+            f"{item.get('loc', 0)} LOC | {_format_energy(_safe_float(item.get('estimated_energy_mj')))} | "
+            f"{_format_carbon(_safe_float(item.get('carbon_ug_co2')))}"
         )
 
     return "\n".join(lines)
@@ -655,6 +715,11 @@ def build_reports(source: str,
         + 0.015 * statement_count
     )
     energy_mj = round(max(energy_mj, 0.02), 4)
+
+    # ── Power & carbon ───────────────────────────────────────────────────────
+    power_mw      = round(energy_mj / (total_ms / 1000.0), 6) if total_ms > 0 else 0.0
+    carbon_ug_co2 = round(energy_mj * _CARBON_UG_PER_MJ, 6)
+
     useful_work_units = _compute_useful_work_units({
         "loc": loc,
         "statement_count": statement_count,
@@ -692,6 +757,8 @@ def build_reports(source: str,
         "analysis_pass_ms": round(analysis_ms, 4),
         "total_analysis_ms": round(total_ms, 4),
         "estimated_energy_mj": energy_mj,
+        "power_mw":            round(power_mw, 6),
+        "carbon_ug_co2":       round(carbon_ug_co2, 6),
         "throughput_loc_per_s": round(throughput, 4),
         "useful_work_units": round(useful_work_units, 4),
         "efficiency_score": efficiency_score,
@@ -732,6 +799,8 @@ def build_reports(source: str,
             "hotspots": hotspots,
             "energy_loc_points": current_projection,
             "energy_loc_bars": current_loc_range_bars,
+            "power_mw":      run_entry.get("power_mw", 0.0),
+            "carbon_ug_co2": run_entry.get("carbon_ug_co2", 0.0),
             "exports": {
                 "summary": exports["current_summary"],
                 "energy_loc_svg": exports["current_energy_loc_svg"],
@@ -742,6 +811,8 @@ def build_reports(source: str,
             "summary": cumulative_summary,
             "energy_trend": energy_series,
             "loc_bucket_energy": loc_bucket_series,
+            "total_carbon_ug": sum(_safe_float(r.get("carbon_ug_co2")) for r in history_runs),
+            "avg_power_mw":   sum(_safe_float(r.get("power_mw"))       for r in history_runs) / max(len(history_runs), 1),
             "exports": {
                 "summary": exports["cumulative_summary"],
                 "energy_trend_svg": exports["cumulative_energy_trend_svg"],

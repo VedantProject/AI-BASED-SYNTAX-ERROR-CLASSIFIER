@@ -3,13 +3,16 @@ Current Code Performance & Energy Report
 Language: PYTHON
 Program: <editor>
 LOC: 10 (0-20 LOC)
-Estimated energy consumption: 1.525 mJ
-Total analysis time: 0.45 ms
-Parse time: 0.29 ms
-IR build time: 0.04 ms
-Analysis pass time: 0.11 ms
-Throughput: 22031.29 LOC/s
-Efficiency score: 69.00
+Estimated energy consumption: 1.536 mJ
+Estimated power draw: 2096.9416 mW
+Carbon emission (this run): 0.0994 µg CO₂
+Carbon context: ≈ running a 5 W LED for 1.106 s  |  ≈ 10,060,362 such analyses equal 1 g CO₂
+Total analysis time: 0.73 ms
+Parse time: 0.46 ms
+IR build time: 0.07 ms
+Analysis pass time: 0.19 ms
+Throughput: 13653.74 LOC/s
+Efficiency score: 68.85
 Useful work units: 13.58
 CFG blocks / edges / TAC: 4 / 2 / 9
 Cyclomatic complexity: 5 (low)
